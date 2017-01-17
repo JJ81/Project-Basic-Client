@@ -90,6 +90,8 @@ router.get('/', function (req, res) {
   });
 });
 
-
+router.get('/test', function (req, res) {
+	res.json({result : 'Hello World'});
+});
 
 module.exports = router;

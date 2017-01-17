@@ -2,18 +2,18 @@
   "name": "HC-Mobile",
   "version": "0.0.0",
   "private": false,
-  "description" : "HC Mobile",
-  "license" : "MIT",
-  "repository" : "https://github.com/JJ81/HC-Mobile.git",
+  "description": "HC Mobile",
+  "license": "MIT",
+  "repository": "https://github.com/JJ81/HC-Mobile.git",
   "scripts": {
     "start": "nodemon ./bin/www nodemon -e hbs",
     "debug": "DEBUG=ams-holdemclub:* npm run dev",
     "dev-server": "NODE_ENV=development nodemon ./bin/www nodemon",
     "dev-client": "NODE_ENV=development nodemon ./bin/www nodemon -e hbs",
-
-    "local" : "NODE_ENV=local nodemon ./bin/www nodemon",
-    "development" : "NODE_ENV=development nodemon ./bin/www nodemon",
-    "production": "NODE_ENV=production nodemon ./bin/www nodemon"
+    "local": "NODE_ENV=local nodemon ./bin/www nodemon",
+    "development": "NODE_ENV=development nodemon ./bin/www nodemon",
+    "production": "NODE_ENV=production nodemon ./bin/www nodemon",
+    "test" : "jasmine spec/hello_world_spec.js"
   },
   "dependencies": {
     "async": "^2.1.4",
@@ -24,6 +24,7 @@
     "express": "~4.13.1",
     "express-csv": "^0.6.0",
     "hbs": "~3.1.0",
+    "jasmine-node": "^1.14.5",
     "jquery-validation": "^1.16.0",
     "jquery.cookie": "^1.4.1",
     "morgan": "~1.6.1",
@@ -36,6 +37,7 @@
     "connect-flash": "^0.1.1",
     "cookie-session": "^2.0.0-alpha.2",
     "currency-formatter": "^1.0.6",
+    "jasmine": "^2.5.3",
     "moment": "^2.17.0",
     "mysql": "^2.12.0",
     "passport": "^0.3.2",

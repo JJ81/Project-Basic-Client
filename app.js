@@ -98,18 +98,22 @@ if (app.get('env') === 'local'){
   global.mysql_location = 'local';
   global.redis_location = 'local';
 
-  console.info('local');
+  //console.info('local');
 }else if(app.get('env') === 'development'){
   global.redis_location = 'dev';
   global.mysql_location = 'dev';
 
-  console.info('development');
+  //console.info('development');
 }else if(app.get('env') === 'production'){
   global.mysql_location = 'real';
   global.redis_location = 'real';
 
-  console.info('production');
+  //console.info('production');
 }
+
+exports.closeServer = function(){
+	server.close();
+};
 
 
 module.exports = app;
