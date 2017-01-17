@@ -50,7 +50,7 @@ const allowCORS = function(req, res, next) {
 };
 app.use(allowCORS);
 
-global.PROJ_TITLE = "홀덤클럽티비, 웹모바일";
+global.PROJ_TITLE = "홀덤클럽티비";
 
 app.use('/', routes);
 
