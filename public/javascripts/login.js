@@ -5,17 +5,17 @@
 requirejs(
   [
     'jquery'
-    , 'jqueryCookie'
-    , 'jqueryValidate'
+    ,'jqueryCookie'
+    ,'jqueryValidate'
   ],
   function (jQuery) {
     var $ = jQuery;
     var
-      remember = $('#remember'),
-      agent = $('#agent'),
-      password = $('#password'),
-      form_agent_login = $('#form-agent-login'),
-      btn_agent_login = $('#btn-agent-login');
+    remember = $('#remember'),
+    agent = $('#agent'),
+    password = $('#password'),
+    form_agent_login = $('#form-agent-login'),
+    btn_agent_login = $('#btn-agent-login');
 
     checkCookie();
 
@@ -96,5 +96,5 @@ requirejs(
         }
       }
     });
-  } // end of function
-);
+}); // end of function
+

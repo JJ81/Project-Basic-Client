@@ -13,12 +13,9 @@
 
     {{{body}}}
 
-    <script src="/vendor/plugins/requirejs/require.2.3.2.js"></script>
+    <script src="/components/requirejs/require.js"></script>
     <script src="/javascripts/app.js"></script>
-
-
     {{#if (isEquals current_path 'login')}}<script src="javascripts/login.js"></script>{{/if}}
     {{#if (isEquals current_path 'INDEX')}}<script src="javascripts/index.js"></script>{{/if}}
-
 </body>
 </html>

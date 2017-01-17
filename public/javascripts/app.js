@@ -5,31 +5,16 @@
 require.config({
   map: {},
   paths: {
-    jquery: ['/vendor/plugins/jQuery/jquery-2.2.3.min']
-    , jquery_ui: '/vendor/plugins/jQueryUI/jquery-ui.min'
-    , bootstrap: ['/vendor/bootstrap/js/bootstrap.min']
-    , jqueryCookie: '/vendor/plugins/jquery_cookie/jquery.cookie.1.4.1'
-    , jqueryValidate: '/vendor/plugins/jquery_validate/jquery.validate.min'
-    , 'common': '/javascripts/common'
-    , 'select2': '/vendor/plugins/select2/select2.full.min'
-    , 'lodash' : 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min'
-    , fastclick: '/vendor/plugins/fastclick/fastclick'
+    jquery: ['/components/jquery/dist/jquery.min'],
+    bootstrap : ['/components/bootstrap/dist/js/bootstrap.min'],
+    jqueryCookie : ['/components/jquery.cookie/jquery.cookie'],
+    jqueryValidate : ['/components/jquery-validation/dist/jquery.validate.min'],
+    lodash : ['/components/lodash/dist/lodash.min'],
+    fastclick : ['/components/fastclick/lib/fastclick'],
+    common : ['/javascripts/common']
   },
   shim: {
-    'bootstrap': {
-      deps: ['jquery']
-    },
-    'jquery_ui': {
-      deps: ['jquery']
-    },
-    'jqueryCookie': {
-      deps: ['jquery']
-    },
-    'jqueryValidate': {
-      deps: ['jquery']
-    },
-    'select2': {
-      deps: ['jquery']
-    }
+    jqueryValidate : ['jquery'],
+    jqueryCookie : ['jquery']
   }
 });

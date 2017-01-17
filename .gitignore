@@ -4,4 +4,6 @@
 /docs
 /secret
 /_bak
-
+/public/components
+/public/_bak
+/public/javascripts/_bak
