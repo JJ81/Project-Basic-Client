@@ -1,7 +1,7 @@
 define(
   [
     'jquery',
-    'common',
+    '../common',
     'lodash',
     'adminLTE',
     'jqueryValidate',

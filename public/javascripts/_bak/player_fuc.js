@@ -5,7 +5,7 @@
 define(
   [
     'jquery'
-    , 'common'
+    , '../common'
     , 'adminLTE'
     , 'jqueryValidate'
   ], function ($) {

@@ -1,24 +1,19 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
 /*routes*/
-var routes = require('./routes/index');
-var api = require('./routes/api');
-var agents = require('./routes/agents');
-var players = require('./routes/players');
-var report = require('./routes/reports');
-
+const routes = require('./routes/index');
 
 /*routes*/
-var app = express();
-var hbs = require('hbs');
-var passport = require('passport');
-var flash = require('connect-flash');
-var cookieSession = require('cookie-session');
+const app = express();
+const hbs = require('hbs');
+const passport = require('passport');
+const flash = require('connect-flash');
+const cookieSession = require('cookie-session');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,7 +25,7 @@ hbs.registerPartials(__dirname + '/views/modal');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 app.use(cookieSession({
-  keys: ['AMS_Admin']
+  keys: ['HC_Mobile']
 }));
 
 
@@ -45,7 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 
 
-var allowCORS = function(req, res, next) {
+const allowCORS = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
@@ -53,36 +48,25 @@ var allowCORS = function(req, res, next) {
     res.send(200) :
     next();
 };
-
-global.PROJ_TITLE = "Hold'em Club AMS, ";
-
-
 app.use(allowCORS);
+
+global.PROJ_TITLE = "홀덤클럽티비";
+
 app.use('/', routes);
-app.use('/agents', agents);
-app.use('/players', players);
-app.use('/report', report);
-app.use('/api/v1', api);
 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-
-  // todo 로그인을 하지 않았다면 로그인 페이지로 자동 이동한다.
-  //if(req.user === null){
-  //  res.redirect('/login');
-  //}
-
-  console.error('404 error');
-  var err = new Error('Not Found');
-  err.status = 404;
+  //console.error('404 error');
+  //
+  //var err = new Error('Not Found');
+  //err.status = 404;
   //next(err);
   res.render('404', {
     current_path: '404 Error Page',
     title: PROJ_TITLE + 'ERROR PAGE',
     loggedIn: req.user
   });
-
 });
 
 // error handlers
@@ -101,14 +85,13 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  console.error('500 error in prod');
-  res.status(err.status || 500);
+  // console.error('500 error in prod');
+  // res.status(err.status || 500);
   res.render('500', {
     current_path: '500 Error Page',
     title: PROJ_TITLE + 'ERROR PAGE'
   });
 });
-
 
 // Swifty Automatic Changing ENV.
 if (app.get('env') === 'local'){

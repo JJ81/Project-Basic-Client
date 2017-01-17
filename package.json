@@ -1,7 +1,10 @@
 {
   "name": "ams-holdemclub",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
+  "description" : "HC Mobile",
+  "license" : "MIT",
+  "repository" : "https://github.com/JJ81/HC-Mobile.git",
   "scripts": {
     "start": "nodemon ./bin/www nodemon -e hbs",
     "debug": "DEBUG=ams-holdemclub:* npm run dev",
@@ -25,8 +28,7 @@
     "jquery.cookie": "^1.4.1",
     "morgan": "~1.6.1",
     "request": "^2.79.0",
-    "serve-favicon": "~2.3.0",
-    "sql-injection": "0.0.5"
+    "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
     "JSON": "^1.0.0",

@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
-var mysql_dbc = require('../commons/db_conn')();
+var mysql_dbc = require('../../commons/db_conn')();
 var connection = mysql_dbc.init();
 var async = require('async');
-var QUERY = require('../database/query');
-var UTIL = require('../util/util');
-var HomeDAO = require('../RedisDAO/HomeDAO');
+var QUERY = require('../../database/query');
+var UTIL = require('../../util/util');
+var HomeDAO = require('../../RedisDAO/HomeDAO');
 // var JSON = require('JSON');
 
 
@@ -21,7 +21,7 @@ var isAuthenticated = function (req, res, next) {
 /**
  * Agent page
  * */
-var AgentService = require('../service/AgentService');
+var AgentService = require('../../service/AgentService');
 router.get('/', isAuthenticated, function (req, res) {
 
   if (req.user.layer === 3) {

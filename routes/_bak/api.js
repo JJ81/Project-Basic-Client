@@ -1,17 +1,17 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
-var mysql_dbc = require('../commons/db_conn')();
+var mysql_dbc = require('../../commons/db_conn')();
 var connection = mysql_dbc.init();
 
 var bcrypt = require('bcrypt');
 var async = require('async');
-var QUERY = require('../database/query');
+var QUERY = require('../../database/query');
 
-var TWOACEAPI = require('../secret/twoace_api')('dev');
-var util = require('../util/util');
-var CommonDAO = require('../RedisDAO/CommonDAO');
-var UTIL = require('../util/util');
+var TWOACEAPI = require('../../secret/twoace_api')('dev');
+var util = require('../../util/util');
+var CommonDAO = require('../../RedisDAO/CommonDAO');
+var UTIL = require('../../util/util');
 
 /**
  * create agent
@@ -113,7 +113,7 @@ router.post('/agent/set/password', function (req, res) {
   });
 });
 
-const AgentService = require('../service/AgentService');
+const AgentService = require('../../service/AgentService');
 
 /**
  * 에이전트가 자신의 에이전트에게 전달

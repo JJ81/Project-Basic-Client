@@ -1,18 +1,18 @@
 var express = require('express');
 var router = express.Router();
 //var mysql = require('mysql');
-var mysql_dbc = require('../commons/db_conn')();
+var mysql_dbc = require('../../commons/db_conn')();
 var connection = mysql_dbc.init();
 
 
 // var PROJ_TITLE = "Hold'em Club AMS, ";
 var bcrypt = require('bcrypt');
 var async = require('async');
-var QUERY = require('../database/query');
-require('../commons/helpers');
-var UTIL = require('../util/util');
-var CommonDAO = require('../RedisDAO/CommonDAO');
-var AgentService = require('../service/AgentService');
+var QUERY = require('../../database/query');
+require('../../commons/helpers');
+var UTIL = require('../../util/util');
+var CommonDAO = require('../../RedisDAO/CommonDAO');
+var AgentService = require('../../service/AgentService');
 
 /**
  * 모든 플레이어를 보여준다.
