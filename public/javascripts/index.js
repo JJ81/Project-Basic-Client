@@ -6,9 +6,9 @@ requirejs(
   [
     'jquery'
     , 'common'
-    , 'fastclick'
+    ,'fastclick'
   ],
-  function ($, Common) {
-    console.info('index');
+  function () {
+     console.info('index page');
 
   }); // end of func
