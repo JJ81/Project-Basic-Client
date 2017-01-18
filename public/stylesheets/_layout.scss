@@ -1,0 +1,85 @@
+#holdemclub{}
+
+.sidebar-fixed{
+  background: #fff;
+  @media screen and (min-width: $width-size01) {
+    width: 230px;
+    height: 100%;
+  }
+
+  @media screen and (max-width: $width-size01) {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  //border: 1px solid #f00;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.content_area{
+
+  // border: 1px solid #f00;
+
+  @media screen and (min-width: $width-size01) {
+    padding-left: 230px;
+  }
+
+  @media screen and (max-width: $width-size01) {
+    padding-left: 0;
+  }
+
+  .heading{
+    color: #444;
+    font-size: 26px;
+    border-bottom: 1px solid #eee;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    a.title{
+      color: #444;
+    }
+  }
+}
+
+
+.content_wrapper{
+  position: relative;
+  background :#eee;
+  padding: 10px;
+}
+
+.inner_content{
+  max-width: 1200px;
+  margin: 0 auto;
+  background :#fff;
+  padding: 20px;
+}
+
+html, body{
+  overflow-x:hidden;
+}
+
+.header{
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+.logo_area{
+  font-size: 26px;
+  position: relative;
+  top: -6px;
+  left: 20px;
+  display: inline-block;
+
+}
+
+.btn_login{
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}

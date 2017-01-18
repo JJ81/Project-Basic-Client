@@ -95,3 +95,10 @@ hbs.registerHelper('ifCond', function (v1, operator, v2, options) {
       return options.inverse(this);
   }
 });
+
+hbs.registerHelper('for', function(from, to, incr, block) {
+  var accum = '';
+  for(var i = from; i < to; i += incr)
+    accum += block.fn(i);
+  return accum;
+});

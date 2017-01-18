@@ -1,133 +1,52 @@
 @charset "UTF-8";
-// commons
-.blind {
-  display: none;
-}
-
-.center {
-  text-align: center;
-}
-
-.right {
-  text-align: right;
-}
-
-.left {
-  text-align: left;
-}
-
-.empty:after{
-  content: "-";
-}
-
-// Home page view
-.home_section {
-
-  .select2-container--default {
-    .select2-selection--single {
-      height: 34px !important;
-    }
-  }
-
-  .select2-container--default {
-    .select2-results > .select2-results__options {
-      max-height: 227px !important;
-    }
-  }
-
-  .select2-container--default {
-    .select2-selection--single {
-      .select2-selection__arrow {
-        top: 4px !important;
-      }
-    }
-  }
-
-  .btn-white {
-    background: #fff !important;
-    border-color: #aaa !important;
-  }
-}
-
-.agent_balance {
-  font-size: 15px;
-}
-
-.btn-clear {
-  margin-left: 10px;
-}
-
-// player
-
-.player_section,
-.game_section,
-.financial_section {
-  .nickname {
-    height: 34px !important;
-    width: 150px;
-  }
-
-  .btn-white {
-    background: #fff !important;
-    border-color: #aaa !important;
-  }
-
-  .btn_search {
-    position: relative;
-    left: -1px;
-  }
-}
-
-.text-warning {
-  color: #dd4b39 !important;
-}
-
-.the-legend {
-  border-style: none;
-  border-width: 0;
-  font-size: 14px;
-  line-height: 20px;
-  margin-bottom: 0;
-}
-.the-fieldset {
-  border: 2px groove threedface #444;
-  -webkit-box-shadow:  0px 0px 0px 0px #000;
-  box-shadow:  0px 0px 0px 0px #000;
-}
-
-.divider {
-  height: 1px;
-  width:100%;
-  display:block; /* for use on default inline elements like span */
-  margin: 9px 0;
-  overflow: hidden;
-  background-color: #e5e5e5;
-}
-
-.error-page>.error-content{
-  padding-top: 15px;
-}
-
-.select_view_type{
-  margin-top: 10px;
-  .btn-white{
-    color: #000;
-  }
-}
+@import 'variables';
+@import 'layout';
+@import 'main_channel';
+@import 'main_recom';
+@import 'main_community';
 
 
-// credit to agent (modal)
-//.amount_to_agent{
-//  text-align: right;
+//
+//.banner_A{
+//   //border: 1px solid #f00;
+//  margin-top: 10px;
+//
+//  .btn_link{
+//    display: inline-block;
+//  }
+//
+//  @media screen and (min-width: $break-medium) {
+//    .img_A_banner{
+//      max-width: 100%;
+//
+//    }
+//  }
+//
+//  @media screen and (max-width: $break-medium) {
+//    .img_A_banner{
+//      width: 100%;
+//
+//    }
+//  }
+//
+//  .img_banner{
+//    display: none;
+//  }
+//
+//
+//  @media screen and (min-width: $break-medium) {
+//    .img_A_banner{
+//      display: block;
+//    }
+//  }
+//
+//  @media screen and (max-width: $break-medium) {
+//    .img_A_banner_mobile{
+//      display: block;
+//    }
+//  }
 //}
+//
 
-.txt-align-right{
-  text-align: right;
-}
 
-.calcLetter{
-  font-size: 16px;
-  // font-weight: bold;
-  position: relative;
-  top: 31px;
-}
+
