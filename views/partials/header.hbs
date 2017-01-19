@@ -1,48 +1,7 @@
-<header class="main-header">
-    <!-- Logo -->
-    <a href="#" class="logo">
-        <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>A</b>MS</span>
-        <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>Agent</b> Management</span>
-    </a>
-    <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
-        <!-- Sidebar toggle button-->
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-            <span class="sr-only">Toggle navigation</span>
-        </a>
-
-        <input type="hidden" id="agent-code" value="{{loggedIn.agent}}"/>
-        <input type="hidden" id="agent-balance" value="{{loggedIn.balance}}"/>
-
-        <div class="navbar-custom-menu" id="navbar-custom-menu">
-            <ul class="nav navbar-nav">
-                <li>
-                    <a href="#balance" class="get-current-balance">
-                        {{#if (checkMinus loggedIn.balance)}}
-                        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp;&nbsp;
-                        {{/if}}
-                        <strong class="agent_balance" id="agent-current-balance">
-                            <span class="balance-chip">{{comma-number loggedIn.balance}}</span>
-                            &nbsp;&nbsp;<i class="fa fa-refresh" aria-hidden="true"></i>
-                        </strong>
-                    </a>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-user" aria-hidden="true"></i>&nbsp;&nbsp;
-                        {{loggedIn.agent}}
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="#" class="my-password-change" onclick="utils.showModalAgent(this)" data-agent-code="{{loggedIn.agent}}" data-modal-id="setAgentPassword">Change password</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/logout">Signout</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
-{{>modal_agent_change_password}}
+<div class="header">
+    <h1 class="logo_area">
+        <a href="#"><i class="fa fa-bars" aria-hidden="true"></i></a>
+        <a href="#" class="logo">홀덤클럽</a>
+    </h1>
+    <a href="#" class="btn_login">login</a>
+</div>

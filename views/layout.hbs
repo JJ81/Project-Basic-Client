@@ -31,9 +31,19 @@
 </head>
 
 <body class="open_nav">
-
     <div id="holdemclub">
-        {{{body}}}
+        {{> header}}
+        <div class="content_wrapper">
+            {{> left_nav}}
+            <div class="content_area">
+                <div class="inner_content">
+                    <!-- content -->
+                    {{{body}}}
+                    <!-- // content -->
+                </div>
+                {{> footer}}
+            </div>
+        </div>
     </div>
 
     <script src="/components/requirejs/require.js"></script>

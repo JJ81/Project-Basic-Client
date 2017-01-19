@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ContentFilters</key>
+	<dict/>
+	<key>auto_connect</key>
+	<true/>
+	<key>data</key>
+	<dict>
+		<key>connection</key>
+		<dict>
+			<key>colorIndex</key>
+			<integer>5</integer>
+			<key>database</key>
+			<string>dev_holdemclub</string>
+			<key>host</key>
+			<string>dev-holdemclub.ccchnydnz10o.ap-northeast-2.rds.amazonaws.com</string>
+			<key>kcid</key>
+			<string>1068083525478395249</string>
+			<key>name</key>
+			<string>HOLDEMCLUB_DEV</string>
+			<key>rdbms_type</key>
+			<string>mysql</string>
+			<key>sslCACertFileLocation</key>
+			<string></string>
+			<key>sslCACertFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslCertificateFileLocation</key>
+			<string></string>
+			<key>sslCertificateFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslKeyFileLocation</key>
+			<string></string>
+			<key>sslKeyFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>type</key>
+			<string>SPTCPIPConnection</string>
+			<key>useSSL</key>
+			<integer>0</integer>
+			<key>user</key>
+			<string>devholdemclub</string>
+		</dict>
+		<key>session</key>
+		<dict>
+			<key>connectionEncoding</key>
+			<string>utf8</string>
+			<key>contentPageNumber</key>
+			<integer>1</integer>
+			<key>contentSelection</key>
+			<data>
+			YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJX
+			TlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAF
+			gAdUdHlwZVRyb3dzXxAdU2VsZWN0aW9uRGV0YWlsVHlwZU5TSW5k
+			ZXhTZXTSFwsYGVxOU1JhbmdlQ291bnQQAIAG0hscHR5aJGNsYXNz
+			bmFtZVgkY2xhc3Nlc1pOU0luZGV4U2V0oh8gWk5TSW5kZXhTZXRY
+			TlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVk
+			QXJjaGl2ZXLRJidUZGF0YYABAAgAEQAaACMALQAyADcAQABGAE0A
+			VQBgAGcAagBsAG4AcQBzAHUAdwB8AIEAoQCmALMAtQC3ALwAxwDQ
+			ANsA3gDpAPIA9wEEAQcBGQEcASEAAAAAAAACAQAAAAAAAAAoAAAA
+			AAAAAAAAAAAAAAABIw==
+			</data>
+			<key>contentSortColIsAsc</key>
+			<true/>
+			<key>contentViewport</key>
+			<string>{{0, 0}, {694, 450}}</string>
+			<key>isToolbarVisible</key>
+			<true/>
+			<key>queries</key>
+			<string>select 
+max(v.`created_dt`) as updated_dt, ch.`channel_id`, ch.`title`, ch.`created_dt` , ch.`group_id`, g.`title`as g_title, ch.`active`, ch.`priority`, g.`channel_id` as g_channel_id 
+from  
+(select *from `channel`where `active`=1 order by `priority` asc) as ch 
+left join `group` as g 
+on ch.`group_id`= g.`group_id` 
+left join (select *from `video` where `active` = true) as v 
+on ch.`channel_id` = v.`channel_id` 
+group by ch.`group_id`,if (ch.`group_id` is null , ch.`title`, "") 
+order by ch.`priority` asc;
+
+
+
+</string>
+			<key>view</key>
+			<string>SP_VIEW_CUSTOMQUERY</string>
+			<key>windowVerticalDividerPosition</key>
+			<real>184</real>
+		</dict>
+	</dict>
+	<key>encrypted</key>
+	<false/>
+	<key>format</key>
+	<string>connection</string>
+	<key>queryFavorites</key>
+	<array/>
+	<key>queryHistory</key>
+	<array>
+		<string>select max(v.`created_dt`) as updated_dt, ch.`channel_id`, ch.`title`, ch.`created_dt` , ch.`group_id`, g.`title`as g_title, ch.`active`, ch.`priority`, g.`channel_id` as g_channel_id from  (select *from `channel`where `active`=1 order by `priority` asc) as ch left join `group` as g on ch.`group_id`= g.`group_id` left join (select *from `video` where `active` = true) as v on ch.`channel_id` = v.`channel_id` group by ch.`group_id`,if(ch.`group_id` is null , ch.`title`,"") order by ch.`priority` asc</string>
+		<string>select max(v.`created_dt`) as updated_dt, ch.`channel_id`, ch.`title`, ch.`created_dt` , ch.`group_id`, g.`title`as g_title, ch.`active`, ch.`priority`, g.`channel_id` as g_channel_id from  (select *from `channel`where `active`=1 order by `priority` asc) as ch left join `group` as g on ch.`group_id`= g.`group_id` left join (select *from `video` where `active` = true) as v on ch.`channel_id` = v.`channel_id` group by ch.`group_id`,if(ch.`group_id` is null , ch.`title`,"") order by ch.`priority` asc limit 10</string>
+		<string>select * from `admin`</string>
+		<string>create database `orangemanu`</string>
+		<string>use `laravel`</string>
+		<string>create database `laravel`</string>
+		<string>select * from `trainings` as t
+where t.assign_dt &gt;= '2016.12.01' and t.assign_dt &lt;= '2016.12.31'
+or t.due_dt &gt;= '2016.12.01' and t.due_dt &lt;= '2016.12.31'
+order by t.assign_dt asc</string>
+		<string>select * from `trainings` as t
+where t.assign_dt &gt;= '2016.12.01' and t.assign_dt &lt;= '2016.12.31'
+or
+t.due_dt &gt;= '2016.12.01' and t.due_dt &lt;= '2016.12.31'</string>
+		<string>select * from `trainings`</string>
+		<string>select count(*) as users from `users`</string>
+		<string>select now()</string>
+		<string>call sp_dashboard_title</string>
+		<string>alter table `user` drop column `game_login`</string>
+		<string>select * from `agent_wallet_history` as awh
+where `agent_id`= 'holdemclub' and `date` &gt;= '2016.12.01 00:00:00' and `date` &lt; '2016.12.01 23:59:59'
+order by `date` desc limit 1000</string>
+		<string>select * from `agent_wallet_history` as awh
+where `agent_id`= 'holdemclub' and `date` &gt;= '2016.12.01' and `date` &lt; '2016.12.01 23:59:59'
+order by `date` desc limit 1000</string>
+		<string>select * from `agent_wallet_history` as awh
+where `agent_id`= 'holdemclub' and `date` &gt;= '2016.12.01' and `date` &lt; '2016.12.02'
+order by `date` desc limit 1000</string>
+		<string>select * from `agent_wallet_history` as awh
+where `agent_id`= 'holdemclub' and `date` &gt;= '2016.12.01' and `date` &lt; '2016.12.01'
+order by `date` desc limit 1000</string>
+		<string>select * from `agent_wallet_history` as awh
+where `agent_id`= 'holdemclub' and (`date` &gt;= '2016.12.01' and `date` &lt; '2016.12.01')
+order by `date` desc limit 1000</string>
+		<string>select * from `agent_wallet_history` as awh
+where `agent_id`= 'holdemclub' and `date` &gt;= '2016.12.01'  and `date` &lt; '2016.12.01'
+order by `date` desc limit 1000</string>
+		<string>select * from `agent_wallet_history` as awh
+where `agent_id`= 'holdemclub' and `date` &gt;= '2016.12.01' or `date` &lt; '2016.12.01'
+order by `date` desc limit 1000</string>
+	</array>
+	<key>rdbms_type</key>
+	<string>mysql</string>
+	<key>rdbms_version</key>
+	<string>5.6.27-log</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>

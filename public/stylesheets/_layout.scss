@@ -43,7 +43,7 @@
   max-width: 1200px;
   margin: 0 auto;
   background :#fff;
-  padding: 20px;
+  padding: 10px;
 }
 
 html, body{
@@ -70,3 +70,11 @@ html, body{
   top: 20px;
 }
 
+
+#footer{
+  margin-top: 10px;
+  background: #fff;
+  padding: 10px;
+  text-align: center;
+  color : $main-font-color;
+}

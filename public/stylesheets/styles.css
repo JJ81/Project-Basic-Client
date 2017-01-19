@@ -4,20 +4,20 @@
   position: absolute;
   top: 0;
   left: 0; }
-  @media screen and (min-width: 1450px) {
+  @media screen and (min-width: 1050px) {
     .sidebar-fixed {
       width: 230px;
       height: 100%; } }
-  @media screen and (max-width: 1450px) {
+  @media screen and (max-width: 1050px) {
     .sidebar-fixed {
       width: 0;
       height: 0;
       display: none; } }
 
-@media screen and (min-width: 1450px) {
+@media screen and (min-width: 1050px) {
   .content_area {
     padding-left: 230px; } }
-@media screen and (max-width: 1450px) {
+@media screen and (max-width: 1050px) {
   .content_area {
     padding-left: 0; } }
 
@@ -30,7 +30,7 @@
   max-width: 1200px;
   margin: 0 auto;
   background: #fff;
-  padding: 20px; }
+  padding: 10px; }
 
 html, body {
   overflow-x: hidden; }
@@ -51,49 +51,78 @@ html, body {
   right: 20px;
   top: 20px; }
 
-.channel a.btn_channel {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 20px; }
-.channel .hits {
-  display: block;
-  text-align: left;
-  color: #444;
-  font-size: 14px;
-  margin-top: 5px; }
-.channel .badge {
-  position: absolute;
-  top: -5px;
-  left: -5px;
-  background: #d80000; }
-@media screen and (min-width: 768px) {
-  .channel .img_channel {
-    width: 100%; } }
-@media screen and (max-width: 768px) {
-  .channel .img_channel {
-    width: 100%; } }
+#footer {
+  margin-top: 10px;
+  background: #fff;
+  padding: 10px;
+  text-align: center;
+  color: #333; }
 
-.recommend a.btn_recom {
-  position: relative;
-  margin-bottom: 20px;
-  display: inline-block; }
-.recommend .badge {
-  position: absolute;
-  top: -5px;
-  left: -5px;
-  background: #d80000; }
-@media screen and (min-width: 998px) {
-  .recommend .img_recom {
-    width: 100%; } }
-@media screen and (max-width: 998px) {
-  .recommend .img_recom {
-    width: 100%; } }
+.channel {
+  padding: 10px; }
+  .channel a.btn_channel {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px; }
+  .channel .hits {
+    display: block;
+    text-align: left;
+    color: #444;
+    font-size: 14px;
+    margin-top: 5px; }
+  .channel .badge {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    background: #d80000; }
+  @media screen and (min-width: 768px) {
+    .channel .img_channel {
+      width: 100%; } }
+  @media screen and (max-width: 768px) {
+    .channel .img_channel {
+      width: 100%; } }
 
-.community a.btn_commnity {
-  display: inline-block;
-  margin-bottom: 10px; }
-.community .img_community {
-  width: 100%; }
+.recommend {
+  padding: 10px; }
+  .recommend a.btn_recom {
+    position: relative;
+    margin-bottom: 20px;
+    display: inline-block; }
+  .recommend .badge {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    background: #d80000; }
+  @media screen and (min-width: 998px) {
+    .recommend .img_recom {
+      width: 100%; } }
+  @media screen and (max-width: 998px) {
+    .recommend .img_recom {
+      width: 100%; } }
+
+.community {
+  padding: 10px; }
+  .community a.btn_commnity {
+    display: inline-block;
+    margin-bottom: 10px; }
+  .community .img_community {
+    width: 100%; }
+
+.swiper-container {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: visible; }
+  .swiper-container .img_banner {
+    width: 100%; }
+
+.swiper-pagination {
+  position: relative;
+  bottom: -5px !important; }
+
+.swiper-pagination-bullet-active {
+  background: #cd0000 !important;
+  width: 10px;
+  height: 10px; }
 
 .blind {
   display: none; }
@@ -109,10 +138,5 @@ html, body {
   padding-left: 10px; }
   .heading a.title {
     color: #444; }
-
-.swiper-container {
-  width: 100%; }
-  .swiper-container .img_banner {
-    width: 100%; }
 
 /*# sourceMappingURL=styles.css.map */

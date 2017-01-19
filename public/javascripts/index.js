@@ -7,15 +7,11 @@ requirejs(
     'jquery'
     , 'common'
     ,'swiper'
-    //,'mb_player'
     ,'fastclick'
   ],
   function ($, Common) {
-    console.info('index page');
 
-    // $(".player").mb_YTPlayer();
-
-	  var mySwiper = new Swiper ('.swiper-container', {
+	  new Swiper ('.swiper-container', {
 		  direction: 'horizontal',
 		  loop: true,
 		  speed: 1000,
@@ -39,6 +35,14 @@ requirejs(
 	  });
 
 
+	  var
+      swiperBtnPrev = $('.swiper-button-prev'),
+	    swiperBtnNext = $('.swiper-button-next');
+
+	  if(Common.utils.isMobile()){
+		  swiperBtnPrev.addClass('blind');
+		  swiperBtnNext.addClass('blind');
+    }
 
 
      // var
