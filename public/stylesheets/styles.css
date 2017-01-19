@@ -1,4 +1,30 @@
 @import url(../components/swiper/dist/css/swiper.min.css);
+.blind {
+  display: none; }
+
+.heading {
+  color: #444;
+  font-size: 20px;
+  border-bottom: 1px solid #eee;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px; }
+  .heading a.title {
+    color: #444; }
+
+.img_logo {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  margin-right: 5px; }
+
+.ellipsis, .sidebar-fixed li.nav_list {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden; }
+
 .sidebar-fixed {
   background: #fff;
   position: absolute;
@@ -13,6 +39,25 @@
       width: 0;
       height: 0;
       display: none; } }
+  .sidebar-fixed .title {
+    font-size: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px; }
+  .sidebar-fixed .inner-sidebar {
+    padding: 10px; }
+  .sidebar-fixed li.nav_list {
+    list-style: none;
+    margin-bottom: 8px;
+    width: 210px; }
+    .sidebar-fixed li.nav_list a.linkNav {
+      color: #333;
+      font-size: 14px; }
+    .sidebar-fixed li.nav_list a.linkNav:hover {
+      color: #cd0000; }
+
+.recomList,
+.channelList {
+  padding-left: 0; }
 
 @media screen and (min-width: 1050px) {
   .content_area {
@@ -123,20 +168,5 @@ html, body {
   background: #cd0000 !important;
   width: 10px;
   height: 10px; }
-
-.blind {
-  display: none; }
-
-.heading {
-  color: #444;
-  font-size: 20px;
-  border-bottom: 1px solid #eee;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px; }
-  .heading a.title {
-    color: #444; }
 
 /*# sourceMappingURL=styles.css.map */

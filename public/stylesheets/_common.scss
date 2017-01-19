@@ -16,3 +16,17 @@
     color: #444;
   }
 }
+
+
+.img_logo{
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  margin-right: 5px;
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

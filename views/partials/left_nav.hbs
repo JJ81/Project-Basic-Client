@@ -1,34 +1,35 @@
 <div class="sidebar-fixed">
-    <!--<h2>test</h2>-->
-    <!--<ul>-->
-        <!--<li><a href="#">list</a></li>-->
-        <!--<li><a href="#">list</a></li>-->
-        <!--<li><a href="#">list</a></li>-->
-        <!--<li><a href="#">list</a></li>-->
-        <!--<li><a href="#">list</a></li>-->
-        <!--<li><a href="#">list</a></li>-->
-    <!--</ul>-->
-    <!--<h2>test2</h2>-->
-    <!--<ul>-->
-        <!--<li><a href="#">list</a></li>-->
-        <!--<li><a href="#">list</a></li>-->
-        <!--<li><a href="#">list</a></li>-->
-        <!--<li><a href="#">list</a></li>-->
-        <!--<li><a href="#">list</a></li>-->
-        <!--<li><a href="#">list</a></li>-->
-    <!--</ul>-->
+    <div class="inner-sidebar">
+        <h3 class="title">추천방송</h3>
+        <ul class="recomList">
+            {{#each recomList}}
+                <li class="nav_list">
+                    <a href="/channel/{{channel_id}}" class="linkNav">
+                        <img src="https://s3.ap-northeast-2.amazonaws.com/holdemclub/channel/{{channel_id}}/logo"
+                             width="32"
+                             height="32"
+                             class="img_logo"
+                             alt="{{title}}" />
+                        {{title}}
+                    </a>
+                </li>
+            {{/each}}
+        </ul>
 
-    <h3>추천방송</h3>
-    <ul>
-    {{#each recomList}}
-    <li><a href="/channel/{{channel_id}}">{{title}}</a></li>
-    {{/each}}
-    </ul>
-
-    <h3>홀클.tv 컨텐츠</h3>
-    <ul>
-        {{#each contentlist}}
-            <li><a href="/channel/{{channel_id}}">{{title}}</a></li>
-        {{/each}}
-    </ul>
+        <h3 class="title">홀클.tv 컨텐츠</h3>
+        <ul class="channelList">
+            {{#each contentlist}}
+                <li class="nav_list">
+                    <a href="/channel/{{channel_id}}" class="linkNav">
+                        <img src="https://s3.ap-northeast-2.amazonaws.com/holdemclub/channel/{{channel_id}}/logo"
+                             width="32"
+                             height="32"
+                             class="img_logo"
+                             alt="{{title}}" />
+                        {{title}}
+                    </a>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
 </div>

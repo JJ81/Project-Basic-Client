@@ -17,7 +17,41 @@
   position: absolute;
   top: 0;
   left: 0;
+
+  .title{
+    font-size: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+
+  .inner-sidebar{
+    padding: 10px;
+  }
+
+  li.nav_list{
+    list-style: none;
+    margin-bottom: 8px;
+    // border: 1px solid #f00;
+    width: 210px;
+    @extend .ellipsis;
+    a.linkNav{
+      color : $main-font-color;
+      font-size: 14px;
+    }
+    a.linkNav:hover{
+      color: $main-color;
+    }
+  }
+
 }
+
+
+.recomList,
+.channelList{
+//  border: 1px solid #f00;
+  padding-left: 0;
+}
+
 
 .content_area{
 
