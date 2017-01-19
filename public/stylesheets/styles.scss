@@ -4,49 +4,15 @@
 @import 'main_channel';
 @import 'main_recom';
 @import 'main_community';
+@import '../components/swiper/dist/css/swiper.min.css';
+// @import 'mb_player';
+@import 'common';
 
-
-//
-//.banner_A{
-//   //border: 1px solid #f00;
-//  margin-top: 10px;
-//
-//  .btn_link{
-//    display: inline-block;
-//  }
-//
-//  @media screen and (min-width: $break-medium) {
-//    .img_A_banner{
-//      max-width: 100%;
-//
-//    }
-//  }
-//
-//  @media screen and (max-width: $break-medium) {
-//    .img_A_banner{
-//      width: 100%;
-//
-//    }
-//  }
-//
-//  .img_banner{
-//    display: none;
-//  }
-//
-//
-//  @media screen and (min-width: $break-medium) {
-//    .img_A_banner{
-//      display: block;
-//    }
-//  }
-//
-//  @media screen and (max-width: $break-medium) {
-//    .img_A_banner_mobile{
-//      display: block;
-//    }
-//  }
-//}
-//
-
-
+// swiper
+.swiper-container {
+  width: 100%;
+  .img_banner{
+    width: 100%;
+  }
+}
 

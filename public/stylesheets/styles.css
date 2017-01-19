@@ -1,3 +1,4 @@
+@import url(../components/swiper/dist/css/swiper.min.css);
 .sidebar-fixed {
   background: #fff;
   position: absolute;
@@ -19,17 +20,6 @@
 @media screen and (max-width: 1450px) {
   .content_area {
     padding-left: 0; } }
-.content_area .heading {
-  color: #444;
-  font-size: 26px;
-  border-bottom: 1px solid #eee;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px; }
-  .content_area .heading a.title {
-    color: #444; }
 
 .content_wrapper {
   position: relative;
@@ -104,5 +94,25 @@ html, body {
   margin-bottom: 10px; }
 .community .img_community {
   width: 100%; }
+
+.blind {
+  display: none; }
+
+.heading {
+  color: #444;
+  font-size: 20px;
+  border-bottom: 1px solid #eee;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px; }
+  .heading a.title {
+    color: #444; }
+
+.swiper-container {
+  width: 100%; }
+  .swiper-container .img_banner {
+    width: 100%; }
 
 /*# sourceMappingURL=styles.css.map */
