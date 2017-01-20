@@ -1,0 +1,32 @@
+.blind {
+  display: none;
+}
+
+
+.heading{
+  color: #444;
+  font-size: 20px;
+  border-bottom: 1px solid #eee;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  a.title{
+    color: #444;
+  }
+}
+
+
+.img_logo{
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  margin-right: 5px;
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

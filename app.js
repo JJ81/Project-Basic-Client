@@ -18,8 +18,10 @@ const cookieSession = require('cookie-session');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
 hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartials(__dirname + '/views/modal');
+hbs.registerPartials(__dirname + '/views/main');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -38,7 +40,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
-
+app.use('/static', express.static(__dirname + '/public'));
 
 const allowCORS = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -50,7 +52,7 @@ const allowCORS = function(req, res, next) {
 };
 app.use(allowCORS);
 
-global.PROJ_TITLE = "홀덤클럽티비, 웹모바일";
+global.PROJ_TITLE = "홀덤클럽티비";
 
 app.use('/', routes);
 

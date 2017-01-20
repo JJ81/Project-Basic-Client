@@ -26,6 +26,7 @@
     "jquery-ui": "jqueryui#^1.12.1",
     "font-awesome": "fontawesome#^4.7.0",
     "requirejs": "^2.3.2",
-    "jquery-validation": "jquery.validate#^1.13.0"
+    "jquery-validation": "jquery.validate#^1.13.0",
+    "swiper": "^3.4.1"
   }
 }

@@ -11,10 +11,12 @@ require.config({
     jqueryValidate : ['/components/jquery-validation/dist/jquery.validate.min'],
     lodash : ['/components/lodash/dist/lodash.min'],
     fastclick : ['/components/fastclick/lib/fastclick'],
-    common : ['/javascripts/common']
+    swiper : ['/components/swiper/dist/js/swiper.jquery'],
+	  common : ['/javascripts/common']
   },
   shim: {
     jqueryValidate : ['jquery'],
-    jqueryCookie : ['jquery']
+    jqueryCookie : ['jquery'],
+	  swiper : ['jquery']
   }
 });
