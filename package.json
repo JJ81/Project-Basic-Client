@@ -13,8 +13,7 @@
     "local": "NODE_ENV=local nodemon ./bin/www nodemon",
     "development": "NODE_ENV=development nodemon ./bin/www nodemon",
     "production": "NODE_ENV=production nodemon ./bin/www nodemon",
-    "test-jasmine": "jasmine spec/hello_world_spec.js",
-    "test-mocha": "mocha test/test.js"
+    "test": "mocha --require babel-register --debug"
   },
   "dependencies": {
     "async": "^2.1.4",
@@ -34,7 +33,9 @@
   },
   "devDependencies": {
     "JSON": "^1.0.0",
+    "babel-register": "^6.22.0",
     "bcrypt": "^0.8.7",
+    "chai": "^3.5.0",
     "connect-flash": "^0.1.1",
     "cookie-session": "^2.0.0-alpha.2",
     "currency-formatter": "^1.0.6",
