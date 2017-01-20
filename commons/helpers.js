@@ -102,3 +102,9 @@ hbs.registerHelper('for', function(from, to, incr, block) {
     accum += block.fn(i);
   return accum;
 });
+
+
+hbs.registerHelper('divideChannel', function (string) {
+  var _arr = string.split(',');
+  return _arr[0];
+});

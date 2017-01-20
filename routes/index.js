@@ -96,7 +96,7 @@ router.get('/', function (req, res) {
 		    });
       },
       function (cb) {
-	      connection.query(QUERY.HOME.GetNavList, function (err, rows) {
+	      connection.query(QUERY.HOME.GetNavAllList, function (err, rows) {
 		      if(err){
 			      console.error(err);
 			      cb(err, null);

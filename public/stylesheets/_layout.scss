@@ -42,21 +42,17 @@
       color: $main-color;
     }
   }
-
 }
 
 
 .recomList,
 .channelList{
-//  border: 1px solid #f00;
   padding-left: 0;
 }
 
 
 .content_area{
-
   // border: 1px solid #f00;
-
   @media screen and (min-width: $width-size01) {
     padding-left: 230px;
   }
@@ -74,7 +70,7 @@
 }
 
 .inner_content{
-  max-width: 1200px;
+  max-width: $content-max-width;
   margin: 0 auto;
   background :#fff;
   padding: 10px;
@@ -87,21 +83,45 @@ html, body{
 .header{
   border-bottom: 1px solid #eee;
   position: relative;
+  .btnLeftMenu{
+    color : #b7b7b7;
+    font-size: 20px;
+  }
+
+  .btnLeftMenu:hover{
+    color: $main-color;
+  }
+
+  .text-red{
+    color: $main-color;
+  }
+  .text-black {
+    color: $main-font-color;
+  }
 }
 
 .logo_area{
   font-size: 26px;
   position: relative;
   top: -6px;
-  left: 20px;
+  left: 25px;
   display: inline-block;
 
+  .logo:hover{
+    text-decoration: none;
+  }
+
+  .img_logo{
+    position: relative;
+    top: -3px;
+    left: 7px;
+  }
 }
 
 .btn_login{
   position: absolute;
   right: 20px;
-  top: 20px;
+  top: 16px;
 }
 
 

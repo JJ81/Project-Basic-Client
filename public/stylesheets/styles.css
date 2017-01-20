@@ -53,7 +53,7 @@
       color: #333;
       font-size: 14px; }
     .sidebar-fixed li.nav_list a.linkNav:hover {
-      color: #cd0000; }
+      color: #c30000; }
 
 .recomList,
 .channelList {
@@ -83,18 +83,33 @@ html, body {
 .header {
   border-bottom: 1px solid #eee;
   position: relative; }
+  .header .btnLeftMenu {
+    color: #b7b7b7;
+    font-size: 20px; }
+  .header .btnLeftMenu:hover {
+    color: #c30000; }
+  .header .text-red {
+    color: #c30000; }
+  .header .text-black {
+    color: #333; }
 
 .logo_area {
   font-size: 26px;
   position: relative;
   top: -6px;
-  left: 20px;
+  left: 25px;
   display: inline-block; }
+  .logo_area .logo:hover {
+    text-decoration: none; }
+  .logo_area .img_logo {
+    position: relative;
+    top: -3px;
+    left: 7px; }
 
 .btn_login {
   position: absolute;
   right: 20px;
-  top: 20px; }
+  top: 16px; }
 
 #footer {
   margin-top: 10px;
@@ -165,7 +180,7 @@ html, body {
   bottom: -5px !important; }
 
 .swiper-pagination-bullet-active {
-  background: #cd0000 !important;
+  background: #c30000 !important;
   width: 10px;
   height: 10px; }
 
