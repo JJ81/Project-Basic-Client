@@ -1,12 +1,13 @@
 const request = require('request');
 const BASE_URL = 'http://localhost:3002/';
 
+
 describe('Hello World Test', function () {
 	describe('GET /', function () {
 		it('returns status code 200', function (done) {
 			request.get(BASE_URL + 'test', function (error, response, body) {
 				if(error){
-					console.error(err);
+					console.error(error);
 					done();
 				}
 				expect(response.statusCode).toBe(200);
@@ -17,7 +18,7 @@ describe('Hello World Test', function () {
 		it("returns Hello World", function(done) {
 			request.get(BASE_URL + 'test', function(error, response, body) {
 				if(error){
-					console.error(err);
+					console.error(error);
 					done();
 				}
 				const value = JSON.parse(body).result;
@@ -25,6 +26,8 @@ describe('Hello World Test', function () {
 				done();
 			});
 		});
+
+
 		
 		
 	});

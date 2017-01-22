@@ -83,10 +83,41 @@ router.get('/logout', isAuthenticated, function (req, res) {
 
 
 router.get('/', function (req, res) {
-  res.render('index', {
-    current_path : "INDEX",
-    title : PROJ_TITLE,
-    loggedIn: req.user,
+	async.parallel(
+	  [
+	    function (cb){
+		    connection.query(QUERY.HOME.GetRecomList, function (err, rows) {
+			    if(err){
+				    console.error(err);
+				    cb(err, null);
+			    }else{
+				    cb(null, rows);
+			    }
+		    });
+      },
+      function (cb) {
+	      connection.query(QUERY.HOME.GetNavAllList, function (err, rows) {
+		      if(err){
+			      console.error(err);
+			      cb(err, null);
+		      }else{
+			      cb(null, rows);
+		      }
+        });
+      }
+    ], function (err, result){
+	    if(err){
+	      console.error(err);
+		    throw new Error(err);
+      }else{
+		    res.render('index', {
+			    current_path : "INDEX",
+			    title : PROJ_TITLE,
+			    loggedIn: req.user,
+			    recomList : result[0],
+          contentlist : result[1]
+		    });
+      }
   });
 });
 

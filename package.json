@@ -13,7 +13,8 @@
     "local": "NODE_ENV=local nodemon ./bin/www nodemon",
     "development": "NODE_ENV=development nodemon ./bin/www nodemon",
     "production": "NODE_ENV=production nodemon ./bin/www nodemon",
-    "test" : "jasmine spec/hello_world_spec.js"
+    "test-jasmine": "jasmine spec/hello_world_spec.js",
+    "test-mocha": "mocha test/test.js"
   },
   "dependencies": {
     "async": "^2.1.4",
@@ -38,6 +39,16 @@
     "cookie-session": "^2.0.0-alpha.2",
     "currency-formatter": "^1.0.6",
     "jasmine": "^2.5.3",
+    "karma": "^1.4.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.2",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-requirejs": "^1.1.0",
+    "karma-safari-launcher": "^1.0.0",
+    "mocha": "^3.2.0",
     "moment": "^2.17.0",
     "mysql": "^2.12.0",
     "passport": "^0.3.2",

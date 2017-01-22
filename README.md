@@ -5,3 +5,4 @@
 4. MySQL
 5. PM2 + Nodemon
 6. Test Automation with Mocha  (Will Be Soon)
+7. Remote Deploy with AWS CodeDeploy and PM2 Deploy
