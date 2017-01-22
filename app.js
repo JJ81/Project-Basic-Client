@@ -30,7 +30,6 @@ app.use(cookieSession({
   keys: ['HC_Mobile']
 }));
 
-
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -42,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use('/static', express.static(__dirname + '/public'));
 
-const allowCORS = function(req, res, next) {
+const allowCORS = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
@@ -100,18 +99,22 @@ if (app.get('env') === 'local'){
   global.mysql_location = 'local';
   global.redis_location = 'local';
 
-  console.info('local');
+  //console.info('local');
 }else if(app.get('env') === 'development'){
   global.redis_location = 'dev';
   global.mysql_location = 'dev';
 
-  console.info('development');
+  //console.info('development');
 }else if(app.get('env') === 'production'){
   global.mysql_location = 'real';
   global.redis_location = 'real';
 
-  console.info('production');
+  //console.info('production');
 }
+
+exports.closeServer = function(){
+	server.close();
+};
 
 
 module.exports = app;

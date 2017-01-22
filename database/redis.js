@@ -14,11 +14,11 @@ module.exports = function (router, server){
 	}
 
 	client.on("connect", function () {
-		console.log("Redis is connected ");
+		//console.log("Redis is connected ");
 	});
 
 	client.on("ready", function () {
-		console.log("Redis is ready");
+		//console.log("Redis is ready");
 	});
 
 	client.on("error", function (err) {
@@ -30,7 +30,7 @@ module.exports = function (router, server){
 	});
 
 	client.monitor(function (err, res) {
-		console.log("Entering monitoring mode.");
+		//console.log("Entering monitoring mode.");
 		if(err){
 			console.error(err);
 		}else{
