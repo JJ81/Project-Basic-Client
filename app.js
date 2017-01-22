@@ -30,7 +30,6 @@ app.use(cookieSession({
   keys: ['HC_Mobile']
 }));
 
-
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -42,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use('/static', express.static(__dirname + '/public'));
 
-const allowCORS = function(req, res, next) {
+const allowCORS = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');

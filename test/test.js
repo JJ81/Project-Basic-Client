@@ -21,13 +21,15 @@ describe('Should return 200', () => {
 	// todo 대신 채널 데이터 리스트는 실 디비에서 가져오지 않고 로컬이나 데브 디비에서 가져와서 테스트할 수 있도록 하며,
 	// todo 실 서버에 있는 콘텐츠와 동일한 데이터로 업데이트 한 후에 테스트를 실행할 수 있도록 한다
 	//
-	it('Channel Page', (done) =>{
+	it('Channel Page', (done) => {
 		"use strict";
 		request.get('http://localhost:3002/channel', (err, res, body) => {
 			expect(res.statusCode).to.equal(200);
 			done();
 		});
 	});
-
-
+	
+	
+	
+	
 });
