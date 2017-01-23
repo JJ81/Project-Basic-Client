@@ -59,26 +59,26 @@ passport.use(new LocalStrategy({
 ));
 
 router.get('/login', function (req, res) {
-  if (req.user == null) {
-    res.render('login', {
-      current_path: 'login',
-      title: PROJ_TITLE + 'login'
-    });
-  } else {
-    res.redirect('/');
-  }
+	if (req.user == null) {
+		res.render('login', {
+			current_path: 'login',
+			title: PROJ_TITLE + 'login'
+		});
+	} else {
+		res.redirect('/');
+	}
 });
 
 router.post('/login', passport.authenticate('local', {
-  failureRedirect: '/login',
-  failureFlash: true
+	failureRedirect: '/login',
+	failureFlash: true
 }), function (req, res) {
-  res.redirect('/');
+	res.redirect('/');
 });
 
 router.get('/logout', isAuthenticated, (req, res) => {
-  req.logout();
-  res.redirect('/');
+	req.logout();
+	res.redirect('/');
 });
 
 
