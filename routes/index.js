@@ -12,6 +12,7 @@ const JSON = require('JSON');
 require('../database/redis')(router, 'local'); // redis
 require('../commons/helpers');
 
+
 passport.serializeUser((user, done) => {
   done(null, user);
 });
