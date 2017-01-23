@@ -12,50 +12,50 @@ const JSON = require('JSON');
 require('../database/redis')(router, 'local'); // redis
 require('../commons/helpers');
 
-passport.serializeUser(function (user, done) {
-  done(null, user);
+
+passport.serializeUser((user, done) => {
+	done(null, user);
 });
 
-passport.deserializeUser(function (user, done) {
-  done(null, user);
+passport.deserializeUser((user, done) => {
+	done(null, user);
 });
 
-var isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated())
-    return next();
-  res.redirect('/login');
+var isAuthenticated = (req, res, next) => {
+	if (req.isAuthenticated())
+		return next();
+	res.redirect('/login');
 };
 
 passport.use(new LocalStrategy({
-    usernameField: 'agent',
-    passwordField: 'password',
-    passReqToCallback: true
-  }, function (req, agent, password, done) {
-    connection.query(QUERY.AGENT.login, [agent], function (err, data) {
-      if (err) {
-        return done(null, false);
-      } else {
-        if (data.length === 1) {
-          if (!bcrypt.compareSync(password, data[0].password)) {
-            console.log('password is not matched.');
-            return done(null, false);
-          } else {
-            console.log('password is matched.');
-            console.info(data[0]);
-            return done(null, {
-              'agent': data[0].code,
-              'layer': data[0].layer,
-              'parent_id': data[0].parent_id,
-              'top_parent_id': data[0].top_parent_id,
-              'balance': data[0].balance
-            });
-          }
-        } else {
-          return done(null, false);
-        }
-      }
-    });
-  }
+	usernameField: 'agent',
+	passwordField: 'password',
+	passReqToCallback: true }, (req, agent, password, done) => {
+		connection.query(QUERY.AGENT.login, [agent], (err, data) => {
+			if (err) {
+				return done(null, false);
+			} else {
+				if (data.length === 1) {
+					if (!bcrypt.compareSync(password, data[0].password)) {
+						console.log('password is not matched.');
+						return done(null, false);
+					} else {
+						console.log('password is matched.');
+						console.info(data[0]);
+						return done(null, {
+							'agent': data[0].code,
+							'layer': data[0].layer,
+							'parent_id': data[0].parent_id,
+							'top_parent_id': data[0].top_parent_id,
+							'balance': data[0].balance
+						});
+					}
+				} else {
+					return done(null, false);
+				}
+			}
+		});
+	}
 ));
 
 router.get('/login', function (req, res) {
@@ -76,17 +76,17 @@ router.post('/login', passport.authenticate('local', {
   res.redirect('/');
 });
 
-router.get('/logout', isAuthenticated, function (req, res) {
+router.get('/logout', isAuthenticated, (req, res) => {
   req.logout();
   res.redirect('/');
 });
 
 
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
 	async.parallel(
 	  [
-	    function (cb){
-		    connection.query(QUERY.HOME.GetRecomList, function (err, rows) {
+		  (cb) => {
+		    connection.query(QUERY.HOME.GetRecomList, (err, rows) => {
 			    if(err){
 				    console.error(err);
 				    cb(err, null);
@@ -95,8 +95,8 @@ router.get('/', function (req, res) {
 			    }
 		    });
       },
-      function (cb) {
-	      connection.query(QUERY.HOME.GetNavAllList, function (err, rows) {
+		  (cb) => {
+	      connection.query(QUERY.HOME.GetNavAllList, (err, rows) => {
 		      if(err){
 			      console.error(err);
 			      cb(err, null);
@@ -105,7 +105,7 @@ router.get('/', function (req, res) {
 		      }
         });
       }
-    ], function (err, result){
+    ], (err, result) => {
 	    if(err){
 	      console.error(err);
 		    throw new Error(err);
@@ -121,7 +121,7 @@ router.get('/', function (req, res) {
   });
 });
 
-router.get('/test', function (req, res) {
+router.get('/test', (req, res) => {
 	res.json({result : 'Hello World'});
 });
 
