@@ -12,15 +12,16 @@ const JSON = require('JSON');
 require('../database/redis')(router, 'local'); // redis
 require('../commons/helpers');
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser((user, done) => {
   done(null, user);
 });
 
-passport.deserializeUser(function (user, done) {
+passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-var isAuthenticated = function (req, res, next) {
+
+var isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated())
     return next();
   res.redirect('/login');
@@ -31,7 +32,7 @@ passport.use(new LocalStrategy({
     passwordField: 'password',
     passReqToCallback: true
   }, function (req, agent, password, done) {
-    connection.query(QUERY.AGENT.login, [agent], function (err, data) {
+    connection.query(QUERY.AGENT.login, [agent], (err, data) => {
       if (err) {
         return done(null, false);
       } else {
@@ -76,17 +77,17 @@ router.post('/login', passport.authenticate('local', {
   res.redirect('/');
 });
 
-router.get('/logout', isAuthenticated, function (req, res) {
+router.get('/logout', isAuthenticated, (req, res) => {
   req.logout();
   res.redirect('/');
 });
 
 
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
 	async.parallel(
 	  [
-	    function (cb){
-		    connection.query(QUERY.HOME.GetRecomList, function (err, rows) {
+		  (cb) => {
+		    connection.query(QUERY.HOME.GetRecomList, (err, rows) => {
 			    if(err){
 				    console.error(err);
 				    cb(err, null);
@@ -95,8 +96,8 @@ router.get('/', function (req, res) {
 			    }
 		    });
       },
-      function (cb) {
-	      connection.query(QUERY.HOME.GetNavAllList, function (err, rows) {
+		  (cb) => {
+	      connection.query(QUERY.HOME.GetNavAllList, (err, rows) => {
 		      if(err){
 			      console.error(err);
 			      cb(err, null);
@@ -105,7 +106,7 @@ router.get('/', function (req, res) {
 		      }
         });
       }
-    ], function (err, result){
+    ], (err, result) => {
 	    if(err){
 	      console.error(err);
 		    throw new Error(err);
@@ -121,7 +122,7 @@ router.get('/', function (req, res) {
   });
 });
 
-router.get('/test', function (req, res) {
+router.get('/test', (req, res) => {
 	res.json({result : 'Hello World'});
 });
 
