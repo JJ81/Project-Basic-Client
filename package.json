@@ -7,7 +7,7 @@
   "repository": "https://github.com/JJ81/HC-Mobile.git",
   "scripts": {
     "start": "nodemon ./bin/www nodemon -e hbs",
-    "debug": "DEBUG=ams-holdemclub:* npm run dev",
+    "debug": "DEBUG=express:* npm start",
     "dev-server": "NODE_ENV=development nodemon ./bin/www nodemon",
     "dev-client": "NODE_ENV=development nodemon ./bin/www nodemon -e hbs",
     "local": "NODE_ENV=local nodemon ./bin/www nodemon",
