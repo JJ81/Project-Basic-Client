@@ -1,0 +1,46 @@
+<div class="sidebar-fixed">
+    <div class="inner-sidebar">
+        <h3 class="title">추천방송</h3>
+        <ul class="recomList">
+            {{#each recomList}}
+            <li class="nav_list">
+                <a href="/channel/{{channel_id}}" class="linkNav">
+                    <img src="https://s3.ap-northeast-2.amazonaws.com/holdemclub/channel/{{channel_id}}/logo"
+                         width="32"
+                         height="32"
+                         class="img_logo"
+                         alt="{{title}}" />
+                    {{title}}
+                </a>
+            </li>
+            {{/each}}
+        </ul>
+
+        <h3 class="title">홀클.tv 컨텐츠</h3>
+        <ul class="channelList">
+            {{#each contentlist}}
+            <li class="nav_list">
+                {{#if (isEquals type 'single')}}
+                <a href="/channel/{{group_channel_id}}" class="linkNav">
+                    <img src="https://s3.ap-northeast-2.amazonaws.com/holdemclub/channel/{{group_channel_id}}/logo"
+                         width="32"
+                         height="32"
+                         class="img_logo"
+                         alt="{{title}}" />
+                    {{title}}
+                </a>
+                {{else if (isEquals type 'group') }}
+                <a href="/channel/{{divideChannel group_channel_id}}" class="linkNav">
+                    <img src="https://s3.ap-northeast-2.amazonaws.com/holdemclub/channel/{{divideChannel group_channel_id}}/logo"
+                         width="32"
+                         height="32"
+                         class="img_logo"
+                         alt="{{title}}" />
+                    {{title}}
+                </a>
+                {{/if}}
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
