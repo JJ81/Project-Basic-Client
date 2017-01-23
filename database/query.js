@@ -1,19 +1,16 @@
-var QUERY = {};
+const QUERY = {};
 
 QUERY.HOME = {
-  GetNavList :
-    'select v.`created_dt`as updated_dt, ch.`channel_id`, ch.`title`, ch.`created_dt`, sum(v.`hits`)as hits, ch.`group_id`, ch.`active`, ch.`priority` from `channel`as ch left join (select *from `video` where `active`=true order by `created_dt` desc) as v on ch.`channel_id` = v.`channel_id` where ch.`active` =1 and not exists (select *from `group` where `title` = ch.`title`) group by ch.`channel_id` order by ch.`priority` asc;'
-  ,GetRecomList :
-    "select * from `recommend_channel` as rc " +
-    "where rc.active = true " +
-    "order by `priority` desc " +
-    "limit 3;"
-  ,GetNavAllList :
-	"select " +
-	"if(g.title is null, c.title, g.title) as title, " +
+  GetNavList: 'select v.`created_dt`as updated_dt, ch.`channel_id`, ch.`title`, ch.`created_dt`, sum(v.`hits`)as hits, ch.`group_id`, ch.`active`, ch.`priority` from `channel`as ch left join (select *from `video` where `active`=true order by `created_dt` desc) as v on ch.`channel_id` = v.`channel_id` where ch.`active` =1 and not exists (select *from `group` where `title` = ch.`title`) group by ch.`channel_id` order by ch.`priority` asc;'
+  , GetRecomList: "select * from `recommend_channel` as rc " +
+  "where rc.active = true " +
+  "order by `priority` desc " +
+  "limit 3;"
+  , GetNavAllList: "select " +
+  "if(g.title is null, c.title, g.title) as title, " +
   "if(count(g.`group_id`)=0,'single','group') as type, " +
-	"group_concat(c.`channel_id` order by c.priority asc) as group_channel_id, " +
-	"group_concat(c.title order by c.priority asc) as group_channel_title, " +
+  "group_concat(c.`channel_id` order by c.priority asc) as group_channel_id, " +
+  "group_concat(c.title order by c.priority asc) as group_channel_title, " +
   "if(g.group_id is null, c.title ,g.group_id) as group_id " +
   "from `channel` as c " +
   "left join `group` as g " +
@@ -23,4 +20,11 @@ QUERY.HOME = {
   "order by c.priority asc;" // todo 우선순위에 대한 로직은 asc가 아니라 desc가 되어야 한다
 };
 
+QUERY.COMMON = {
+  UserLogin: "select `user_id`, `password`, `nickname`, `name`, `email`, `login_fail_count`, `banned`, `market_code` from `user` where `user_id`=?;",
+  UserFailToLogin: 'update `user` set `login_fail_count`=`login_fail_count`+1 where `user_id`=?;',
+  UserClearFailedCount: 'update `user` set `login_fail_count`=0  where `user_id`=?;',
+  UserUpdateGameLog: 'insert into `log_access_game` set `user_id` = ?, `last_login_dt` = ?;'
+
+};
 module.exports = QUERY;

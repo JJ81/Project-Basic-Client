@@ -7,8 +7,9 @@ const bodyParser = require('body-parser');
 
 /*routes*/
 const routes = require('./routes/index');
-
+const api =require('/api/api');
 /*routes*/
+
 const app = express();
 const hbs = require('hbs');
 const passport = require('passport');
@@ -53,7 +54,10 @@ app.use(allowCORS);
 
 global.PROJ_TITLE = "홀덤클럽티비";
 
+/*routes path*/
 app.use('/', routes);
+app.use('/api/v1', api);
+/*routes path*/
 
 
 // catch 404 and forward to error handler
