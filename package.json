@@ -13,7 +13,7 @@
     "local": "NODE_ENV=local nodemon ./bin/www nodemon",
     "development": "NODE_ENV=development nodemon ./bin/www nodemon",
     "production": "NODE_ENV=production nodemon ./bin/www nodemon",
-    "test": "mocha --require babel-register --debug"
+    "test": "mocha --debug"
   },
   "dependencies": {
     "async": "^2.1.4",
