@@ -84,40 +84,40 @@ router.get('/logout', isAuthenticated, (req, res) => {
 
 router.get('/', (req, res) => {
 	async.parallel(
-	  [
-		  (cb) => {
-		    connection.query(QUERY.HOME.GetRecomList, (err, rows) => {
-			    if(err){
-				    console.error(err);
-				    cb(err, null);
-			    }else{
-				    cb(null, rows);
-			    }
-		    });
-      },
-		  (cb) => {
-	      connection.query(QUERY.HOME.GetNavAllList, (err, rows) => {
-		      if(err){
-			      console.error(err);
-			      cb(err, null);
-		      }else{
-			      cb(null, rows);
-		      }
-        });
-      }
-    ], (err, result) => {
-	    if(err){
-	      console.error(err);
-		    throw new Error(err);
-      }else{
-		    res.render('index', {
-			    current_path : "INDEX",
-			    title : PROJ_TITLE,
-			    loggedIn: req.user,
-			    recomList : result[0],
-          contentlist : result[1]
-		    });
-      }
+		[
+			(cb) => {
+				connection.query(QUERY.HOME.GetRecomList, (err, rows) => {
+					if(err){
+						console.error(err);
+						cb(err, null);
+					}else{
+						cb(null, rows);
+					}
+				});
+			},
+			(cb) => {
+				connection.query(QUERY.HOME.GetNavAllList, (err, rows) => {
+					if(err){
+						console.error(err);
+						cb(err, null);
+					}else{
+						cb(null, rows);
+					}
+				});
+			}
+		], (err, result) => {
+			if(err){
+				console.error(err);
+				throw new Error(err);
+			}else{
+				res.render('index', {
+					current_path : 'INDEX',
+					title : PROJ_TITLE,
+					loggedIn: req.user,
+					recomList : result[0],
+					contentlist : result[1]
+				});
+			}
   });
 });
 
