@@ -6,7 +6,7 @@ const expect = require('chai').expect;
 describe('Should return 200', () => {
 
 	it('Index Page', (done) =>{
-		"use strict";
+		'use strict';
 		request.get('http://localhost:3002/', (err, res, body) => {
 			expect(res.statusCode).to.equal(200);
 			done();
@@ -24,7 +24,7 @@ describe('Should return 200', () => {
 	// todo remote 환경에서 단위 테스트 하기
 	// todo TDD vs. BDD 설정 webStorm
 	it('Channel Page', (done) => {
-		"use strict";
+		'use strict';
 		request.get('http://localhost:3002/channel', (err, res, body) => {
 			expect(res.statusCode).to.equal(200);
 			done();
@@ -34,7 +34,6 @@ describe('Should return 200', () => {
 	
 
 	// test es6 from this area by unit test and check again webstore tools for same thing.
-
 
 
 
