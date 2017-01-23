@@ -20,7 +20,8 @@ describe('Should return 200', () => {
 	// todo 아마도 모든 페이지를 테스트를 자동화하는 것이므로 디비에서 가져온 모든 데이터를 조사하는 것이 좋겠다
 	// todo 대신 채널 데이터 리스트는 실 디비에서 가져오지 않고 로컬이나 데브 디비에서 가져와서 테스트할 수 있도록 하며,
 	// todo 실 서버에 있는 콘텐츠와 동일한 데이터로 업데이트 한 후에 테스트를 실행할 수 있도록 한다
-	//
+	// todo remote 환경에서 단위 테스트 하기
+	// todo TDD vs. BDD 설정 webStorm
 	it('Channel Page', (done) => {
 		"use strict";
 		request.get('http://localhost:3002/channel', (err, res, body) => {
@@ -30,6 +31,11 @@ describe('Should return 200', () => {
 	});
 	
 	
-	
-	
+
+	// test es6 from this area by unit test and check again webstore tools for same thing.
+
+
+
+
+
 });
