@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ContentFilters</key>
+	<dict/>
+	<key>auto_connect</key>
+	<true/>
+	<key>data</key>
+	<dict>
+		<key>connection</key>
+		<dict>
+			<key>colorIndex</key>
+			<integer>5</integer>
+			<key>database</key>
+			<string>dev_holdemclub</string>
+			<key>host</key>
+			<string>dev-holdemclub.ccchnydnz10o.ap-northeast-2.rds.amazonaws.com</string>
+			<key>kcid</key>
+			<string>1068083525478395249</string>
+			<key>name</key>
+			<string>HOLDEMCLUB_DEV</string>
+			<key>rdbms_type</key>
+			<string>mysql</string>
+			<key>sslCACertFileLocation</key>
+			<string></string>
+			<key>sslCACertFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslCertificateFileLocation</key>
+			<string></string>
+			<key>sslCertificateFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslKeyFileLocation</key>
+			<string></string>
+			<key>sslKeyFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>type</key>
+			<string>SPTCPIPConnection</string>
+			<key>useSSL</key>
+			<integer>0</integer>
+			<key>user</key>
+			<string>devholdemclub</string>
+		</dict>
+		<key>session</key>
+		<dict>
+			<key>connectionEncoding</key>
+			<string>utf8mb4</string>
+			<key>contentFilter</key>
+			<dict>
+				<key>filterComparison</key>
+				<string>=</string>
+				<key>filterComparisonTag</key>
+				<integer>0</integer>
+				<key>filterField</key>
+				<string>channel_id</string>
+				<key>filterValue</key>
+				<string>4551b700-9052-11e6-9820-bdab5846dddd</string>
+				<key>firstBetweenField</key>
+				<string></string>
+				<key>menuLabel</key>
+				<string>`channel_id` = '4551b700-9052-11e6-9820-bdab5846dddd'</string>
+				<key>secondBetweenField</key>
+				<string></string>
+			</dict>
+			<key>contentPageNumber</key>
+			<integer>1</integer>
+			<key>contentSelection</key>
+			<data>
+			YnBsaXN0MDDUAQIDBAUGNjdYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoK0HCBUWFxgZHSQoLDA0VSRudWxs0wkK
+			CwwQFFdOUy5rZXlzWk5TLm9iamVjdHNWJGNsYXNzow0OD4ACgAOA
+			BKMREhOABYAGgAiADFR0eXBlVHJvd3NUa2V5c18QJlNlbGVjdGlv
+			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
+			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
+			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
+			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClpjaGFubmVsX2lk0h4f
+			LS5fEA9OU011dGFibGVTdHJpbmejLS8jWE5TU3RyaW5n0h4fMTJe
+			TlNNdXRhYmxlQXJyYXmjMTMjV05TQXJyYXnSHh8iNaIiI18QD05T
+			S2V5ZWRBcmNoaXZlctE4OVRkYXRhgAEACAARABoAIwAtADIANwBF
+			AEsAUgBaAGUAbABwAHIAdAB2AHoAfAB+AIAAggCHAIwAkQC6AMEA
+			wgDDAMUAygDVAN4A9AD4AQUBDgETARUBFwEZAR4BKAEqATUBOgFM
+			AVABWQFeAW0BcQF5AX4BgQGTAZYBmwAAAAAAAAIBAAAAAAAAADoA
+			AAAAAAAAAAAAAAAAAAGd
+			</data>
+			<key>contentSortColIsAsc</key>
+			<true/>
+			<key>contentViewport</key>
+			<string>{{0, 0}, {1536, 1076}}</string>
+			<key>isToolbarVisible</key>
+			<true/>
+			<key>queries</key>
+			<string>
+select * from `recommend_channel` as rc
+where rc.active = true
+order by `priority` desc
+limit 3;
+
+
+select *
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.`active`=true
+order by c.priority desc, c.title asc;
+
+
+select c.channel_id, if(g.group_id is null, c.title , g.title) as title
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.`active`=true
+group by g.group_id
+order by c.priority desc, c.title asc;
+
+select distinct(g.group_id), c.channel_id, if(g.group_id is null, c.title , g.title) as title
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.`active`=true
+group by g.group_id 
+order by c.priority desc, c.title asc;
+
+
+
+
+
+select *
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.`active`=true
+group by g.group_id
+order by c.priority desc, c.title asc;
+
+
+select count(*) as total, c.title, g.title, c.priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.`active`=true
+group by g.group_id
+order by c.priority desc, c.title asc;
+
+
+select c.title, g.title, c.priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+order by c.priority desc, c.title asc;
+
+select 
+distinct(c.title) as channel_title, g.title as group_title, c.priority, g.group_id as group_id, c.channel_id as channel_id
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+order by c.priority desc, c.title asc;
+
+# 모든 컨텐츠 가져오기
+select 
+distinct(c.title) as channel_title, g.title as group_title, c.priority, g.group_id as group_id, c.channel_id as channel_id
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+order by c.priority asc, g.priority asc, c.title asc; 
+
+## 그룹간 순서를 지정할 수 있어야 한다.
+## 만약 그룹과 채널간 경쟁이 있을 경우 어떻게 정렬을 해서 가져올 수 있는가?
+# 모든 콘텐츠를 가져온 다음 이것들을 규칙을 정해서 정렬을 다시 한다.
+# display_title, group_id, channel_id(,,,), group_title
+# sub_channel이 있는 것과 없는 것을 구분할 수 있어야 한다.
+# sub_channel의 경우 해당 채널 아래로 이동시킨다.
+
+select 
+g.group_id, group_concat(c.channel_id) as channel_id, 
+c.title as channel_title,  g.title as group_title, 
+c.priority as c_priority, g.priority as g_priority, count(c.`channel_id`) as sub_channel_count
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by g.group_id
+order by c.priority desc, c.title asc;
+
+
+select 
+g.group_id, group_concat(c.channel_id) as channel_id, 
+c.title as channel_title,  g.title as group_title, 
+c.priority as c_priority, g.priority as g_priority, count(c.`channel_id`) as sub_channel_count
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by g.group_id
+order by c.priority asc;
+
+# 15개의 단독 채널과 그룹 채널이 출력되어야 한다. 순서는 priority asc이다.
+select 
+c.channel_id as channel_id, g.group_id as group_id, 
+c.title as channel_title,  g.title as group_title, 
+c.priority as c_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by c.channel_id
+order by c.priority asc;
+
+# 단독 채널일 경우 sub ""
+# 그룹 채널일 경우 sub에 title의 묶음과 channel_id의 묶음을 출력해보자.
+# order로 출력한 것과는 다르게 group이 되고 있는 모습을 볼 수 있다. =&gt; 블로그로 포스팅할 것
+## concat vs. group_concat vs. group_concat order by
+
+
+select
+c.channel_id as channel_id, if(g.group_id is null, c.title ,g.group_id) as group_id,
+c.title as channel_title,  g.title as group_title, c.priority as c_priority, count(g.`group_id`) as total
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc;
+
+
+select
+#c.channel_id as channel_id, 
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+#c.title as channel_title,  
+#g.title as group_title, c.priority as c_priority, 
+#count(g.`group_id`) as total,
+if(count(g.`group_id`)=0,'single','group') as type
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel_id
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,if(g.title is null, c.title, g.title) as title
+#,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc;
+
+
+
+
+
+select
+#c.channel_id as channel_id, 
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+#c.title as channel_title,  
+#g.title as group_title, c.priority as c_priority, 
+#count(g.`group_id`) as total,
+if(count(g.`group_id`)=0,'single','group') as type
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel_id
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,if(g.title is null, c.title, g.title) as title
+#,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc;
+
+
+select
+if(g.title is null, c.title, g.title) as title,
+if(count(g.`group_id`)=0,'single','group') as type,
+group_concat(c.`channel_id` order by c.priority asc) as group_channel_id,
+group_concat(c.title order by c.priority asc) as group_channel_title,
+if(g.group_id is null, c.title ,g.group_id) as group_id
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc;
+
+
+# 추천채널과 채널 테이블을 연결함. ==&gt; 리얼에 반영할 것.
+alter table `recommend_channel`
+add foreign key (`channel_id`)
+references `channel`(`channel_id`);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</string>
+			<key>table</key>
+			<string>channel</string>
+			<key>view</key>
+			<string>SP_VIEW_CUSTOMQUERY</string>
+			<key>windowVerticalDividerPosition</key>
+			<real>228</real>
+		</dict>
+	</dict>
+	<key>encrypted</key>
+	<false/>
+	<key>format</key>
+	<string>connection</string>
+	<key>queryFavorites</key>
+	<array/>
+	<key>queryHistory</key>
+	<array>
+		<string>alter table `recommend_channel`
+add foreign key (`channel_id`)
+references `channel`(`channel_id`)</string>
+		<string>select * from `recommend_channel` as rc
+where rc.active = true
+order by `priority` desc
+limit 3</string>
+		<string>select rc.`created_dt`, v.`created_dt`as updated_dt, rc.`recom_id`, rc.`channel_id`, rc.`title`, rc.`group_id`, rc.`priority`,ch.`channel_id` as sub_channel_id  from `recommend_channel` as rc left join `channel` as ch on rc.`group_id` = ch.`group_id` left join (select *from `video` where `active`= true order by `created_dt` desc) as v on rc.`channel_id` = v.`channel_id` or ch.`channel_id` = v.`channel_id` where rc.`active`=true group by rc.`channel_id` order by rc.`priority` limit 3</string>
+		<string>select
+if(g.title is null, c.title, g.title) as title,
+if(count(g.`group_id`)=0,'single','group') as type,
+group_concat(c.`channel_id` order by c.priority asc) as group_channel_id,
+group_concat(c.title order by c.priority asc) as group_channel_title,
+if(g.group_id is null, c.title ,g.group_id) as group_id
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+if(g.title is null, c.title, g.title) as title,
+if(count(g.`group_id`)=0,'single','group') as type,
+group_concat(c.`channel_id` order by c.priority asc) as group_channel_id,
+group_concat(c.title order by c.priority asc) as group_channel_title
+if(g.group_id is null, c.title ,g.group_id) as group_id
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+if(g.title is null, c.title, g.title) as title,
+if(count(g.`group_id`)=0,'single','group') as type,
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+
+group_concat(c.`channel_id` order by c.priority asc) as group_channel_id,
+group_concat(c.title order by c.priority asc) as group_channel_title
+
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+if(g.title is null, c.title, g.title) as title,
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+if(count(g.`group_id`)=0,'single','group') as type,
+group_concat(c.`channel_id` order by c.priority asc) as group_channel_id,
+group_concat(c.title order by c.priority asc) as group_channel_title
+
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+#c.channel_id as channel_id, 
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+#c.title as channel_title,  
+#g.title as group_title, c.priority as c_priority, 
+#count(g.`group_id`) as total,
+if(count(g.`group_id`)=0,'single','group') as type
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel_id
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,if(g.title is null, c.title, g.title) as title
+#,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+#c.channel_id as channel_id, 
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+#c.title as channel_title,  
+#g.title as group_title, c.priority as c_priority, 
+#count(g.`group_id`) as total,
+if(count(g.`group_id`)=0,'single','group') as type
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,if(g.title is null, c.title, g.title) as title
+#,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+#c.channel_id as channel_id, 
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+c.title as channel_title,  
+#g.title as group_title, c.priority as c_priority, 
+#count(g.`group_id`) as total,
+if(count(g.`group_id`)=0,'single','group') as type
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,if(g.title is null, c.title, g.title) as title
+#,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+#c.channel_id as channel_id, 
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+c.title as channel_title,  
+#g.title as group_title, c.priority as c_priority, 
+count(g.`group_id`) as total,
+if(count(g.`group_id`)=0,'single','group') as type
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,if(g.title is null, c.title, g.title) as title
+#,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+#c.channel_id as channel_id, 
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+c.title as channel_title,  g.title as group_title, c.priority as c_priority, 
+count(g.`group_id`) as total,
+if(count(g.`group_id`)=0,'single','group') as type
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,if(g.title is null, c.title, g.title) as title
+#,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+#c.channel_id as channel_id, 
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+c.title as channel_title,  g.title as group_title, c.priority as c_priority, 
+count(g.`group_id`) as total,
+if(count(g.`group_id`)=0,'single','group') as type
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel
+,group_concat(c.title order by c.priority asc) as group_channel_title
+#,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+#c.channel_id as channel_id, 
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+c.title as channel_title,  g.title as group_title, c.priority as c_priority, count(g.`group_id`) as total
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel
+,group_concat(c.title order by c.priority asc) as group_channel_title
+#,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+#c.channel_id as channel_id, 
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+c.title as channel_title,  g.title as group_title, c.priority as c_priority, count(g.`group_id`) as total
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+c.channel_id as channel_id, 
+if(g.group_id is null, c.title ,g.group_id) as group_id,
+c.title as channel_title,  g.title as group_title, c.priority as c_priority, count(g.`group_id`) as total
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select
+#c.channel_id as channel_id, 
+#if(g.group_id is null, c.title ,g.group_id) as group_id,
+c.title as channel_title,  g.title as group_title, c.priority as c_priority, count(g.`group_id`) as total
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string># 단독 채널일 경우 sub ""
+# 그룹 채널일 경우 sub에 title의 묶음과 channel_id의 묶음을 출력해보자.
+# order로 출력한 것과는 다르게 group이 되고 있는 모습을 볼 수 있다. =&gt; 블로그로 포스팅할 것
+## concat vs. group_concat vs. group_concat order by
+
+
+select
+c.channel_id as channel_id, if(g.group_id is null, c.title ,g.group_id) as group_id,
+c.title as channel_title,  g.title as group_title, c.priority as c_priority, count(g.`group_id`) as total
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,group_concat(c.priority order by c.priority asc) as group_priority
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by group_id
+order by c.priority asc</string>
+		<string>select 
+c.channel_id as channel_id 
+c.title as channel_title,  g.title as group_title, 
+c.priority as c_priority, 
+,if(count(g.`group_id`)=0, 'single','group') as type
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel_id
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,group_concat(c.priority order by c.priority asc) as group_priority
+,if(g.title is null, c.title, g.title) as title
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by g.group_id
+order by c.priority asc</string>
+		<string>select 
+c.channel_id as channel_id 
+if(g.group_id is null, c.title ,g.group_id) as group_id, 
+c.title as channel_title,  g.title as group_title, 
+c.priority as c_priority, 
+,if(count(g.`group_id`)=0, 'single','group') as type
+,group_concat(c.`channel_id` order by c.priority asc) as group_channel_id
+,group_concat(c.title order by c.priority asc) as group_channel_title
+,group_concat(c.priority order by c.priority asc) as group_priority
+,if(g.title is null, c.title, g.title) as title
+from `channel` as c
+left join `group` as g
+on c.group_id = g.group_id
+where c.active=true
+group by g.group_id
+order by c.priority asc</string>
+	</array>
+	<key>rdbms_type</key>
+	<string>mysql</string>
+	<key>rdbms_version</key>
+	<string>5.6.27-log</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>

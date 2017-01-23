@@ -18,8 +18,10 @@ const cookieSession = require('cookie-session');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
 hbs.registerPartials(__dirname + '/views/partials');
 hbs.registerPartials(__dirname + '/views/modal');
+hbs.registerPartials(__dirname + '/views/main');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -27,7 +29,6 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(cookieSession({
   keys: ['HC_Mobile']
 }));
-
 
 app.use(flash());
 app.use(passport.initialize());
@@ -38,9 +39,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
+app.use('/static', express.static(__dirname + '/public'));
 
-
-const allowCORS = function(req, res, next) {
+const allowCORS = (req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
@@ -50,7 +51,7 @@ const allowCORS = function(req, res, next) {
 };
 app.use(allowCORS);
 
-global.PROJ_TITLE = "홀덤클럽티비, 웹모바일";
+global.PROJ_TITLE = "홀덤클럽티비";
 
 app.use('/', routes);
 
@@ -98,18 +99,22 @@ if (app.get('env') === 'local'){
   global.mysql_location = 'local';
   global.redis_location = 'local';
 
-  console.info('local');
+  //console.info('local');
 }else if(app.get('env') === 'development'){
   global.redis_location = 'dev';
   global.mysql_location = 'dev';
 
-  console.info('development');
+  //console.info('development');
 }else if(app.get('env') === 'production'){
   global.mysql_location = 'real';
   global.redis_location = 'real';
 
-  console.info('production');
+  //console.info('production');
 }
+
+exports.closeServer = function(){
+	server.close();
+};
 
 
 module.exports = app;
