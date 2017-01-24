@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 
 /*routes*/
 const routes = require('./routes/index');
-const api =require('/api/api');
+const api =require('./api/api');
 /*routes*/
 
 const app = express();
@@ -28,7 +28,7 @@ hbs.registerPartials(__dirname + '/views/main');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 app.use(cookieSession({
-  keys: ['HC_Mobile']
+	keys: ['HC_Mobile']
 }));
 
 app.use(flash());
@@ -43,16 +43,17 @@ app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use('/static', express.static(__dirname + '/public'));
 
 const allowCORS = (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-  (req.method === 'OPTIONS') ?
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+	res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+	(req.method === 'OPTIONS') ?
     res.send(200) :
     next();
 };
 app.use(allowCORS);
 
-global.PROJ_TITLE = "홀덤클럽티비";
+
+global.PROJ_TITLE = '홀덤클럽티비';
 
 /*routes path*/
 app.use('/', routes);
@@ -67,24 +68,24 @@ app.use(function(req, res, next) {
   //var err = new Error('Not Found');
   //err.status = 404;
   //next(err);
-  res.render('404', {
-    current_path: '404 Error Page',
-    title: PROJ_TITLE + 'ERROR PAGE',
-    loggedIn: req.user
-  });
+	res.render('404', {
+		current_path: '404 Error Page',
+		title: PROJ_TITLE + 'ERROR PAGE',
+		loggedIn: req.user
+	});
 });
 
 // error handlers
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('500', {
-      current_path: '500 Error Page',
-      title: PROJ_TITLE + 'ERROR PAGE'
-    });
-  });
+	app.use(function(err, req, res, next) {
+		res.status(err.status || 500);
+		res.render('500', {
+			current_path: '500 Error Page',
+			title: PROJ_TITLE + 'ERROR PAGE'
+		});
+	});
 }
 
 // production error handler
@@ -92,26 +93,26 @@ if (app.get('env') === 'development') {
 app.use(function(err, req, res, next) {
   // console.error('500 error in prod');
   // res.status(err.status || 500);
-  res.render('500', {
-    current_path: '500 Error Page',
-    title: PROJ_TITLE + 'ERROR PAGE'
-  });
+	res.render('500', {
+		current_path: '500 Error Page',
+		title: PROJ_TITLE + 'ERROR PAGE'
+	});
 });
 
 // Swifty Automatic Changing ENV.
 if (app.get('env') === 'local'){
-  global.mysql_location = 'local';
-  global.redis_location = 'local';
+	global.mysql_location = 'local';
+	global.redis_location = 'local';
 
   //console.info('local');
 }else if(app.get('env') === 'development'){
-  global.redis_location = 'dev';
-  global.mysql_location = 'dev';
+	global.redis_location = 'dev';
+	global.mysql_location = 'dev';
 
   //console.info('development');
 }else if(app.get('env') === 'production'){
-  global.mysql_location = 'real';
-  global.redis_location = 'real';
+	global.mysql_location = 'real';
+	global.redis_location = 'real';
 
   //console.info('production');
 }
