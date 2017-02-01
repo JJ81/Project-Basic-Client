@@ -67,124 +67,58 @@ const allowCORS = (req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-    <<<<<<<
-    HEAD
     (req.method === 'OPTIONS') ? res.send(200) : next();
 };
 app.use(allowCORS);
 
 global.PROJ_TITLE = '홀덤클럽티비';
-======
-=
-    (req.method === 'OPTIONS') ?
-        res.send(200) :
-        next();
-}
-;
-app.use(allowCORS);
 
->>>>>>>
-develop - home - theme - yun - back
-
-global.PROJ_TITLE = '홀덤클럽티비';
-
-/*routes path*/
 app.use('/', routes);
-app.use('/api/v1', api);
-/*routes path*/
 
 // catch 404 and forward to error handler
-<<<<<<<
-HEAD
 app.use((req, res, next) => {
     // TODO 무조건 404를 거쳐가고 있는데 이것을 방지하는 코드를 넣을 것
-    ======
-    =
-        app.use(function (req, res, next) {
-            //console.error('404 error');
-            //
-            //var err = new Error('Not Found');
-            //err.status = 404;
-            //next(err);
-            >>>>>>>
-            develop - home - theme - yun - back
-            res.render('404', {
-                current_path: '404 Error Page',
-                title: PROJ_TITLE + 'ERROR PAGE',
-                loggedIn: req.user
-            });
-        });
+    res.render('404', {
+        current_path: '404 Error Page',
+        title: PROJ_TITLE + 'ERROR PAGE',
+        loggedIn: req.user
+    });
+});
 
 // error handlers
 // development error handler
 // will print stacktrace
-    if (app.get('env') === 'development') {
-    <<<<<<<
-        HEAD
-        app.use((err, req, res, next) => {
-            res.status(err.status || 500);
-            res.render('500', {
-                current_path: ' 500 Error Page',
-            === === =
-                app.use(function (err, req, res, next) {
-                    res.status(err.status || 500);
-                    res.render('500', {
-                            current_path: '500 Error Page',
-                        >>> >>> > develop - home - theme - yun - back
-                    title: PROJ_TITLE + 'ERROR PAGE'
-                })
-                    ;
-                });
-        }
+if (app.get('env') === 'development') {
+    app.use((err, req, res, next) => {
+        res.status(err.status || 500);
+        res.render('500', {
+            current_path: ' 500 Error Page',
+            title: PROJ_TITLE + 'ERROR PAGE'
+        });
+    });
+}
 
 // production error handler
 // no stacktraces leaked to user
-            <<<<<<<
-            HEAD
-            app.use((err, req, res, next) => {
-                ======
-                =
-                    app.use(function (err, req, res, next) {
-                        // console.error('500 error in prod');
-                        // res.status(err.status || 500);
-                        >>>>>>>
-                        develop - home - theme - yun - back
-                        res.render('500', {
-                            current_path: '500 Error Page',
-                            title: PROJ_TITLE + 'ERROR PAGE'
-                        });
-                    });
+app.use((err, req, res, next) => {
+    res.render('500', {
+        current_path: '500 Error Page',
+        title: PROJ_TITLE + 'ERROR PAGE'
+    });
+});
 
 // Swifty Automatic Changing ENV.
 // todo config 파일을 생성하여 아래의 설정을 공통으로 가져갈 수 있도록
-                if (app.get('env') === 'local') {
-                    global.mysql_location = 'local';
-                    global.redis_location = 'local';
-                <<<<<<<
-                    HEAD
-                } else if (app.get('env') === 'development') {
-                    global.redis_location = 'dev';
-                    global.mysql_location = 'dev';
-                } else if (app.get('env') === 'production') {
-                    global.mysql_location = 'real';
-                    global.redis_location = 'real';
-                ======
-                    =
-                    
-                    //console.info('local');
-                } else if (app.get('env') === 'development') {
-                    global.redis_location = 'dev';
-                    global.mysql_location = 'dev';
-                    
-                    //console.info('development');
-                } else if (app.get('env') === 'production') {
-                    global.mysql_location = 'real';
-                    global.redis_location = 'real';
-                    
-                    //console.info('production');
-                >>>>>>>
-                    develop - home - theme - yun - back
-                }
-                
-                
-                module.exports = app;
+if (app.get('env') === 'local'){
+    global.mysql_location = 'local';
+    global.redis_location = 'local';
+}else if(app.get('env') === 'development'){
+    global.redis_location = 'dev';
+    global.mysql_location = 'dev';
+}else if(app.get('env') === 'production'){
+    global.mysql_location = 'real';
+    global.redis_location = 'real';
+}
+
+
+module.exports = app;
