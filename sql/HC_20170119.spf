@@ -320,6 +320,10 @@ references `channel`(`channel_id`);
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string># 메인 배너 가져오기
+select * from banner_main 
+where `active`=true 
+order by `priority` asc</string>
 		<string>alter table `recommend_channel`
 add foreign key (`channel_id`)
 references `channel`(`channel_id`)</string>
@@ -550,22 +554,6 @@ group by group_id
 order by c.priority asc</string>
 		<string>select 
 c.channel_id as channel_id 
-c.title as channel_title,  g.title as group_title, 
-c.priority as c_priority, 
-,if(count(g.`group_id`)=0, 'single','group') as type
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel_id
-,group_concat(c.title order by c.priority asc) as group_channel_title
-,group_concat(c.priority order by c.priority asc) as group_priority
-,if(g.title is null, c.title, g.title) as title
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by g.group_id
-order by c.priority asc</string>
-		<string>select 
-c.channel_id as channel_id 
-if(g.group_id is null, c.title ,g.group_id) as group_id, 
 c.title as channel_title,  g.title as group_title, 
 c.priority as c_priority, 
 ,if(count(g.`group_id`)=0, 'single','group') as type

@@ -14,7 +14,7 @@ const hbs = require('hbs');
 const passport = require('passport');
 const flash = require('connect-flash');
 // 쿠키 기반 스토리지를 구현 하나의 세션키가 아닌 세션 전체를 쿠키에 직렬화한다
-// 브라우저는 하나의 쿠키당 4096바이트 이상을 지원하도록 되어 있지만 한계르르 초과하지 않도록 보장하려면 하나의 도메인당 4093바이트의 크기를 초과해서는 안된다
+// 브라우저는 하나의 쿠키당 4096바이트 이상을 지원하도록 되어 있지만 한계를 초과하지 않도록 보장하려면 하나의 도메인당 4093바이트의 크기를 초과해서는 안된다
 // 클라이언트에서 쿠키 데이터를 볼 수 있기 때문에 쿠키 데이터를 안전하게 모호하게 유지를 해야 할 경우 express-session을 선택하는 것이 더 나을 수 있다.
 const cookieSession = require('cookie-session');
 const helmet = require('helmet');
