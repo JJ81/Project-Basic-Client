@@ -10,7 +10,7 @@ const async = require('async');
 const QUERY = require('../database/query');
 const JSON = require('JSON');
 require('../database/redis')(router, 'local'); // redis
-require('../commons/helpers');
+require('../helpers/helpers');
 
 
 passport.serializeUser((user, done) => {

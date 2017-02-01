@@ -1,9 +1,9 @@
-var mysql = require('mysql');
-var config = require('../secret/db_info').dev;
+const mysql = require('mysql');
+const config = require('../secret/db_info').dev;
 
-module.exports = function () {
+module.exports = () => {
   return {
-    init: function () {
+    init: () => {
       return mysql.createConnection({
         host: config.host,
         port: config.port,
@@ -16,8 +16,8 @@ module.exports = function () {
       });
     },
 
-    test_open: function (conn) {
-      conn.connect(function (err) {
+    test_open: (conn) => {
+      conn.connect((err) => {
         if (err) {
           console.error('mysql connection error.');
           console.error(err);
