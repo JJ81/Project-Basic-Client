@@ -140,13 +140,9 @@ router.post('/signup', (req, res) => {
     
     User.signUp(_obj, (err, result) => {
         if (!err) {
-            res.json({
-                result: result
-            });
+            res.json(result);
         } else {
-            res.json({
-                result: result
-            });
+            res.json(result);
         }
     });
 });
