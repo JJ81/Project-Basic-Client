@@ -8,7 +8,6 @@ const bodyParser = require('body-parser');
 /*routes*/
 const routes = require('./routes/index');
 const api = require('./api/api');
-/*routes*/
 
 const app = express();
 const hbs = require('hbs');
@@ -26,8 +25,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 hbs.registerPartials(__dirname + '/views/partials');
-hbs.registerPartials(__dirname + '/views/modal');
-hbs.registerPartials(__dirname + '/views/main');
+// hbs.registerPartials(__dirname + '/views/modal');
+// hbs.registerPartials(__dirname + '/views/main');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -49,15 +48,12 @@ app.use(cookieSession({
 app.use(helmet());
 app.disable('x-powered-by');
 
-
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-
-//app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
@@ -74,15 +70,17 @@ app.use(allowCORS);
 global.PROJ_TITLE = '홀덤클럽티비';
 
 app.use('/', routes);
+app.use('/api/v1/', routes);
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
-    // TODO 무조건 404를 거쳐가고 있는데 이것을 방지하는 코드를 넣을 것
-    res.render('404', {
-        current_path: '404 Error Page',
-        title: PROJ_TITLE + 'ERROR PAGE',
-        loggedIn: req.user
-    });
+app.use((req, res) => {
+  // TODO 무조건 404를 거쳐가고 있는데 이것을 방지하는 코드를 넣을 것
+	res.status(404);
+  res.render('404', {
+      current_path: '404 Error Page',
+      title: PROJ_TITLE + 'ERROR PAGE',
+      loggedIn: req.user
+  });
 });
 
 // error handlers
