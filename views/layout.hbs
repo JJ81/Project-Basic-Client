@@ -37,15 +37,20 @@
 
     <title>{{title}}</title>
 </head>
-<body class="nav-md">
-<div class="container body">
-    <div class="main_container">
-        {{> left_nav}}
-        {{> header}}
-        {{{body}}}
-        {{> footer}}
+<body class="nav-md {{current_path}}">
+
+{{#unless (isEquals current_path 'login')}}
+    <div class="container body">
+        <div class="main_container">
+            {{> left_nav}}
+            {{> header}}
+            {{{body}}}
+            {{> footer}}
+        </div>
     </div>
-</div>
+{{else}}
+    {{{body}}}
+{{/unless}}
 
 
 <!-- jQuery -->
