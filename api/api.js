@@ -12,8 +12,8 @@ const
     // CommonDAO = require('../RedisDAO/CommonDAO'),
     // UTIL = require('../util/util'),
     User = require('../service/UserService'),
+    Admin = require('../service/AdminService'),
     Reply = require('../service/UserService');
-// Auth = require('../service/AuthService')
 
 
 /**
@@ -86,7 +86,7 @@ passport.use(new LocalStrategy({
         passwordField: 'password',
         passReqToCallback: true
     }, (req, usernameField, passwordField, done) => {
-    
+        
         User.login(usernameField, passwordField, (err, result) => {
             console.log(result);
             if (err) {
@@ -114,6 +114,39 @@ router.post('/hc/login', passport.authenticate('local', {
 }), (req, res) => {
     res.redirect('/');
 });
+
+
+/**
+ * 생방송 ON
+ */
+router.post('/broadcast/live', (req, res) => {
+    // TODO 유효성 검사 추가해야됨
+    const link = req.body.link;
+    Admin.onLive(link, (err, result)=>{
+         if(!err){
+             res.json(result);
+         }else{
+             res.json(result);
+         }
+    });
+});
+
+router.put('/broadcast/live', (req, res) => {
+    const id = req.body.id;
+    Admin.endLive(id, (err, result)=>{
+        if(!err){
+            res.json(result);
+        }else{
+            res.json(result);
+        }
+    });
+});
+
+
+
+/**
+ * HC_TV API
+ */
 
 /**
  * 홀덤클럽 회원가입
@@ -211,9 +244,9 @@ router.put('/reply', (req, res) => {
 });
 
 router.delete('/reply', (req, res) => {
-
+    
     const reply_id = req.body.id;
-
+    
     Reply.remove(reply_id, (err, result) => {
         if (!err) {
             res.json(result);

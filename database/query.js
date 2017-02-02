@@ -42,4 +42,10 @@ QUERY.ReReply = {
     Modify: 'update `reply_video` set `comment` =? where `id` = ?;',
     Remove: 'delete from `reply_video` where `id` =?'
 };
+
+
+QUERY.Broadcast = {
+    LiveOn : 'insert into `broadcast` set ?;',
+    LiveEnd : 'update `broadcast` set `end_dt` = ?, `status` = 0 where `id` = ?'
+};
 module.exports = QUERY;

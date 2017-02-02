@@ -20,8 +20,6 @@ const isAuthenticated = (req, res, next) => {
 };
 
 router.get('/', isAuthenticated, (req, res) => {
-    console.log(req.user);
-    console.log('asdasd');
     res.render('index', {
         current_path: 'INDEX',
         title: PROJ_TITLE,
