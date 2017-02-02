@@ -76,16 +76,6 @@ const isAuthenticated = (req, res, next) => {
     res.redirect('/login');
 };
 
-/*게임 로그인에 대한 API*/
-router.post('/login', function (req, res) {
-    const _obj = {
-        user_id: req.body.user_id,
-        password: req.body.password
-    };
-    // TODO _obj null, undefined 로직 추가해야됨
-});
-
-
 /**
  * 홀덤쿨럽 티비 로그인 API
  * 로그인 실패시 로그인실패 카운트 증가, 로그인 실패 10일경우 계정락
@@ -95,8 +85,10 @@ passport.use(new LocalStrategy({
         usernameField: 'user_id',
         passwordField: 'password',
         passReqToCallback: true
-    }, (req, user_id, password, done) => {
-        User.login(user_id, password, (err, result) => {
+    }, (req, usernameField, passwordField, done) => {
+    
+        User.login(usernameField, passwordField, (err, result) => {
+            console.log(result);
             if (err) {
                 return done(null, false);
             } else {
@@ -110,16 +102,16 @@ passport.use(new LocalStrategy({
     }
 ));
 
+router.get('/logout', (req, res) => {
+    console.log('logout');
+    req.logout();
+    res.redirect('/');
+});
 
 router.post('/hc/login', passport.authenticate('local', {
     failureRedirect: '/login',
     failureFlash: true
 }), (req, res) => {
-    res.redirect('/');
-});
-
-router.get('/api/v1/logout', (req, res) => {
-    req.logout();
     res.redirect('/');
 });
 

@@ -13,53 +13,22 @@ require('../database/redis')(router, 'local'); // redis
 require('../helpers/helpers');
 
 
-passport.serializeUser((user, done) => {
-    console.log(user);
-    done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-    console.log(user);
-    done(null, user);
-});
-
-var isAuthenticated = (req, res, next) => {
+const isAuthenticated = (req, res, next) => {
     if (req.isAuthenticated())
         return next();
     res.redirect('/login');
 };
 
-passport.use(new LocalStrategy({
-        usernameField: 'agent',
-        passwordField: 'password',
-        passReqToCallback: true
-    }, (req, agent, password, done) => {
-        connection.query(QUERY.AGENT.login, [agent], (err, data) => {
-            if (err) {
-                return done(null, false);
-            } else {
-                if (data.length === 1) {
-                    if (!bcrypt.compareSync(password, data[0].password)) {
-                        console.log('password is not matched.');
-                        return done(null, false);
-                    } else {
-                        console.log('password is matched.');
-                        console.info(data[0]);
-                        return done(null, {
-                            'agent': data[0].code,
-                            'layer': data[0].layer,
-                            'parent_id': data[0].parent_id,
-                            'top_parent_id': data[0].top_parent_id,
-                            'balance': data[0].balance
-                        });
-                    }
-                } else {
-                    return done(null, false);
-                }
-            }
-        });
-    }
-));
+router.get('/', isAuthenticated, (req, res) => {
+    console.log(req.user);
+    console.log('asdasd');
+    res.render('index', {
+        current_path: 'INDEX',
+        title: PROJ_TITLE,
+        loggedIn: req.user
+    });
+});
+
 
 router.get('/login', function (req, res) {
     if (req.user == null) {
@@ -72,31 +41,13 @@ router.get('/login', function (req, res) {
     }
 });
 
-router.post('/login', passport.authenticate('local', {
-    failureRedirect: '/login',
-    failureFlash: true
-}), function (req, res) {
-    res.redirect('/');
-});
 
-router.get('/logout', isAuthenticated, (req, res) => {
-    req.logout();
-    res.redirect('/');
-});
+/*------------TEST CODE----------*/
 
-
-router.get('/', isAuthenticated, (req, res) => {
-    res.render('index', {
-        current_path: 'INDEX',
-        title: PROJ_TITLE,
-        loggedIn: req.user,
-    });
-});
 
 router.get('/test', (req, res) => {
     res.json({result: 'Hello World'});
 });
-
 
 // TEST CSRF token
 const csrf = require('csurf');

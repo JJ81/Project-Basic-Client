@@ -6,8 +6,13 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 /*routes*/
-const routes = require('./routes/index');
-const api = require('./api/api');
+const
+    routes = require('./routes/index'),
+    api = require('./api/api'),
+    event = require('./routes/event'),
+    content = require('./routes/content'),
+    broadcast = require('./routes/broadcast');
+/*routes*/
 
 const app = express();
 const hbs = require('hbs');
@@ -70,17 +75,20 @@ app.use(allowCORS);
 global.PROJ_TITLE = '홀덤클럽티비';
 
 app.use('/', routes);
-app.use('/api/v1/', routes);
+app.use('/api/v1/', api);
+app.use('/event/', event);
+app.use('/content/', content);
+app.use('/broadcast/', broadcast);
 
 // catch 404 and forward to error handler
 app.use((req, res) => {
-  // TODO 무조건 404를 거쳐가고 있는데 이것을 방지하는 코드를 넣을 것
-	res.status(404);
-  res.render('404', {
-      current_path: '404 Error Page',
-      title: PROJ_TITLE + 'ERROR PAGE',
-      loggedIn: req.user
-  });
+    // TODO 무조건 404를 거쳐가고 있는데 이것을 방지하는 코드를 넣을 것
+    res.status(404);
+    res.render('404', {
+        current_path: '404 Error Page',
+        title: PROJ_TITLE + 'ERROR PAGE',
+        loggedIn: req.user
+    });
 });
 
 // error handlers
@@ -107,13 +115,13 @@ app.use((err, req, res, next) => {
 
 // Swifty Automatic Changing ENV.
 // todo config 파일을 생성하여 아래의 설정을 공통으로 가져갈 수 있도록
-if (app.get('env') === 'local'){
+if (app.get('env') === 'local') {
     global.mysql_location = 'local';
     global.redis_location = 'local';
-}else if(app.get('env') === 'development'){
+} else if (app.get('env') === 'development') {
     global.redis_location = 'dev';
     global.mysql_location = 'dev';
-}else if(app.get('env') === 'production'){
+} else if (app.get('env') === 'production') {
     global.mysql_location = 'real';
     global.redis_location = 'real';
 }
