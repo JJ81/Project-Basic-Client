@@ -12,6 +12,7 @@ const JSON = require('JSON');
 require('../database/redis')(router, 'local'); // redis
 require('../helpers/helpers');
 
+const request = require('request');
 
 passport.serializeUser((user, done) => {
 	console.log(user);
@@ -85,38 +86,50 @@ router.get('/logout', isAuthenticated, (req, res) => {
 });
 
 
+/**
+ * 메인 페이지
+ */
+const HOST = 'http://localhost:3002/'; // todo config 파일로 이동시키고 서버실행시 변경이 될 수 있도록 설정한다.
+
 router.get('/', (req, res) => {
-    
+	'use strict';
+
 	async.parallel(
 		[
 			(cb) => {
-				connection.query(QUERY.HOME.GetRecomList, (err, rows) => {
-					if (!err) {
-						cb(null, rows);
-					} else {
-						console.error(err);
+				request.get(`${HOST}api/v2/broadcast/live`, (err, res, body) => {
+					if(!err && res.statusCode == 200){
+						// console.log(typeof body);
+						// console.log(body);
+						// console.log(body.success);
+
+						let _body = JSON.parse(body);
+
+						if(_body.success){
+							cb(null, _body);
+						}else{
+							console.error('success status is false');
+							cb(null, null);
+						}
+					}else{
 						cb(err, null);
-					}
-				});
-			},
-			(cb) => {
-				connection.query(QUERY.HOME.GetNavAllList, (err, rows) => {
-					if (!err) {
-						cb(null, rows);
-					} else {
 						console.error(err);
-						cb(err, null);
 					}
 				});
 			}
 		], (err, result) => {
 		if (!err) {
+
+			console.log('result');
+			console.log(result);
+
 			res.render('index', {
 				current_path: 'INDEX',
 				title: PROJ_TITLE,
-				loggedIn: req.user,
-				recomList: result[0],
-				contentlist: result[1]
+				live : result[0].live
+				// loggedIn: req.user
+				// recomList: result[0],
+				// contentlist: result[1]
 			});
 		} else {
 			console.error(err);

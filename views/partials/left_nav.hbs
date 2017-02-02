@@ -1,5 +1,16 @@
 <div class="sidebar-fixed">
     <div class="inner-sidebar">
+        <h3>
+            {{#each live}}
+                {{#if (isEquals status 1)}}
+                    방송중
+                {{else}}
+                    미방송중
+                {{/if}}
+                / id : {{id}}
+            {{/each}}
+        </h3>
+
         <h3 class="title">추천방송</h3>
         <ul class="recomList">
             {{#each recomList}}

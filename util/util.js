@@ -203,5 +203,10 @@ util.switchToUserGameHistoryFormat = function (gameDate) {
 
 };
 
+// util.getHostName = (req) => {
+// console.info(req.headers.host);
+// 	return;
+// };
+
 module.exports = util;
 

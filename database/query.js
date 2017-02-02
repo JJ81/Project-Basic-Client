@@ -42,4 +42,9 @@ QUERY.ReReply = {
     Modify: 'update `reply_video` set `comment` =? where `id` = ?;',
     Remove: 'delete from `reply_video` where `id` =?'
 };
+
+QUERY.BROADCAST = {
+	GET : 'select * from `broadcast` order by `start_dt` desc limit 1;'
+};
+
 module.exports = QUERY;

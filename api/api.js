@@ -118,6 +118,8 @@ router.post('/hc/login', passport.authenticate('local', {
     res.redirect('/');
 });
 
+
+// ??
 router.get('/api/v1/logout', (req, res) => {
     req.logout();
     res.redirect('/');
@@ -230,6 +232,34 @@ router.delete('/reply', (req, res) => {
         }
     });
 });
+
+
+////////////////////////////////////////// API v2.0 //////////////////////////////////////////////////ㅍ
+
+const mysql_dbc = require('../commons/db_conn')();
+const connection = mysql_dbc.init();
+const QUERY = require('../database/query');
+
+/**
+ * 라이브 방송 여부 체크
+ */
+router.get('/broadcast/live', (req, res) => {
+	connection.query(QUERY.BROADCAST.GET, (err, rows) => {
+		if(!err){
+			res.json({
+				success : true,
+				live : rows
+			});
+		}else{
+			res.json({
+				success : false,
+				error : err
+			});
+		}
+	});
+});
+
+
 
 
 module.exports = router;

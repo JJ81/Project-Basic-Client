@@ -46,22 +46,7 @@
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
 			<key>contentFilter</key>
-			<dict>
-				<key>filterComparison</key>
-				<string>=</string>
-				<key>filterComparisonTag</key>
-				<integer>0</integer>
-				<key>filterField</key>
-				<string>channel_id</string>
-				<key>filterValue</key>
-				<string>4551b700-9052-11e6-9820-bdab5846dddd</string>
-				<key>firstBetweenField</key>
-				<string></string>
-				<key>menuLabel</key>
-				<string>`channel_id` = '4551b700-9052-11e6-9820-bdab5846dddd'</string>
-				<key>secondBetweenField</key>
-				<string></string>
-			</dict>
+			<dict/>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
@@ -73,19 +58,19 @@
 			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
 			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
 			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
-			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClpjaGFubmVsX2lk0h4f
-			LS5fEA9OU011dGFibGVTdHJpbmejLS8jWE5TU3RyaW5n0h4fMTJe
-			TlNNdXRhYmxlQXJyYXmjMTMjV05TQXJyYXnSHh8iNaIiI18QD05T
-			S2V5ZWRBcmNoaXZlctE4OVRkYXRhgAEACAARABoAIwAtADIANwBF
-			AEsAUgBaAGUAbABwAHIAdAB2AHoAfAB+AIAAggCHAIwAkQC6AMEA
-			wgDDAMUAygDVAN4A9AD4AQUBDgETARUBFwEZAR4BKAEqATUBOgFM
-			AVABWQFeAW0BcQF5AX4BgQGTAZYBmwAAAAAAAAIBAAAAAAAAADoA
-			AAAAAAAAAAAAAAAAAAGd
+			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClJpZNIeHy0uXxAPTlNN
+			dXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5TTXV0YWJs
+			ZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tleWVkQXJj
+			aGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBLAFIAWgBl
+			AGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIAwwDFAMoA
+			1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEtATIBRAFIAVEBVgFl
+			AWkBcQF2AXkBiwGOAZMAAAAAAAACAQAAAAAAAAA6AAAAAAAAAAAA
+			AAAAAAABlQ==
 			</data>
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1536, 1076}}</string>
+			<string>{{0, 0}, {1212, 756}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -290,22 +275,113 @@ references `channel`(`channel_id`);
 
 
 
+####### 여기서부터 v2.0 ##########
+
+create table `broadcast`(
+	id bigint not null auto_increment,
+	date datetime default CURRENT_TIMESTAMP,
+	status boolean default true,
+	link varchar(255) character set utf8 default null,
+	primary key(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT;
+
+alter table `broadcast` drop column `end_dt`;
+alter table `broadcast` add column `end_dt` datetime default null after `date`;
+
+alter table `broadcast` drop column `date`;
+alter table `broadcast` add column `start_dt` datetime default CURRENT_TIMESTAMP after `id`;
+
+
+
+# insert into `broadcast` (`link`) values('');
+## 쿼리로 한방에 해결하는 방법을 찾아보자.
+
+insert into `broadcast` ('link')
+select link
+where date(`date`) = CURDATE();
 
 
 
 
+select `id`, `date`, `link`, `status` from `broadcast`
+where date(`date`) = curdate();
+
+insert into `broadcast` (`link`) values('http://www.google.com');
+
+select * from `broadcast` where date(`date`) = curdate();
+
+# 이건 문법에 문제가 있다고 출력된다.
+IF EXISTS (select * from `broadcast`)
+BEGIN
+print 'no rows'
+END;
+
+## 아래와 같은 방법도 사용하지 못한다. 
+select * from `broadcast` where date(`date`) = curdate();
+if @@rowcount=0
+begin
+print '0'
+end;
 
 
+## select ifnull을 통해서 실행해본다.
+#select ifnull( (select `status` from `broadcast` where date(`date`) = curdate()), 0) as result;
+
+##;
+## 아래 코드도 실행이 되지 않는다. 문제는 버전에 있는 것인지 아니면 문법에 있는 것인지...
+if not exists ( select * from `broadcast` where date(`date`) = curdate() )
+then insert into `broadcast` (`link`) values('http://www.google.com')
+else update `broadcast` set `status`=false where date(`date`) = curdate()
+end if;
 
 
+/* DROP PROCEDURE `GetFlavour`
+CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
+begin
+if not exists ( select * from `broadcast` where date(`date`) = curdate() )
+then insert into `broadcast` (`link`) values('http://www.google.com')
+else update `broadcast` set `status`=false where date(`date`) = curdate()
+end if
+end; */
 
+######
+
+select * if(
+	exists( select * from `broadcast` where date(`date`) = curdate() ) is null,
+	'true',
+	'false'
+) from `broadcast`;
+
+
+## 중복일 경우 업데이트를 치는 구문이 있다.
+insert into `broadcast` (`link`) values('http://www.google.com')
+on duplicate key update `status`=false where date(`date`)=curdate();
+
+## 같은 날 한 번 이상 방송을 할 경우
+## insert의 조건, 어떤 것도 방송중이지 않아야 한다.
+## 가장 최근에 한 개에 대해서 방송중 여부를 판단한다.
+
+
+# 최근 방송 여부를 판단하고 방송을 정상적으로 종료를 하지 않은 상태에서는 방송중이라는 신호가 이어진다.
+## 현재 방송중인지의 여부를 판단한다. (백오피스와 클라이언트사이드 모두 사용)
+select * from `broadcast` 
+order by `date` desc
+limit 1;
+
+# 방송중일 경우 반드시 해당 아이디를 통해서 방송중인 레코드에 상태값을 update하게 된다
+## 만약 하루동안 방송중이라고 켜놓고 다음날에 이어서 방송을 할 경우는 이틀연속 쉬지 않고 방송으르 한 것으로 판단하게 된다.
+## 방송중 여부는 항상 최신 레코드를 기준으로 판단하게 된다.
+## 방송중일 경우 버튼에 해당 아이디가 있을 것이고 
+## 방송중이지 않을 경우 버튼에는 해당 아이디가 없을 것이다.
+## 방송중일 경우, 버튼을 누르면 레코드에 update를 하게 되고 with id
+## 방송중이지 않을 경우, 새로운 레코드를 insert하게 되고 페이지를 릴로드되면서 버튼에 id를 가지고 있는 방송중 상태가 될 것이다.
 
 
 
 
 </string>
 			<key>table</key>
-			<string>channel</string>
+			<string>broadcast</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -320,253 +396,150 @@ references `channel`(`channel_id`);
 	<array/>
 	<key>queryHistory</key>
 	<array>
-		<string># 메인 배너 가져오기
-select * from banner_main 
-where `active`=true 
-order by `priority` asc</string>
-		<string>alter table `recommend_channel`
-add foreign key (`channel_id`)
-references `channel`(`channel_id`)</string>
-		<string>select * from `recommend_channel` as rc
-where rc.active = true
-order by `priority` desc
-limit 3</string>
-		<string>select rc.`created_dt`, v.`created_dt`as updated_dt, rc.`recom_id`, rc.`channel_id`, rc.`title`, rc.`group_id`, rc.`priority`,ch.`channel_id` as sub_channel_id  from `recommend_channel` as rc left join `channel` as ch on rc.`group_id` = ch.`group_id` left join (select *from `video` where `active`= true order by `created_dt` desc) as v on rc.`channel_id` = v.`channel_id` or ch.`channel_id` = v.`channel_id` where rc.`active`=true group by rc.`channel_id` order by rc.`priority` limit 3</string>
-		<string>select
-if(g.title is null, c.title, g.title) as title,
-if(count(g.`group_id`)=0,'single','group') as type,
-group_concat(c.`channel_id` order by c.priority asc) as group_channel_id,
-group_concat(c.title order by c.priority asc) as group_channel_title,
-if(g.group_id is null, c.title ,g.group_id) as group_id
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-if(g.title is null, c.title, g.title) as title,
-if(count(g.`group_id`)=0,'single','group') as type,
-group_concat(c.`channel_id` order by c.priority asc) as group_channel_id,
-group_concat(c.title order by c.priority asc) as group_channel_title
-if(g.group_id is null, c.title ,g.group_id) as group_id
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-if(g.title is null, c.title, g.title) as title,
-if(count(g.`group_id`)=0,'single','group') as type,
-if(g.group_id is null, c.title ,g.group_id) as group_id,
+		<string>alter table `broadcast` add column `start_dt` datetime default CURRENT_TIMESTAMP after `id`</string>
+		<string>alter table `broadcast` add column `start_dt` datetime CURRENT_TIMESTAMP after `id`</string>
+		<string>alter table `broadcast` add column `start_dt` datetime CURRENT_TIMESTAMP null after `id`</string>
+		<string>alter table `broadcast` drop column `date`</string>
+		<string>alter table `broadcast` add column `end_dt` datetime default null after `date`</string>
+		<string>alter table `broadcast` drop column `end_dt`</string>
+		<string>alter table `broadcast` add column `end_dt` datetime default CURRENT_TIMESTAMP after `date`</string>
+		<string>alter table `broadcast` add column `end_dt` datetime default current_timestampt after `date`</string>
+		<string>## 같은 날 한 번 이상 방송을 할 경우
+## insert의 조건, 어떤 것도 방송중이지 않아야 한다.
+## 가장 최근에 한 개에 대해서 방송중 여부를 판단한다.
 
-group_concat(c.`channel_id` order by c.priority asc) as group_channel_id,
-group_concat(c.title order by c.priority asc) as group_channel_title
+select * from `broadcast` 
+order by `date` desc
+limit 1</string>
+		<string>/* DROP PROCEDURE `GetFlavour`
+CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
+begin
+if not exists ( select * from `broadcast` where date(`date`) = curdate() )
+then insert into `broadcast` (`link`) values('http://www.google.com')
+else update `broadcast` set `status`=false where date(`date`) = curdate()
+end if
+end; */
 
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-if(g.title is null, c.title, g.title) as title,
-if(g.group_id is null, c.title ,g.group_id) as group_id,
-if(count(g.`group_id`)=0,'single','group') as type,
-group_concat(c.`channel_id` order by c.priority asc) as group_channel_id,
-group_concat(c.title order by c.priority asc) as group_channel_title
+######
 
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-#c.channel_id as channel_id, 
-if(g.group_id is null, c.title ,g.group_id) as group_id,
-#c.title as channel_title,  
-#g.title as group_title, c.priority as c_priority, 
-#count(g.`group_id`) as total,
-if(count(g.`group_id`)=0,'single','group') as type
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel_id
-,group_concat(c.title order by c.priority asc) as group_channel_title
-,if(g.title is null, c.title, g.title) as title
-#,group_concat(c.priority order by c.priority asc) as group_priority
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-#c.channel_id as channel_id, 
-if(g.group_id is null, c.title ,g.group_id) as group_id,
-#c.title as channel_title,  
-#g.title as group_title, c.priority as c_priority, 
-#count(g.`group_id`) as total,
-if(count(g.`group_id`)=0,'single','group') as type
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel
-,group_concat(c.title order by c.priority asc) as group_channel_title
-,if(g.title is null, c.title, g.title) as title
-#,group_concat(c.priority order by c.priority asc) as group_priority
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-#c.channel_id as channel_id, 
-if(g.group_id is null, c.title ,g.group_id) as group_id,
-c.title as channel_title,  
-#g.title as group_title, c.priority as c_priority, 
-#count(g.`group_id`) as total,
-if(count(g.`group_id`)=0,'single','group') as type
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel
-,group_concat(c.title order by c.priority asc) as group_channel_title
-,if(g.title is null, c.title, g.title) as title
-#,group_concat(c.priority order by c.priority asc) as group_priority
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-#c.channel_id as channel_id, 
-if(g.group_id is null, c.title ,g.group_id) as group_id,
-c.title as channel_title,  
-#g.title as group_title, c.priority as c_priority, 
-count(g.`group_id`) as total,
-if(count(g.`group_id`)=0,'single','group') as type
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel
-,group_concat(c.title order by c.priority asc) as group_channel_title
-,if(g.title is null, c.title, g.title) as title
-#,group_concat(c.priority order by c.priority asc) as group_priority
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-#c.channel_id as channel_id, 
-if(g.group_id is null, c.title ,g.group_id) as group_id,
-c.title as channel_title,  g.title as group_title, c.priority as c_priority, 
-count(g.`group_id`) as total,
-if(count(g.`group_id`)=0,'single','group') as type
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel
-,group_concat(c.title order by c.priority asc) as group_channel_title
-,if(g.title is null, c.title, g.title) as title
-#,group_concat(c.priority order by c.priority asc) as group_priority
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-#c.channel_id as channel_id, 
-if(g.group_id is null, c.title ,g.group_id) as group_id,
-c.title as channel_title,  g.title as group_title, c.priority as c_priority, 
-count(g.`group_id`) as total,
-if(count(g.`group_id`)=0,'single','group') as type
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel
-,group_concat(c.title order by c.priority asc) as group_channel_title
-#,group_concat(c.priority order by c.priority asc) as group_priority
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-#c.channel_id as channel_id, 
-if(g.group_id is null, c.title ,g.group_id) as group_id,
-c.title as channel_title,  g.title as group_title, c.priority as c_priority, count(g.`group_id`) as total
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel
-,group_concat(c.title order by c.priority asc) as group_channel_title
-#,group_concat(c.priority order by c.priority asc) as group_priority
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-#c.channel_id as channel_id, 
-if(g.group_id is null, c.title ,g.group_id) as group_id,
-c.title as channel_title,  g.title as group_title, c.priority as c_priority, count(g.`group_id`) as total
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel
-,group_concat(c.title order by c.priority asc) as group_channel_title
-,group_concat(c.priority order by c.priority asc) as group_priority
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-c.channel_id as channel_id, 
-if(g.group_id is null, c.title ,g.group_id) as group_id,
-c.title as channel_title,  g.title as group_title, c.priority as c_priority, count(g.`group_id`) as total
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel
-,group_concat(c.title order by c.priority asc) as group_channel_title
-,group_concat(c.priority order by c.priority asc) as group_priority
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select
-#c.channel_id as channel_id, 
-#if(g.group_id is null, c.title ,g.group_id) as group_id,
-c.title as channel_title,  g.title as group_title, c.priority as c_priority, count(g.`group_id`) as total
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel
-,group_concat(c.title order by c.priority asc) as group_channel_title
-,group_concat(c.priority order by c.priority asc) as group_priority
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string># 단독 채널일 경우 sub ""
-# 그룹 채널일 경우 sub에 title의 묶음과 channel_id의 묶음을 출력해보자.
-# order로 출력한 것과는 다르게 group이 되고 있는 모습을 볼 수 있다. =&gt; 블로그로 포스팅할 것
-## concat vs. group_concat vs. group_concat order by
+select * if(
+	exists( select * from `broadcast` where date(`date`) = curdate() ) is null,
+	'true',
+	'false'
+) from `broadcast`</string>
+		<string>/* DROP PROCEDURE `GetFlavour`
+CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
+begin
+if not exists ( select * from `broadcast` where date(`date`) = curdate() )
+then insert into `broadcast` (`link`) values('http://www.google.com')
+else update `broadcast` set `status`=false where date(`date`) = curdate()
+end if
+end; */
 
+######
 
-select
-c.channel_id as channel_id, if(g.group_id is null, c.title ,g.group_id) as group_id,
-c.title as channel_title,  g.title as group_title, c.priority as c_priority, count(g.`group_id`) as total
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel
-,group_concat(c.title order by c.priority asc) as group_channel_title
-,group_concat(c.priority order by c.priority asc) as group_priority
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by group_id
-order by c.priority asc</string>
-		<string>select 
-c.channel_id as channel_id 
-c.title as channel_title,  g.title as group_title, 
-c.priority as c_priority, 
-,if(count(g.`group_id`)=0, 'single','group') as type
-,group_concat(c.`channel_id` order by c.priority asc) as group_channel_id
-,group_concat(c.title order by c.priority asc) as group_channel_title
-,group_concat(c.priority order by c.priority asc) as group_priority
-,if(g.title is null, c.title, g.title) as title
-from `channel` as c
-left join `group` as g
-on c.group_id = g.group_id
-where c.active=true
-group by g.group_id
-order by c.priority asc</string>
+select *
+if(
+	exists( select * from `broadcast` where date(`date`) = curdate() ) is null,
+	'true',
+	'false'
+) from `broadcast`</string>
+		<string>/* DROP PROCEDURE `GetFlavour`
+CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
+begin
+if not exists ( select * from `broadcast` where date(`date`) = curdate() )
+then insert into `broadcast` (`link`) values('http://www.google.com')
+else update `broadcast` set `status`=false where date(`date`) = curdate()
+end if
+end; */
+
+select *
+if(
+	exists( select * from `broadcast` where date(`date`) = curdate() ) is null,
+	'true',
+	'false'
+) from `broadcast`</string>
+		<string>/* DROP PROCEDURE `GetFlavour`
+CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
+begin
+if not exists ( select * from `broadcast` where date(`date`) = curdate() )
+then insert into `broadcast` (`link`) values('http://www.google.com')
+else update `broadcast` set `status`=false where date(`date`) = curdate()
+end if
+end; */
+
+select *
+if(
+	exists( select * from `broadcast` where date(`date`) = curdate() ) is null
+	'true',
+	'false'
+) from `broadcast`</string>
+		<string>/* DROP PROCEDURE `GetFlavour`
+CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
+begin
+if not exists ( select * from `broadcast` where date(`date`) = curdate() )
+then insert into `broadcast` (`link`) values('http://www.google.com')
+else update `broadcast` set `status`=false where date(`date`) = curdate()
+end if
+end; */
+
+select *
+if(
+	exists( select * from `broadcast` where date(`date`) = curdate() ) is null
+	print 'yes',
+	print 'no'
+) from `broadcast`</string>
+		<string>if(
+	exists( select * from `broadcast` where date(`date`) = curdate() ) is null
+	print 'yes',
+	print 'no'
+)</string>
+		<string>/* DROP PROCEDURE `GetFlavour`
+CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
+begin
+if not exists ( select * from `broadcast` where date(`date`) = curdate() )
+then insert into `broadcast` (`link`) values('http://www.google.com')
+else update `broadcast` set `status`=false where date(`date`) = curdate()
+end if
+end; */
+
+if(
+	exists( select * from `broadcast` where date(`date`) = curdate() ) is null
+	print 'yes',
+	print 'no'
+)</string>
+		<string>DROP PROCEDURE `GetFlavour`
+CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
+begin
+if not exists ( select * from `broadcast` where date(`date`) = curdate() )
+then insert into `broadcast` (`link`) values('http://www.google.com')
+else update `broadcast` set `status`=false where date(`date`) = curdate()
+end if
+end</string>
+		<string>DROP PROCEDURE `GetFlavour`
+CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
+begin
+if not exists ( select * from `broadcast` where date(`date`) = curdate() )
+then insert into `broadcast` (`link`) values('http://www.google.com')
+else update `broadcast` set `status`=false where date(`date`) = curdate()
+end if</string>
+		<string>DELIMITER
+DROP PROCEDURE `GetFlavour`
+CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
+begin
+if not exists ( select * from `broadcast` where date(`date`) = curdate() )
+then insert into `broadcast` (`link`) values('http://www.google.com')
+else update `broadcast` set `status`=false where date(`date`) = curdate()
+end if</string>
+		<string>## select ifnull을 통해서 실행해본다.
+#select ifnull( (select `status` from `broadcast` where date(`date`) = curdate()), 0) as result;
+
+##;
+
+if not exists ( select * from `broadcast` where date(`date`) = curdate() )
+then insert into `broadcast` (`link`) values('http://www.google.com')
+else update `broadcast` set `status`=false where date(`date`) = curdate()
+end if</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>
