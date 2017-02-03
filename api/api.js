@@ -3,16 +3,16 @@
  */
 
 const
-     express = require('express'),
-    router = express.Router(),
-    bcrypt = require('bcrypt'),
-    passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy,
-    // async = require('async'),
-    // CommonDAO = require('../RedisDAO/CommonDAO'),
-    // UTIL = require('../util/util'),
-    User = require('../service/UserService'),
-    Reply = require('../service/ReplyService');
+	express = require('express'),
+	router = express.Router(),
+	bcrypt = require('bcrypt'),
+	passport = require('passport'),
+	LocalStrategy = require('passport-local').Strategy,
+	// async = require('async'),
+	// CommonDAO = require('../RedisDAO/CommonDAO'),
+	// UTIL = require('../util/util'),
+	User = require('../service/UserService'),
+	Reply = require('../service/ReplyService');
 // Auth = require('../service/AuthService')
 
 
@@ -260,6 +260,21 @@ router.get('/broadcast/live', (req, res) => {
 });
 
 
+router.get('/navigation/channel/list', (req, res) => {
+	connection.query(QUERY.NAVI.CHANNEL_ALL_ORDERED, (err, rows) => {
+		if(!err){
+			res.json({
+				success : true,
+				list : rows
+			});
+		}else{
+			res.json({
+				success : false,
+				msg : err
+			});
+		}
+	});
+});
 
 
 module.exports = router;

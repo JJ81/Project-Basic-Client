@@ -1,14 +1,18 @@
 <div class="sidebar-fixed">
     <div class="inner-sidebar">
         <h3>
+        {{#if live}}
             {{#each live}}
-                {{#if (isEquals status 1)}}
+                {{#if (isEquals live.status 1)}}
                     방송중
                 {{else}}
                     미방송중
                 {{/if}}
-                / id : {{id}}
+                / id : {{live.id}}
             {{/each}}
+        {{else}}
+            미방중
+        {{/if}}
         </h3>
 
         <h3 class="title">추천방송</h3>

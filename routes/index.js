@@ -89,7 +89,17 @@ router.get('/logout', isAuthenticated, (req, res) => {
 /**
  * 메인 페이지
  */
-const HOST = 'http://localhost:3002/'; // todo config 파일로 이동시키고 서버실행시 변경이 될 수 있도록 설정한다.
+
+// todo config 파일로 이동시키고 서버실행시 변경이 될 수 있도록 설정한다.
+const HOST_INFO = {
+	LOCAL : 'http://localhost:3002/api/',
+	DEV : 'http://beta.holdemclub.tv/api/',
+	REAL : 'http://holdemclub.tv/api/',
+	VERSION : 'v2'
+};
+
+const HOST = `${HOST_INFO.LOCAL}${HOST_INFO.VERSION}`;
+
 
 router.get('/', (req, res) => {
 	'use strict';
@@ -97,7 +107,7 @@ router.get('/', (req, res) => {
 	async.parallel(
 		[
 			(cb) => {
-				request.get(`${HOST}api/v2/broadcast/live`, (err, res, body) => {
+				request.get(`${HOST}/broadcast/live`, (err, res, body) => {
 					if(!err && res.statusCode == 200){
 						// console.log(typeof body);
 						// console.log(body);
@@ -108,7 +118,7 @@ router.get('/', (req, res) => {
 						if(_body.success){
 							cb(null, _body);
 						}else{
-							console.error('success status is false');
+							console.error('[live] success status is false');
 							cb(null, null);
 						}
 					}else{
@@ -117,6 +127,23 @@ router.get('/', (req, res) => {
 					}
 				});
 			}
+			// ,
+			// (cb) => {
+			// 	request.get(`${HOST}/navigation/channel/all`, (err, res, body)=>{
+			// 		let _body = JSON.parse(body);
+			// 		if(!err && res.statusCode == 200){
+			// 			if(_body.success){
+			// 				cb(null, _body);
+			// 			}else{
+			// 				console.error('[navi] success status is false');
+			// 				cb(err, null);
+			// 			}
+			// 		}else{
+			// 			cb(err, null);
+			// 			console.error(err);
+			// 		}
+			// 	});
+			// }
 		], (err, result) => {
 		if (!err) {
 
@@ -126,10 +153,9 @@ router.get('/', (req, res) => {
 			res.render('index', {
 				current_path: 'INDEX',
 				title: PROJ_TITLE,
-				live : result[0].live
-				// loggedIn: req.user
-				// recomList: result[0],
-				// contentlist: result[1]
+				loggedIn: req.user,
+				live : result[0]
+				//,channels : result[1]
 			});
 		} else {
 			console.error(err);
