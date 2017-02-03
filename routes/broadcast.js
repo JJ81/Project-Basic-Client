@@ -1,11 +1,22 @@
 const
-    express = require('express'),
-    router = express.Router();
+	express = require('express'),
+	router = express.Router();
 
 
-
-router.get('/result', (req, res)=>{
-    console.log('asdasdasdasd');
-    res.json({result: 'Hello World'});
+router.get('/calendar', (req, res)=>{
+	res.render('bc_calendar',{
+		current_path: 'bc_calendar',
+		title: PROJ_TITLE + 'login'
+	});
 });
+
+
+router.get('/live', (req, res)=>{
+	res.render('bc_live',{
+		current_path: 'bc_calendar',
+		title: PROJ_TITLE + 'login'
+	});
+});
+
+
 module.exports = router;

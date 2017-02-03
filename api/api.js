@@ -3,17 +3,18 @@
  */
 
 const
-    express = require('express'),
-    router = express.Router(),
-    bcrypt = require('bcrypt'),
-    passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy,
+	express = require('express'),
+	router = express.Router(),
+	bcrypt = require('bcrypt'),
+	passport = require('passport'),
+	LocalStrategy = require('passport-local').Strategy,
     // async = require('async'),
     // CommonDAO = require('../RedisDAO/CommonDAO'),
     // UTIL = require('../util/util'),
-    User = require('../service/UserService'),
-    Admin = require('../service/AdminService'),
-    Reply = require('../service/UserService');
+	User = require('../service/UserService'),
+	Common = require('../service/CommonService'),
+	Broadcast = require('../service/BroadcastService'),
+	Reply = require('../service/UserService');
 
 
 /**
@@ -62,18 +63,18 @@ const
 
 
 passport.serializeUser((user, done) => {
-    done(null, user);
+	done(null, user);
 });
 
 passport.deserializeUser((user, done) => {
-    done(null, user);
+	done(null, user);
 });
 
 
 const isAuthenticated = (req, res, next) => {
-    if (req.isAuthenticated())
-        return next();
-    res.redirect('/login');
+	if (req.isAuthenticated())
+		return next();
+	res.redirect('/login');
 };
 
 /**
@@ -82,66 +83,73 @@ const isAuthenticated = (req, res, next) => {
  */
 
 passport.use(new LocalStrategy({
-        usernameField: 'user_id',
-        passwordField: 'password',
-        passReqToCallback: true
-    }, (req, usernameField, passwordField, done) => {
-        
-        User.login(usernameField, passwordField, (err, result) => {
-            console.log(result);
-            if (err) {
-                return done(null, false);
-            } else {
-                if (result.success) {
-                    return done(null, result.user_info);
-                } else {
-                    return done(null, false);
-                }
-            }
-        });
-    }
+	usernameField: 'user_id',
+	passwordField: 'password',
+	passReqToCallback: true
+}, (req, usernameField, passwordField, done) => {
+	Common.login(usernameField, passwordField, (err, result) => {
+		if (err) {
+			return done(null, false);
+		} else {
+			console.log(result);
+			if (result.success) {
+				return done(null, result.admin_info);
+			} else {
+				return done(null, false);
+			}
+		}
+	});
+}
 ));
 
 router.get('/logout', (req, res) => {
-    console.log('logout');
-    req.logout();
-    res.redirect('/');
+	console.log('logout');
+	req.logout();
+	res.redirect('/');
 });
 
 router.post('/hc/login', passport.authenticate('local', {
-    failureRedirect: '/login',
-    failureFlash: true
+	failureRedirect: '/login',
+	failureFlash: true
 }), (req, res) => {
-    res.redirect('/');
+	res.redirect('/');
 });
 
 
-/**
- * 생방송 ON
- */
 router.post('/broadcast/live', (req, res) => {
     // TODO 유효성 검사 추가해야됨
-    const link = req.body.link;
-    Admin.onLive(link, (err, result)=>{
-         if(!err){
-             res.json(result);
-         }else{
-             res.json(result);
-         }
-    });
+	const link = req.body.link;
+	Broadcast.onLive(link, (err, result) => {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.json(result);
+		}
+	});
 });
 
 router.put('/broadcast/live', (req, res) => {
-    const id = req.body.id;
-    Admin.endLive(id, (err, result)=>{
-        if(!err){
-            res.json(result);
-        }else{
-            res.json(result);
-        }
-    });
+	const id = req.body.id;
+	Broadcast.endLive(id, (err, result) => {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.json(result);
+		}
+	});
 });
 
+
+router.post('/broadcast/calendar', (req, res) => {
+    
+	Broadcast.calendarUpload(req, (err, result) => {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.json(result);
+		}
+	});
+});
 
 
 /**
@@ -154,106 +162,106 @@ router.put('/broadcast/live', (req, res) => {
 router.post('/signup', (req, res) => {
     
     // TODO _obj 검사 그런데 마켓팅코드는 입력안할수있는데??, password === re_password  검사
-    const _obj = {
-        user_id: req.body.user_id,
-        nickname: req.body.nickname,
-        password: bcrypt.hashSync(req.body.password, 10),
-        email: req.body.email,
-        market_code: req.body.market_code || null,
-        signup_dt: new Date()
-    };
+	const _obj = {
+		user_id: req.body.user_id,
+		nickname: req.body.nickname,
+		password: bcrypt.hashSync(req.body.password, 10),
+		email: req.body.email,
+		market_code: req.body.market_code || null,
+		signup_dt: new Date()
+	};
     
-    User.signUp(_obj, (err, result) => {
-        if (!err) {
-            res.json(result);
-        } else {
-            res.json(result);
-        }
-    });
+	User.signUp(_obj, (err, result) => {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.json(result);
+		}
+	});
 });
 
 
 router.get('/users/duplication/user_id', (req, res) => {
-    const user_id = req.query.user_id;
+	const user_id = req.query.user_id;
     
-    User.duplicateByUserId(user_id, (err, result) => {
-        if (!err) {
-            res.json(result);
-        } else {
-            res.json(result);
-        }
-    });
+	User.duplicateByUserId(user_id, (err, result) => {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.json(result);
+		}
+	});
 });
 
 router.get('/users/duplication/nickname', (req, res) => {
-    const nickname = req.query.nickname;
+	const nickname = req.query.nickname;
     
-    User.duplicateByNickname(nickname, (err, result) => {
-        if (!err) {
-            res.json(result);
-        } else {
-            res.json(result);
-        }
-    });
+	User.duplicateByNickname(nickname, (err, result) => {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.json(result);
+		}
+	});
 });
 
 router.get('/users/duplication/email', (req, res) => {
-    const email = req.query.email;
+	const email = req.query.email;
     
-    User.duplicateByEmail(email, (err, result) => {
-        if (!err) {
-            res.json(result);
-        } else {
-            res.json(result);
-        }
-    });
+	User.duplicateByEmail(email, (err, result) => {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.json(result);
+		}
+	});
 });
 
 router.post('/reply', (req, res) => {
     //TODO 댓글이랑 답글을 한곳에서 처리하자
     
-    const _obj = {
-        video_id: req.body.video_id,
-        comment: req.body.comment_content,
-        nickname: req.user.nickname
-    };
+	const _obj = {
+		video_id: req.body.video_id,
+		comment: req.body.comment_content,
+		nickname: req.user.nickname
+	};
     
-    Reply.write(_obj, (err, result) => {
-        if (!err) {
-            res.json(result);
-        } else {
-            res.json(result);
-        }
-    });
+	Reply.write(_obj, (err, result) => {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.json(result);
+		}
+	});
 });
 
 router.put('/reply', (req, res) => {
     
-    const _obj = {
-        id: req.body.id,
-        comment: req.body.comment_content,
-    };
+	const _obj = {
+		id: req.body.id,
+		comment: req.body.comment_content,
+	};
     
-    Reply.modify(_obj, (err, result) => {
-        if (!err) {
-            res.json(result);
-        } else {
-            res.json(result);
-        }
-    });
+	Reply.modify(_obj, (err, result) => {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.json(result);
+		}
+	});
 });
 
 router.delete('/reply', (req, res) => {
     
-    const reply_id = req.body.id;
+	const reply_id = req.body.id;
     
-    Reply.remove(reply_id, (err, result) => {
-        if (!err) {
-            res.json(result);
-        } else {
-            res.json(result);
-        }
-    });
+	Reply.remove(reply_id, (err, result) => {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.json(result);
+		}
+	});
 });
 
 

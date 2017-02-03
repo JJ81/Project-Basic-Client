@@ -5,12 +5,18 @@
 'use strict';
 
 define(
-    [
-        'jquery'
-    ], function ($) {
+	[
+		'jquery',
+		'bootstrap',
+		'bootstrapProgressbar',
+		'custom',
+		'npPogress',
+		'iCheck',
+		'fastclick',
+    
+	], function ($) {
         
-        // 네비게이션 관련 전체 공통 로직
-        console.log('common js');
+        
         
         // 로직 설명
         /**
@@ -25,27 +31,58 @@ define(
          * 2. 1450이상일 경우 좌측 메뉴가 자동으로 노출된다.
          *
          */
+            
+            // TODO 일단 여기에 작성하고 어디로 뺄지 결정하자
+	const API = {
+		baseURL: '/api/v1'
+                
+	};
+        
+	const utils = {
+            
+		broadcastLiveOn: (link, callback) => {
+			$.ajax({
+				url: API.baseURL + '/broadcast/live',
+				type: 'post',
+				data: {link: link},
+				success: function (data, textStatus, jqXHR) {
+					callback(null, data);
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					callback(textStatus, null);
+				}
+			});
+		},
+            
+		broadcastLiveOff: (id, callback) => {
+			$.ajax({
+				url: API.baseURL + '/broadcast/live',
+				type: 'put',
+				data: {id: id},
+				success: function (data, textStatus, jqXHR) {
+					callback(null, data);
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					callback(textStatus, null);
+				}
+			});
+		},
+            
+		broadcastCalendarUpload: (id) => {
+                
+		},
+            
+		broadcastCalendarDelete: (id) => {
+                
+		},
+            
+            
+	};
         
         
-        var utils = utils || {};
-        utils.isMobile = function () {
-            if (navigator.userAgent.match(/Android/i)
-                || navigator.userAgent.match(/webOS/i)
-                || navigator.userAgent.match(/iPhone/i)
-                || navigator.userAgent.match(/iPad/i)
-                || navigator.userAgent.match(/iPod/i)
-                || navigator.userAgent.match(/BlackBerry/i)
-                || navigator.userAgent.match(/Windows Phone/i)
-            ) {
-                return true;
-            }
-            else {
-                return false;
-            }
-        };
+	window.util = utils;
+        
+	return utils;
         
         
-        return {
-            utils: utils
-        };
-    });
+});

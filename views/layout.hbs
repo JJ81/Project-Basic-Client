@@ -25,8 +25,7 @@
     <!-- iCheck -->
     <link href="/components/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
     <!-- bootstrap-progressbar -->
-    <link href="/components/gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css"
-          rel="stylesheet">
+    <link href="/components/gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
     <!-- JQVMap -->
     <link href="/components/gentelella/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/>
     <!-- bootstrap-daterangepicker -->
@@ -53,46 +52,53 @@
 {{/unless}}
 
 
-<!-- jQuery -->
-<script src="/components/gentelella/vendors/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap -->
-<script src="/components/gentelella/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- FastClick -->
-<script src="/components/gentelella/vendors/fastclick/lib/fastclick.js"></script>
-<!-- NProgress -->
-<script src="/components/gentelella/vendors/nprogress/nprogress.js"></script>
-<!-- Chart.js -->
-<script src="/components/gentelella/vendors/Chart.js/dist/Chart.min.js"></script>
-<!-- gauge.js -->
-<script src="/components/gentelella/vendors/gauge.js/dist/gauge.min.js"></script>
-<!-- bootstrap-progressbar -->
-<script src="/components/gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
-<!-- iCheck -->
-<script src="/components/gentelella/vendors/iCheck/icheck.min.js"></script>
-<!-- Skycons -->
-<script src="/components/gentelella/vendors/skycons/skycons.js"></script>
-<!-- Flot -->
-<script src="/components/gentelella/vendors/Flot/jquery.flot.js"></script>
-<script src="/components/gentelella/vendors/Flot/jquery.flot.pie.js"></script>
-<script src="/components/gentelella/vendors/Flot/jquery.flot.time.js"></script>
-<script src="/components/gentelella/vendors/Flot/jquery.flot.stack.js"></script>
-<script src="/components/gentelella/vendors/Flot/jquery.flot.resize.js"></script>
-<!-- Flot plugins -->
-<script src="/components/gentelella/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
-<script src="/components/gentelella/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
-<script src="/components/gentelella/vendors/flot.curvedlines/curvedLines.js"></script>
-<!-- DateJS -->
-<script src="/components/gentelella/vendors/DateJS/build/date.js"></script>
-<!-- JQVMap -->
-<script src="/components/gentelella/vendors/jqvmap/dist/jquery.vmap.js"></script>
-<script src="/components/gentelella/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
-<script src="/components/gentelella/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
-<!-- bootstrap-daterangepicker -->
-<script src="/components/gentelella/vendors/moment/min/moment.min.js"></script>
-<script src="/components/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script src="/components/requirejs/require.js"></script>
+<script src="/javascripts/app.js"></script>
 
-<!-- Custom Theme Scripts -->
-<script src="/components/gentelella/build/js/custom.min.js"></script>
+
+
+<script src="/javascripts/{{current_path}}.js"></script>
+
+<!--&lt;!&ndash; jQuery &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/jquery/dist/jquery.min.js"></script>-->
+<!--&lt;!&ndash; Bootstrap &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/bootstrap/dist/js/bootstrap.min.js"></script>-->
+<!--&lt;!&ndash; FastClick &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/fastclick/lib/fastclick.js"></script>-->
+<!--&lt;!&ndash; NProgress &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/nprogress/nprogress.js"></script>-->
+<!--&lt;!&ndash; Chart.js &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/Chart.js/dist/Chart.min.js"></script>-->
+<!--&lt;!&ndash; gauge.js &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/gauge.js/dist/gauge.min.js"></script>-->
+<!--&lt;!&ndash; bootstrap-progressbar &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>-->
+<!--&lt;!&ndash; iCheck &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/iCheck/icheck.min.js"></script>-->
+<!--&lt;!&ndash; Skycons &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/skycons/skycons.js"></script>-->
+<!--&lt;!&ndash; Flot &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/Flot/jquery.flot.js"></script>-->
+<!--<script src="/components/gentelella/vendors/Flot/jquery.flot.pie.js"></script>-->
+<!--<script src="/components/gentelella/vendors/Flot/jquery.flot.time.js"></script>-->
+<!--<script src="/components/gentelella/vendors/Flot/jquery.flot.stack.js"></script>-->
+<!--<script src="/components/gentelella/vendors/Flot/jquery.flot.resize.js"></script>-->
+<!--&lt;!&ndash; Flot plugins &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>-->
+<!--<script src="/components/gentelella/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>-->
+<!--<script src="/components/gentelella/vendors/flot.curvedlines/curvedLines.js"></script>-->
+<!--&lt;!&ndash; DateJS &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/DateJS/build/date.js"></script>-->
+<!--&lt;!&ndash; JQVMap &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/jqvmap/dist/jquery.vmap.js"></script>-->
+<!--<script src="/components/gentelella/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>-->
+<!--<script src="/components/gentelella/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>-->
+<!--&lt;!&ndash; bootstrap-daterangepicker &ndash;&gt;-->
+<!--<script src="/components/gentelella/vendors/moment/min/moment.min.js"></script>-->
+<!--<script src="/components/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>-->
+
+<!--&lt;!&ndash; Custom Theme Scripts &ndash;&gt;-->
+<!--<script src="/components/gentelella/build/js/custom.min.js"></script>-->
 
 
 </body>

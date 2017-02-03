@@ -41,8 +41,6 @@ router.get('/login', function (req, res) {
 
 
 /*------------TEST CODE----------*/
-
-
 router.get('/test', (req, res) => {
     res.json({result: 'Hello World'});
 });
