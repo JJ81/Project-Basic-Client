@@ -14,8 +14,6 @@ const
  * @type {{}}
  */
 
-
-
 Reply.write = (reply_info, callback) => {
     connection.query(QUERY.Reply.Write, reply_info, (err, result) => {
         if (!err) {

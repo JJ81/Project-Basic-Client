@@ -51,26 +51,22 @@
 			<integer>1</integer>
 			<key>contentSelection</key>
 			<data>
-			YnBsaXN0MDDUAQIDBAUGNjdYJHZlcnNpb25YJG9iamVjdHNZJGFy
-			Y2hpdmVyVCR0b3ASAAGGoK0HCBUWFxgZHSQoLDA0VSRudWxs0wkK
-			CwwQFFdOUy5rZXlzWk5TLm9iamVjdHNWJGNsYXNzow0OD4ACgAOA
-			BKMREhOABYAGgAiADFR0eXBlVHJvd3NUa2V5c18QJlNlbGVjdGlv
-			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
-			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
-			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
-			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClJpZNIeHy0uXxAPTlNN
-			dXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5TTXV0YWJs
-			ZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tleWVkQXJj
-			aGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBLAFIAWgBl
-			AGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIAwwDFAMoA
-			1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEtATIBRAFIAVEBVgFl
-			AWkBcQF2AXkBiwGOAZMAAAAAAAACAQAAAAAAAAA6AAAAAAAAAAAA
-			AAAAAAABlQ==
+			YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJX
+			TlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAF
+			gAdUdHlwZVRyb3dzXxAdU2VsZWN0aW9uRGV0YWlsVHlwZU5TSW5k
+			ZXhTZXTSFwsYGVxOU1JhbmdlQ291bnQQAIAG0hscHR5aJGNsYXNz
+			bmFtZVgkY2xhc3Nlc1pOU0luZGV4U2V0oh8gWk5TSW5kZXhTZXRY
+			TlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVk
+			QXJjaGl2ZXLRJidUZGF0YYABAAgAEQAaACMALQAyADcAQABGAE0A
+			VQBgAGcAagBsAG4AcQBzAHUAdwB8AIEAoQCmALMAtQC3ALwAxwDQ
+			ANsA3gDpAPIA9wEEAQcBGQEcASEAAAAAAAACAQAAAAAAAAAoAAAA
+			AAAAAAAAAAAAAAABIw==
 			</data>
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1212, 756}}</string>
+			<string>{{0, 0}, {2450, 1260}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -273,10 +269,11 @@ alter table `recommend_channel`
 add foreign key (`channel_id`)
 references `channel`(`channel_id`);
 
-
-
-####### 여기서부터 v2.0 ##########
-
+###################################
+###################################
+######### 여기서부터 v2.0 ############
+###################################
+###################################
 create table `broadcast`(
 	id bigint not null auto_increment,
 	date datetime default CURRENT_TIMESTAMP,
@@ -377,15 +374,145 @@ limit 1;
 ## 방송중이지 않을 경우, 새로운 레코드를 insert하게 되고 페이지를 릴로드되면서 버튼에 id를 가지고 있는 방송중 상태가 될 것이다.
 
 
+select * from `broadcast` 
+order by `start_dt` desc limit 1;
+
+### channel ####
+select * from `channel`;
+alter table `channel` add column `type` enum('G', 'S', 'U') default 'G' after `title`; ## General, Special, Under
+
+
+# 모든 채널 가져오기
+select * from `channel`
+order by `priority` desc;
+
+
+## 대표 채널 가져오기
+select * from `channel`
+where `type` != 'U'
+order by `priority` desc; ## U, S타입인 경우만 group_id를 같는다, G일 경우 단독 채널이다.
+
+
+create table `channel_group` (
+	`id` bigint not null auto_increment,
+	`group_id` varchar(255) character set utf8 not null,
+	`channel` varchar(255) character set utf8 not null,
+	primary key(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT;
+
+
+## 데이터가 정상적으로 생성이 된 이후에 참조키를 걸어서 연결할 것!!
+
+
+select * from `channel`
+where group_id is not null;
+
+## 기존 채널과 그룹을 유지하면서 안정적으로 릴리즈하기 위해서 새로운 테이블을 만들어서 진행해보자.
+
+create table `channel_new` (
+	`channel_id` varchar(255) character set utf8 not null,
+	`title` varchar(255) character set utf8 not null,
+	`type` enum('S','G','U') default 'G' comment 'Special(대표채널), General(단독채널), Under(S채널에 종속)',
+	`description` text default null,
+	`created_dt` datetime default CURRENT_TIMESTAMP,
+	`priority` bigint unsigned default null,
+	`group_id` varchar(255) character set utf8 default null,
+	`hit_count` bigint default 0,
+	`active` boolean default true, 
+	unique key(`channel_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT;
+
+
+
+## 시나리오 대로 실행을 해본다.
+# 1. 처음부터 대표 채널을 등록한다.
+select * from `channel_new`;
+insert into `channel_new` (`channel_id`,`title`, `type`) 
+values('08b75690-6d90-11e6-8ac2-b7031c24f9d2', '네임드 쇼다운 라이브', 'S');
+
+# 2. 대표 채널에 속하는 서브 채널을 생성한다.
+insert into `channel_new` (`channel_id`,`title`, `type`)
+values('385bc900-90f7-11e6-876f-719554daeebf', '네임드 쇼다운 라이브 시즌1', 'U');
+
+select * from `channel_group`;
+
+
+
+select cn.*
+from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id
+where cn.type != 'U';
+
+select cn.*
+from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id;
+
+
+select DISTINCT cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id
+where cn.type !='U';
+
+select * from `channel_new`;
+
+
+
+# channel_new와 channel과 channel_group의 channel을 연결한다.
+alter table `channel_group`
+add foreign key (`channel_id`)
+references `channel`(`channel_id`);
+
+
+## 우선 순위에 맞게 서브 채널을 제외한 모든 채널을 가져온다.
+select * from `channel_new`
+where `type` != 'U'
+order by `priority` desc;
+
+
+# 그룹 채널을 가져온다.
+select * from `channel_group`;
+
+# line 126번 참고
+
+
+##;
+select cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id
+where cn.type !='U';
+
+
+# 그룹별로 채널을 묶는다.
+select group_id, group_concat(`channel_id`) as channels
+from `channel_group`
+group by `group_id`;
+
+
+select cn.*, cg.group_id, cg.channels from `channel_new` as cn
+left join (
+	select group_id, group_concat(`channel_id`) as channels
+	from `channel_group`
+	group by `group_id`
+) as cg
+on cn.group_id = cg.group_id
+where cn.type !='U' and cn.active=true
+order by cn.priority desc;
+
+# line 181 참고
+select group_id, group_concat(`channel_id`) as channels
+from `channel_group`
+group by `group_id`;
 
 
 </string>
 			<key>table</key>
-			<string>broadcast</string>
+			<string>channel_new</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
-			<real>228</real>
+			<real>191</real>
 		</dict>
 	</dict>
 	<key>encrypted</key>
@@ -396,150 +523,103 @@ limit 1;
 	<array/>
 	<key>queryHistory</key>
 	<array>
-		<string>alter table `broadcast` add column `start_dt` datetime default CURRENT_TIMESTAMP after `id`</string>
-		<string>alter table `broadcast` add column `start_dt` datetime CURRENT_TIMESTAMP after `id`</string>
-		<string>alter table `broadcast` add column `start_dt` datetime CURRENT_TIMESTAMP null after `id`</string>
-		<string>alter table `broadcast` drop column `date`</string>
-		<string>alter table `broadcast` add column `end_dt` datetime default null after `date`</string>
-		<string>alter table `broadcast` drop column `end_dt`</string>
-		<string>alter table `broadcast` add column `end_dt` datetime default CURRENT_TIMESTAMP after `date`</string>
-		<string>alter table `broadcast` add column `end_dt` datetime default current_timestampt after `date`</string>
-		<string>## 같은 날 한 번 이상 방송을 할 경우
-## insert의 조건, 어떤 것도 방송중이지 않아야 한다.
-## 가장 최근에 한 개에 대해서 방송중 여부를 판단한다.
+		<string>select cn.*, cg.group_id, cg.channels from `channel_new` as cn
+left join (
+	select group_id, group_concat(`channel_id`) as channels
+	from `channel_group`
+	group by `group_id`
+) as cg
+on cn.group_id = cg.group_id
+where cn.type !='U' and cn.active=true
+order by cn.priority desc</string>
+		<string>select group_id, group_concat(`channel_id`) as channels
+from `channel_group`
+group by `group_id`</string>
+		<string>select cn.*, cg.group_id, cg.channels from `channel_new` as cn
+left join (
+	select group_id, group_concat(`channel_id`) as channels
+	from `channel_group`
+	group by `group_id`
+) as cg
+on cn.group_id = cg.group_id
+where cn.type !='U'
+order by cn.priority desc</string>
+		<string>select cn.*, cg.group_id, cg.channels from `channel_new` as cn
+left join (
+	select group_id, group_concat(`channel_id`) as channels
+	from `channel_group`
+	group by `group_id`
+) as cg
+on cn.group_id = cg.group_id
+where cn.type !='U'
+order by cn.proirity desc</string>
+		<string>select cn.*, cg.group_id, cg.channels from `channel_new` as cn
+left join (
+	select group_id, group_concat(`channel_id`) as channels
+	from `channel_group`
+	group by `group_id`
+) as cg
+on cn.group_id = cg.group_id
+where cn.type !='U'</string>
+		<string>select cn.*, cg.* from `channel_new` as cn
+left join (
+	select group_id, group_concat(`channel_id`) as channels
+	from `channel_group`
+	group by `group_id`
+) as cg
+on cn.group_id = cg.group_id
+where cn.type !='U'</string>
+		<string>select cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
+left join (
+	select group_id, group_concat(`channel_id`) as channels
+	from `channel_group`
+	group by `group_id`
+) as cg
+on cn.group_id = cg.group_id
+where cn.type !='U'</string>
+		<string># 그룹별로 
+select group_id, group_concat(`channel_id`) as channels
+from `channel_group`
+group by `group_id`</string>
+		<string>select group_id, group_concat(`channel_id`)
+from `channel_group`
+group by `group_id`</string>
+		<string>select * from `channel_group`</string>
+		<string># line 126번 참고
 
-select * from `broadcast` 
-order by `date` desc
-limit 1</string>
-		<string>/* DROP PROCEDURE `GetFlavour`
-CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
-begin
-if not exists ( select * from `broadcast` where date(`date`) = curdate() )
-then insert into `broadcast` (`link`) values('http://www.google.com')
-else update `broadcast` set `status`=false where date(`date`) = curdate()
-end if
-end; */
-
-######
-
-select * if(
-	exists( select * from `broadcast` where date(`date`) = curdate() ) is null,
-	'true',
-	'false'
-) from `broadcast`</string>
-		<string>/* DROP PROCEDURE `GetFlavour`
-CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
-begin
-if not exists ( select * from `broadcast` where date(`date`) = curdate() )
-then insert into `broadcast` (`link`) values('http://www.google.com')
-else update `broadcast` set `status`=false where date(`date`) = curdate()
-end if
-end; */
-
-######
-
-select *
-if(
-	exists( select * from `broadcast` where date(`date`) = curdate() ) is null,
-	'true',
-	'false'
-) from `broadcast`</string>
-		<string>/* DROP PROCEDURE `GetFlavour`
-CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
-begin
-if not exists ( select * from `broadcast` where date(`date`) = curdate() )
-then insert into `broadcast` (`link`) values('http://www.google.com')
-else update `broadcast` set `status`=false where date(`date`) = curdate()
-end if
-end; */
-
-select *
-if(
-	exists( select * from `broadcast` where date(`date`) = curdate() ) is null,
-	'true',
-	'false'
-) from `broadcast`</string>
-		<string>/* DROP PROCEDURE `GetFlavour`
-CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
-begin
-if not exists ( select * from `broadcast` where date(`date`) = curdate() )
-then insert into `broadcast` (`link`) values('http://www.google.com')
-else update `broadcast` set `status`=false where date(`date`) = curdate()
-end if
-end; */
-
-select *
-if(
-	exists( select * from `broadcast` where date(`date`) = curdate() ) is null
-	'true',
-	'false'
-) from `broadcast`</string>
-		<string>/* DROP PROCEDURE `GetFlavour`
-CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
-begin
-if not exists ( select * from `broadcast` where date(`date`) = curdate() )
-then insert into `broadcast` (`link`) values('http://www.google.com')
-else update `broadcast` set `status`=false where date(`date`) = curdate()
-end if
-end; */
-
-select *
-if(
-	exists( select * from `broadcast` where date(`date`) = curdate() ) is null
-	print 'yes',
-	print 'no'
-) from `broadcast`</string>
-		<string>if(
-	exists( select * from `broadcast` where date(`date`) = curdate() ) is null
-	print 'yes',
-	print 'no'
-)</string>
-		<string>/* DROP PROCEDURE `GetFlavour`
-CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
-begin
-if not exists ( select * from `broadcast` where date(`date`) = curdate() )
-then insert into `broadcast` (`link`) values('http://www.google.com')
-else update `broadcast` set `status`=false where date(`date`) = curdate()
-end if
-end; */
-
-if(
-	exists( select * from `broadcast` where date(`date`) = curdate() ) is null
-	print 'yes',
-	print 'no'
-)</string>
-		<string>DROP PROCEDURE `GetFlavour`
-CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
-begin
-if not exists ( select * from `broadcast` where date(`date`) = curdate() )
-then insert into `broadcast` (`link`) values('http://www.google.com')
-else update `broadcast` set `status`=false where date(`date`) = curdate()
-end if
-end</string>
-		<string>DROP PROCEDURE `GetFlavour`
-CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
-begin
-if not exists ( select * from `broadcast` where date(`date`) = curdate() )
-then insert into `broadcast` (`link`) values('http://www.google.com')
-else update `broadcast` set `status`=false where date(`date`) = curdate()
-end if</string>
-		<string>DELIMITER
-DROP PROCEDURE `GetFlavour`
-CREATE PROCEDURE `GetFlavour`(`FlavourID` INT, `FlavourName` VARCHAR(20))
-begin
-if not exists ( select * from `broadcast` where date(`date`) = curdate() )
-then insert into `broadcast` (`link`) values('http://www.google.com')
-else update `broadcast` set `status`=false where date(`date`) = curdate()
-end if</string>
-		<string>## select ifnull을 통해서 실행해본다.
-#select ifnull( (select `status` from `broadcast` where date(`date`) = curdate()), 0) as result;
 
 ##;
-
-if not exists ( select * from `broadcast` where date(`date`) = curdate() )
-then insert into `broadcast` (`link`) values('http://www.google.com')
-else update `broadcast` set `status`=false where date(`date`) = curdate()
-end if</string>
+select cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id
+where cn.type !='U'</string>
+		<string>select DISTINCT cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id
+where cn.type !='U'</string>
+		<string>select DISTINCT cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id</string>
+		<string>select distinct cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id</string>
+		<string>select cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id</string>
+		<string>select * from `channel_new`</string>
+		<string>select cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id
+where cn.group_id is not null</string>
+		<string>select cn.*, cg.* from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id</string>
+		<string>select cn.* from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id</string>
+		<string>select * from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

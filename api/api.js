@@ -3,7 +3,7 @@
  */
 
 const
-    express = require('express'),
+     express = require('express'),
     router = express.Router(),
     bcrypt = require('bcrypt'),
     passport = require('passport'),
@@ -12,7 +12,7 @@ const
     // CommonDAO = require('../RedisDAO/CommonDAO'),
     // UTIL = require('../util/util'),
     User = require('../service/UserService'),
-    Reply = require('../service/UserService');
+    Reply = require('../service/ReplyService');
 // Auth = require('../service/AuthService')
 
 
@@ -62,26 +62,26 @@ const
 
 
 passport.serializeUser((user, done) => {
-    done(null, user);
+	done(null, user);
 });
 
 passport.deserializeUser((user, done) => {
-    done(null, user);
+	done(null, user);
 });
 
 
 const isAuthenticated = (req, res, next) => {
-    if (req.isAuthenticated())
-        return next();
-    res.redirect('/login');
+	if (req.isAuthenticated())
+		return next();
+	res.redirect('/login');
 };
 
 /*게임 로그인에 대한 API*/
 router.post('/login', function (req, res) {
-    const _obj = {
-        user_id: req.body.user_id,
-        password: req.body.password
-    };
+	const _obj = {
+		user_id: req.body.user_id,
+		password: req.body.password
+	};
     // TODO _obj null, undefined 로직 추가해야됨
 });
 
@@ -90,39 +90,36 @@ router.post('/login', function (req, res) {
  * 홀덤쿨럽 티비 로그인 API
  * 로그인 실패시 로그인실패 카운트 증가, 로그인 실패 10일경우 계정락
  */
-
 passport.use(new LocalStrategy({
-        usernameField: 'user_id',
-        passwordField: 'password',
-        passReqToCallback: true
-    }, (req, user_id, password, done) => {
-        User.login(user_id, password, (err, result) => {
-            if (err) {
-                return done(null, false);
-            } else {
-                if (result.success) {
-                    return done(null, result.user_info);
-                } else {
-                    return done(null, false);
-                }
-            }
-        });
-    }
-));
+	usernameField: 'user_id',
+	passwordField: 'password',
+	passReqToCallback: true
+}, (req, user_id, password, done) => {
+	User.login(user_id, password, (err, result) => {
+		if (err) {
+			return done(null, false);
+		} else {
+			if (result.success) {
+				return done(null, result.user_info);
+			} else {
+				return done(null, false);
+			}
+		}
+	});
+}));
 
 
-router.post('/hc/login', passport.authenticate('local', {
-    failureRedirect: '/login',
-    failureFlash: true
+router.post('/login', passport.authenticate('local', {
+	failureRedirect: '/login',
+	failureFlash: true
 }), (req, res) => {
-    res.redirect('/');
+	res.redirect('/');
 });
 
 
-// ??
-router.get('/api/v1/logout', (req, res) => {
-    req.logout();
-    res.redirect('/');
+router.get('/logout', (req, res) => {
+	req.logout();
+	res.redirect('/');
 });
 
 /**
@@ -186,7 +183,10 @@ router.get('/users/duplication/email', (req, res) => {
     });
 });
 
-router.post('/reply', (req, res) => {
+
+//////////////////////////  API REPLY  /////////////////////////////////////
+
+router.post('/reply/create', (req, res) => {
     //TODO 댓글이랑 답글을 한곳에서 처리하자
     
     const _obj = {
@@ -204,7 +204,7 @@ router.post('/reply', (req, res) => {
     });
 });
 
-router.put('/reply', (req, res) => {
+router.put('/reply/update', (req, res) => {
     
     const _obj = {
         id: req.body.id,
@@ -220,7 +220,7 @@ router.put('/reply', (req, res) => {
     });
 });
 
-router.delete('/reply', (req, res) => {
+router.delete('/reply/delete', (req, res) => {
 
     const reply_id = req.body.id;
 

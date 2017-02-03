@@ -21,7 +21,7 @@ var isAuthenticated = function (req, res, next) {
 /**
  * Agent page
  * */
-var AgentService = require('../../service/AgentService');
+var AgentService = require('../../service/_bak/AgentService');
 router.get('/', isAuthenticated, function (req, res) {
 
   if (req.user.layer === 3) {

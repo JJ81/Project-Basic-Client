@@ -2,13 +2,12 @@
  * Created by cheese on 2017. 1. 23..
  */
 const
-    mysql_dbc = require('../commons/db_conn')(),
-    connection = mysql_dbc.init(),
-    bcrypt = require('bcrypt'),
-    QUERY = require('../database/query');
+  mysql_dbc = require('../commons/db_conn')(),
+	connection = mysql_dbc.init(),
+	bcrypt = require('bcrypt'),
+	QUERY = require('../database/query');
 
 const User = {};
-
 
 /**
  *로그인 실패시 로그인 실패 카운트 증가(10이상시 계정 정지)
@@ -16,13 +15,13 @@ const User = {};
  * @param callback
  */
 User.failToLogin = (user_id, callback) => {
-    connection.query(QUERY.USER.FailToLogin, user_id, (err, result) => {
-        if (!err) {
-            callback(null, result);
-        } else {
-            callback(err, null);
-        }
-    });
+	connection.query(QUERY.USER.FailToLogin, user_id, (err, result) => {
+		if (!err) {
+			callback(null, result);
+		}else{
+			callback(err, null);
+		}
+	});
 };
 
 /**
@@ -31,13 +30,13 @@ User.failToLogin = (user_id, callback) => {
  * @param callback
  */
 User.clearFailedCount = (user_id, callback) => {
-    connection.query(QUERY.USER.ClearFailedCount, user_id, (err, result) => {
-        if (!err) {
-            callback(null, result);
-        } else {
-            callback(err, null);
-        }
-    });
+	connection.query(QUERY.USER.ClearFailedCount, user_id, (err, result) => {
+		if (!err) {
+			callback(null, result);
+		} else {
+			callback(err, null);
+		}
+	});
 };
 
 /**
@@ -46,13 +45,13 @@ User.clearFailedCount = (user_id, callback) => {
  * @param callback
  */
 User.updateGameLog = (user_id, callback) => {
-    connection.query(QUERY.USER.UpdateGameLog, user_id, (err, result) => {
-        if (!err) {
-            callback(null, result);
-        } else {
-            callback(err, null);
-        }
-    });
+	connection.query(QUERY.USER.UpdateGameLog, user_id, (err, result) => {
+		if (!err) {
+			callback(null, result);
+		} else {
+			callback(err, null);
+		}
+	});
 };
 
 User.login = (user_id, password, callback) => {

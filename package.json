@@ -14,7 +14,8 @@
     "development": "NODE_ENV=development nodemon ./bin/www nodemon",
     "production": "NODE_ENV=production nodemon ./bin/www nodemon",
     "test": "mocha --debug",
-    "webpack-watch": "webpack --config webpack.config.js -p -w"
+    "webpack-watch": "webpack --config webpack.config.js -p -w",
+    "nsp": "nsp check"
   },
   "dependencies": {
     "JSON": "^1.0.0",
@@ -63,6 +64,7 @@
     "karma-requirejs": "^1.1.0",
     "karma-safari-launcher": "^1.0.0",
     "mocha": "^3.2.0",
+    "nsp": "^2.6.2",
     "webpack": "^1.9.11",
     "webpack-dev-server": "^1.16.3"
   }
