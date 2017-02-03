@@ -46,7 +46,22 @@
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
 			<key>contentFilter</key>
-			<dict/>
+			<dict>
+				<key>filterComparison</key>
+				<string>=</string>
+				<key>filterComparisonTag</key>
+				<integer>0</integer>
+				<key>filterField</key>
+				<string>channel_id</string>
+				<key>filterValue</key>
+				<string>e62f3db0-8ba1-11e6-b572-b512822291cd</string>
+				<key>firstBetweenField</key>
+				<string></string>
+				<key>menuLabel</key>
+				<string>`channel_id` = 'e62f3db0-8ba1-11e6-b572-b512822291cd'</string>
+				<key>secondBetweenField</key>
+				<string></string>
+			</dict>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
@@ -66,7 +81,7 @@
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {2450, 1260}}</string>
+			<string>{{0, 0}, {2817, 1132}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -462,7 +477,7 @@ select * from `channel_new`;
 # channel_new와 channel과 channel_group의 channel을 연결한다.
 alter table `channel_group`
 add foreign key (`channel_id`)
-references `channel`(`channel_id`);
+references `channel_new`(`channel_id`);
 
 
 ## 우선 순위에 맞게 서브 채널을 제외한 모든 채널을 가져온다.
@@ -501,10 +516,158 @@ where cn.type !='U' and cn.active=true
 order by cn.priority desc;
 
 # line 181 참고
+
+## channels 순서를 기준으로 우측열에 타이틀을 넣어보자.
 select group_id, group_concat(`channel_id`) as channels
 from `channel_group`
 group by `group_id`;
 
+# 서브 채널만 가져온다.
+select `channel_id`, `title` from `channel_new`
+where `type` = 'U';
+
+select t.* from 
+(
+	select group_id, group_concat(`channel_id`) as channels
+	from `channel_group`
+	group by `group_id`
+) as t;
+
+
+select group_concat(`channel_id`) as channels
+from `channel_group`
+group by `group_id`;
+	
+	
+/* select * from `channel_new`
+where `channel_id` in 
+(
+	select group_concat(`channel_id`) as channels
+	from `channel_group`
+	group by `group_id`
+); */
+
+;
+select * from `channel_new` as cn
+inner join (
+	select group_concat(`channel_id`) as channels
+	from `channel_group`
+	group by `group_id`
+) as cg
+on cn.channel_id = cg.channels;
+
+
+select * from `channel_group` as cg
+where cg.channel_id in (
+	select group_concat(`channel_id`) as channels
+	from `channel_group`
+	group by `group_id`
+);
+
+
+## 
+select if(cn.group_id is null, cn.title, cn.group_id) as group_id, group_concat(`cn`.`channel_id`) as channels, group_concat(`cn`.`title`) as titles
+from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id
+group by cg.group_id;
+
+
+select cn.*, cg.*
+from `channel_new` as cn
+left join (
+	select group_concat(`channel_id`) as channels, group_id
+	from `channel_group`
+	group by `group_id`
+) as cg
+on cn.group_id = cg.channels;
+
+select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id;
+
+
+select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, group_concat(if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id)
+from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id
+group by cg.group_id;
+
+
+select * from `channel_new`;
+
+select * 
+from `channel_new` as cn
+inner join `channel_new` cn2
+;
+
+select group_id, group_concat(`channel_id`) as channels
+from `channel_group`
+group by `group_id`;
+
+
+select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+from `channel_new` as cn
+left join `channel_group` as cg
+on cn.group_id = cg.group_id;
+
+
+select ch.*, cn.title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id;
+
+
+
+select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, ch.group_id, ch.channel_id as sub_channel, cn.title as sub_title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id;
+
+
+
+
+select * from channel_new;
+
+
+select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, ch.group_id, group_concat(ch.channel_id) as sub_channel, group_concat(cn.title) as sub_title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U'
+group by ch.group_id;
+
+##########################################################
+################# 좌측 채널을 순서대로 가져오는 쿼리 ################
+##########################################################
+select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title, ch.priority
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U'
+group by ch.group_id
+order by ch.priority desc;
 
 </string>
 			<key>table</key>
@@ -523,103 +686,199 @@ group by `group_id`;
 	<array/>
 	<key>queryHistory</key>
 	<array>
-		<string>select cn.*, cg.group_id, cg.channels from `channel_new` as cn
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title, ch.priority
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U'
+group by ch.group_id
+order by ch.priority desc</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title, order by ch.priority desc) as sub_title, ch.priority
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U'
+group by ch.group_id
+order by ch.priority desc</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title) as sub_title, ch.priority
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U'
+group by ch.group_id
+order by ch.priority desc</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id) as sub_channel, group_concat(cn.title) as sub_title, ch.priority
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U'
+group by ch.group_id
+order by ch.priority desc</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id) as sub_channel, group_concat(cn.title) as sub_title, ch.priority
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U'
+group by ch.group_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, group_concat(ch.channel_id) as sub_channel, group_concat(cn.title) as sub_title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U'
+group by ch.group_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, ch.group_id, group_concat(ch.channel_id) as sub_channel, group_concat(cn.title) as sub_title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U'
+group by ch.group_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, ch.group_id, group_concat(ch.channel_id) as sub_channel, group_concat(cn.title) as sub_title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+group by ch.group_id</string>
+		<string>select * from channel_new</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, ch.group_id, group_concat(`ch.channel_id`) as sub_channel, group_concat(`cn.title`) as sub_title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+group by ch.group_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, ch.group_id, group_concat(`ch.channel_id`) as sub_channel, group_concat(`cn.title`) as sub_title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+group by ch.channel_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, ch.group_id, ch.channel_id as sub_channel, cn.title as sub_title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, ch.group_id, ch.channel_id as sub_channel, ch.type, cn.title as sub_title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, ch.group_id, ch.channel_id as sub_channel, cn.title as sub_title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, ch.group_id, ch.channel_id as sub_channel, cn.title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, ch.group_id, ch.channel_id as sub_channel cn.title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, ch.group_id, cn.title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, cn.title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, cn.title from 
+`channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id</string>
+		<string>select ch.channel as super_channel, ch.title as super_title, cn.title from 
+`channel_new` as cn
 left join (
-	select group_id, group_concat(`channel_id`) as channels
-	from `channel_group`
-	group by `group_id`
-) as cg
-on cn.group_id = cg.group_id
-where cn.type !='U' and cn.active=true
-order by cn.priority desc</string>
-		<string>select group_id, group_concat(`channel_id`) as channels
-from `channel_group`
-group by `group_id`</string>
-		<string>select cn.*, cg.group_id, cg.channels from `channel_new` as cn
-left join (
-	select group_id, group_concat(`channel_id`) as channels
-	from `channel_group`
-	group by `group_id`
-) as cg
-on cn.group_id = cg.group_id
-where cn.type !='U'
-order by cn.priority desc</string>
-		<string>select cn.*, cg.group_id, cg.channels from `channel_new` as cn
-left join (
-	select group_id, group_concat(`channel_id`) as channels
-	from `channel_group`
-	group by `group_id`
-) as cg
-on cn.group_id = cg.group_id
-where cn.type !='U'
-order by cn.proirity desc</string>
-		<string>select cn.*, cg.group_id, cg.channels from `channel_new` as cn
-left join (
-	select group_id, group_concat(`channel_id`) as channels
-	from `channel_group`
-	group by `group_id`
-) as cg
-on cn.group_id = cg.group_id
-where cn.type !='U'</string>
-		<string>select cn.*, cg.* from `channel_new` as cn
-left join (
-	select group_id, group_concat(`channel_id`) as channels
-	from `channel_group`
-	group by `group_id`
-) as cg
-on cn.group_id = cg.group_id
-where cn.type !='U'</string>
-		<string>select cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
-left join (
-	select group_id, group_concat(`channel_id`) as channels
-	from `channel_group`
-	group by `group_id`
-) as cg
-on cn.group_id = cg.group_id
-where cn.type !='U'</string>
-		<string># 그룹별로 
-select group_id, group_concat(`channel_id`) as channels
-from `channel_group`
-group by `group_id`</string>
-		<string>select group_id, group_concat(`channel_id`)
-from `channel_group`
-group by `group_id`</string>
-		<string>select * from `channel_group`</string>
-		<string># line 126번 참고
-
-
-##;
-select cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
-left join `channel_group` as cg
-on cn.group_id = cg.group_id
-where cn.type !='U'</string>
-		<string>select DISTINCT cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
-left join `channel_group` as cg
-on cn.group_id = cg.group_id
-where cn.type !='U'</string>
-		<string>select DISTINCT cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
-left join `channel_group` as cg
-on cn.group_id = cg.group_id</string>
-		<string>select distinct cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
-left join `channel_group` as cg
-on cn.group_id = cg.group_id</string>
-		<string>select cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
-left join `channel_group` as cg
-on cn.group_id = cg.group_id</string>
-		<string>select * from `channel_new`</string>
-		<string>select cn.*, cg.group_id, cg.channel_id from `channel_new` as cn
-left join `channel_group` as cg
-on cn.group_id = cg.group_id
-where cn.group_id is not null</string>
-		<string>select cn.*, cg.* from `channel_new` as cn
-left join `channel_group` as cg
-on cn.group_id = cg.group_id</string>
-		<string>select cn.* from `channel_new` as cn
-left join `channel_group` as cg
-on cn.group_id = cg.group_id</string>
-		<string>select * from `channel_new` as cn
-left join `channel_group` as cg
-on cn.group_id = cg.group_id</string>
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

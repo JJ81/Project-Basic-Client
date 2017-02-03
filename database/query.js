@@ -47,4 +47,20 @@ QUERY.BROADCAST = {
 	GET : 'select * from `broadcast` order by `start_dt` desc limit 1;'
 };
 
+QUERY.NAVI = {
+	CHANNEL_ALL_ORDERED :
+		'select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title, ch.priority ' +
+		'from `channel_new` as cn ' +
+		'inner join ( ' +
+			'select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id ' +
+			'from `channel_new` as cn ' +
+			'left join `channel_group` as cg ' +
+			'on cn.group_id = cg.group_id ' +
+		') as ch ' +
+		'on ch.channel_id = cn.channel_id ' +
+		'where ch.type != \'U\' ' +
+		'group by ch.group_id ' +
+		'order by ch.priority desc;'
+};
+
 module.exports = QUERY;
