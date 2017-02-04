@@ -13,7 +13,7 @@ router.get('/calendar', (req, res)=>{
 
 router.get('/live', (req, res)=>{
 	res.render('bc_live',{
-		current_path: 'bc_calendar',
+		current_path: 'bc_live',
 		title: PROJ_TITLE + 'login'
 	});
 });
