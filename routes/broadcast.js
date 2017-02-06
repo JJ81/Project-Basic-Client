@@ -5,29 +5,34 @@ const
 
 
 router.get('/calendar', (req, res)=>{
-    res.render('bc_calendar',{
-        current_path: 'bc_calendar',
-        title: PROJ_TITLE + 'login'
+    
+    Broadcast.getCalendarList((err, result) => {
+        if (!err) {
+            res.render('bc_calendar',{
+                current_path: 'bc_calendar',
+                title: PROJ_TITLE + '방송 편성표',
+                result : result
+            });
+        } else {
+            res.status(500).send({ error: err});
+        }
     });
 });
 
 
 router.get('/live', (req, res)=>{
     
-    Broadcast.getList((err, result) => {
+    Broadcast.getLiveList((err, result) => {
         if (!err) {
-            console.log(result.length);
             res.render('bc_live',{
                 current_path: 'bc_live',
-                title: PROJ_TITLE + 'login',
+                title: PROJ_TITLE + '라이브 방송',
                 live_result: (result.length ===0) ? false : result
             });
         } else {
-            res.json(err);
+            res.status(500).send({ error: err});
         }
     });
-    
-    
 });
 
 

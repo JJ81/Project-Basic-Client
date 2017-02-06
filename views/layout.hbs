@@ -57,7 +57,11 @@
 
 
 
-<script src="/javascripts/{{current_path}}.js"></script>
+
+{{#if current_path}}
+    <script src="/javascripts/{{current_path}}.js"></script>
+{{/if}}
+
 
 <!--&lt;!&ndash; jQuery &ndash;&gt;-->
 <!--<script src="/components/gentelella/vendors/jquery/dist/jquery.min.js"></script>-->

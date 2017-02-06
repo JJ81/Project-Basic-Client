@@ -75,10 +75,10 @@ app.use(allowCORS);
 global.PROJ_TITLE = '홀덤클럽티비';
 
 app.use('/', routes);
-app.use('/api/v1/', api);
-app.use('/event/', event);
-app.use('/content/', content);
-app.use('/broadcast/', broadcast);
+app.use('/api/v1', api);
+app.use('/event', event);
+app.use('/content', content);
+app.use('/broadcast', broadcast);
 
 // catch 404 and forward to error handler
 app.use((req, res) => {

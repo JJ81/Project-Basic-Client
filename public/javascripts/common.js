@@ -51,7 +51,7 @@ define(
                 }
             });
         },
-    
+            
         broadcastLiveOff: (id, callback) => {
             $.ajax({
                 url: API.baseURL + '/broadcast/live',
@@ -65,16 +65,23 @@ define(
                 }
             });
         },
-            
-        broadcastCalendarUpload: (id) => {
+        
+        broadcastCalendarDelete: (id, callback) => {
+            $.ajax({
+                url: API.baseURL + '/broadcast/calendar',
+                type: 'DELETE',
+                data: {id: id},
+                success: function (data, textStatus, jqXHR) {
+                    callback(null, data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    callback(textStatus, null);
+                }
+            });
                 
         },
             
-        broadcastCalendarDelete: (id) => {
-                
-        },
-            
-        /*Form 전송은 이곳에서 전부 담당한다.*/
+            /*Form 전송은 이곳에서 전부 담당한다.*/
         AjaxFormSubmit: function (form, callback) {
             form.ajaxForm({
                 url: form.attr('action'),
@@ -87,6 +94,10 @@ define(
                     callback(textStatus, null);
                 }
             });
+        },
+        
+        refreshDisplay: function (div_id) {
+            $('#'+div_id).load(location.href+' #'+div_id+'>*', '');
         }
     };
         
@@ -94,8 +105,6 @@ define(
     $('.modal').on('hidden.bs.modal', function (e) {
         $(this).find('form')[0].reset();
     });
-    
-    
         
         
     window.util = utils;

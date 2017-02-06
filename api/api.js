@@ -14,6 +14,7 @@ const
     User = require('../service/UserService'),
     Common = require('../service/CommonService'),
     Broadcast = require('../service/BroadcastService'),
+    Event =require('../service/Eventservice'),
     Reply = require('../service/UserService');
 
 
@@ -131,7 +132,7 @@ router.post('/broadcast/live', (req, res) => {
 
 router.get('/broadcast/live', (req, res) => {
     // TODO 유효성 검사 추가해야됨
-    Broadcast.getList((err, result) => {
+    Broadcast.getLiveList((err, result) => {
         if (!err) {
             res.json(result);
         } else {
@@ -164,7 +165,7 @@ router.delete('/broadcast/live', (req, res) => {
 });
 
 router.post('/broadcast/calendar', (req, res) => {
-    Broadcast.calendarUpload(req, (err, result) => {
+    Broadcast.uploadCalendar(req, (err, result) => {
         if (!err) {
             res.json(result);
         } else {
@@ -173,8 +174,26 @@ router.post('/broadcast/calendar', (req, res) => {
     });
 });
 
+router.delete('/broadcast/calendar', (req, res) => {
+    const id = req.body.id;
+    Broadcast.deleteCalendar(id, (err, result) => {
+        if (!err) {
+            res.json({success:true, msg:'삭제를 완료했습니다.'});
+        } else {
+            res.json({success:false, msg:'다시 시도해주세요'});
+        }
+    });
+});
 //broadcast API END
 
+//event API Start
+router.post('/event', (req, res)=>{
+    Event.Upload(req, (err, result) =>{
+        res.json(result);
+    });
+});
+
+//event API END
 /**
  * HC_TV API
  */

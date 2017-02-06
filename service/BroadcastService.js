@@ -39,13 +39,20 @@ Broadcast.endLive = (id, callback) => {
     });
 };
 
-Broadcast.getList = (callback) => {
+Broadcast.getLiveList = (callback) => {
     connection.query(QUERY.Broadcast.LiveGetList, (err, result) => {
         callback(err, result);
     });
 };
 
-Broadcast.calendarUpload = (req, callback) => {
+Broadcast.getCalendarList = (callback) =>{
+    connection.query(QUERY.Broadcast.CalendarList, (err, result) => {
+        callback(err, result);
+    });
+    
+};
+
+Broadcast.uploadCalendar = (req, callback) => {
     /**
      * @tasks_작업_순서
      *      1.formidable 파일 업로드
@@ -86,13 +93,12 @@ Broadcast.calendarUpload = (req, callback) => {
     });
 };
 
-Broadcast.calendarDelete = (what) => {
-    
+Broadcast.deleteCalendar = (id, callback) => {
+    /*TODO 추후에 S3삭제 로직 추가*/
+    connection.query(QUERY.Broadcast.CalendarDelete, [id], (err, result)=>{
+        callback(err, result);
+    });
 };
-
-function test() {
-    
-}
 
 
 

@@ -46,8 +46,5 @@ requirejs(
         /**
          * 생방송 수정
          */
-
-        btn_bc_live_modify.on('click', function () {
-            
-        });
+        
     });

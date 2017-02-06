@@ -52,6 +52,12 @@ QUERY.Broadcast = {
     LiveOn : 'insert into `broadcast` set ?;',
     LiveEnd : 'update `broadcast` set `end_dt` = ?, `status` = 0 where `id` = ?',
     LiveGetList : 'select *from `broadcast` where `status` = 1;',
-    CalendarWrite: 'insert into `broadcast_calendar` set ?;'
+    CalendarWrite: 'insert into `broadcast_calendar` set ?;',
+    CalendarList : 'select *from `broadcast_calendar`;',
+    CalendarDelete: 'delete from `broadcast_calendar` where `id` =?;'
+};
+
+QUERY.Event = {
+    Register :'....'
 };
 module.exports = QUERY;

@@ -16,7 +16,7 @@ require.config({
         common: ['/javascripts/common']
     },
     shim: {
-        custom: ['jquery'],
+        custom: ['jquery','bootstrap'],
         bootstrap: ['jquery'],
         bootstrapProgressbar: ['jquery'],
         iCheck:['jquery'],
