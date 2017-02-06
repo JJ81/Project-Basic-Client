@@ -102,4 +102,11 @@ QUERY.EVENT = {
 		'select * from `vote_answer` where vote_id=?;'
 };
 
+QUERY.VIDEO = {
+	LIST :
+		'select * from `video` ' +
+		'where `channel_id`=? ' +
+		'order by `created_dt` desc;'
+};
+
 module.exports = QUERY;

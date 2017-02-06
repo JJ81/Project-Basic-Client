@@ -420,7 +420,27 @@ router.get('/event/vote/answer/:id', (req, res) => {
 				});
 			}
 		});
+});
 
+/**
+ * 채널 아이디로 해당 채널 비디오 리스트 가져오기
+ */
+router.get('/video/list/:channel_id', (req, res) => {
+	connection.query(QUERY.VIDEO.LIST,
+		[req.params.channel_id],
+		(err, rows) => {
+			if(!err){
+				res.json({
+					success : true,
+					result : rows
+				});
+			}else{
+				res.json({
+					success : false,
+					msg : err
+				});
+			}
+		});
 });
 
 

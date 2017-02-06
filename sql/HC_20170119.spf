@@ -45,25 +45,24 @@
 		<dict>
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
+			<key>contentFilter</key>
+			<dict/>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
 			<data>
-			YnBsaXN0MDDUAQIDBAUGNjdYJHZlcnNpb25YJG9iamVjdHNZJGFy
-			Y2hpdmVyVCR0b3ASAAGGoK0HCBUWFxgZHSQoLDA0VSRudWxs0wkK
-			CwwQFFdOUy5rZXlzWk5TLm9iamVjdHNWJGNsYXNzow0OD4ACgAOA
-			BKMREhOABYAGgAiADFR0eXBlVHJvd3NUa2V5c18QJlNlbGVjdGlv
-			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
-			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
-			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
-			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClJpZNIeHy0uXxAPTlNN
-			dXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5TTXV0YWJs
-			ZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tleWVkQXJj
-			aGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBLAFIAWgBl
-			AGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIAwwDFAMoA
-			1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEtATIBRAFIAVEBVgFl
-			AWkBcQF2AXkBiwGOAZMAAAAAAAACAQAAAAAAAAA6AAAAAAAAAAAA
-			AAAAAAABlQ==
+			YnBsaXN0MDDUAQIDBAUGJyhYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYdJFUkbnVsbNMJCgsMDxJX
+			TlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAF
+			gAdUdHlwZVRyb3dzXxAdU2VsZWN0aW9uRGV0YWlsVHlwZU5TSW5k
+			ZXhTZXTUFwsYGRobHBxaTlNMb2NhdGlvblxOU1JhbmdlQ291bnRY
+			TlNMZW5ndGgQAIAGEAHSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2Vz
+			Wk5TSW5kZXhTZXSiIiNaTlNJbmRleFNldFhOU09iamVjdNIeHyUm
+			XE5TRGljdGlvbmFyeaIlI18QD05TS2V5ZWRBcmNoaXZlctEpKlRk
+			YXRhgAEACAARABoAIwAtADIANwBAAEYATQBVAGAAZwBqAGwAbgBx
+			AHMAdQB3AHwAgQChAKoAtQDCAMsAzQDPANEA1gDhAOoA9QD4AQMB
+			DAERAR4BIQEzATYBOwAAAAAAAAIBAAAAAAAAACsAAAAAAAAAAAAA
+			AAAAAAE9
 			</data>
 			<key>contentSortColIsAsc</key>
 			<true/>
@@ -779,8 +778,9 @@ where `id`=14;
 select * from `vote_answer`
 where vote_id=14;
 
-
-
+# type이 G 혹은 U인 채널 아이디로 비디오 리스트를 가져온다.
+select * from `video`
+where `channel_id`='385bc900-90f7-11e6-876f-719554daeebf';
 
 
 
@@ -792,7 +792,7 @@ where vote_id=14;
 
 </string>
 			<key>table</key>
-			<string>event</string>
+			<string>channel_new</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -807,6 +807,12 @@ where vote_id=14;
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string>select * from `video`
+where `channel_id`='385bc900-90f7-11e6-876f-719554daeebf'</string>
+		<string>where `channel_id`='385bc900-90f7-11e6-876f-719554daeebf'</string>
+		<string>select * from `video`</string>
+		<string>select * from `video`
+where `channel_id`='396b78f0-ce7c-11e6-a239-43548c5e1547'</string>
 		<string>select * from `vote_question`
 where `id`=14</string>
 		<string>select * from `vote_question`
@@ -844,21 +850,6 @@ where `event_id`=3</string>
 select * from `event_result`
 where `event_id`=1</string>
 		<string>alter table `event` add column `thumbnail` varchar(255) character set utf8 not null after `title`</string>
-		<string>## 이벤트 리스트 가져오기
-select * from `event`
-order by `created_dt` desc</string>
-		<string>## 이벤트 리스트 가져오기
-select * from `event`</string>
-		<string>alter table `event_result`
-add foreign key (`event_id`)
-references `event`(`id`)</string>
-		<string>create table `event_result` (
-	`id` bigint not null auto_increment,
-	`event_id` bigint not null,
-	`result_img` varchar(255) character set utf8 not null,
-	`created_dt` datetime default CURRENT_TIMESTAMP,
-	primary key(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

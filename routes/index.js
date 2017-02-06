@@ -308,13 +308,14 @@ router.get('/event/:ref_id/information', (req, res) => {
 				console.error(err);
 				throw new Error(err);
 			}
-	});
-
+		});
 });
 
-router.get('/test', (req, res) => {
-	res.json({result: 'Hello World'});
-});
+
+
+// router.get('/test', (req, res) => {
+// 	res.json({result: 'Hello World'});
+// });
 
 
 // TEST CSRF token
@@ -333,8 +334,8 @@ router.get('/test/form', csrfProtection, (req, res) => {
 	});
 });
 
-router.post('/test/form/submit', parseForm, csrfProtection, (req, res) => {
-	res.send('data is being processed');
-});
+// router.post('/test/form/submit', parseForm, csrfProtection, (req, res) => {
+// 	res.send('data is being processed');
+// });
 
 module.exports = router;
