@@ -13,6 +13,7 @@ require('../database/redis')(router, 'local'); // redis
 require('../helpers/helpers');
 
 const request = require('request');
+const STATIC_URL = 'http://static.holdemclub.tv/';
 
 passport.serializeUser((user, done) => {
 	console.log(user);
@@ -99,14 +100,14 @@ const HOST_INFO = {
 };
 
 const HOST = `${HOST_INFO.LOCAL}${HOST_INFO.VERSION}`;
-
+console.log(HOST);
 
 router.get('/', (req, res) => {
 	'use strict';
 
 	async.parallel(
 		[
-			(cb) => {
+			(cb) => { // 방송중
 				request.get(`${HOST}/broadcast/live`, (err, res, body) => {
 					if(!err && res.statusCode == 200){
 						// console.log(typeof body);
@@ -126,24 +127,38 @@ router.get('/', (req, res) => {
 						console.error(err);
 					}
 				});
+			},
+			(cb) => { // 좌측 채널 리스트
+				request.get(`${HOST}/navigation/channel/list`, (err, res, body)=>{
+					let _body = JSON.parse(body);
+					if(!err && res.statusCode == 200){
+						if(_body.success){
+							cb(null, _body);
+						}else{
+							console.error('[navi] success status is false');
+							cb('Navigation', null);
+						}
+					}else{
+						cb(err, null);
+						console.error(err);
+					}
+				});
+			},
+			(cb) => {
+				request.get(`${HOST}/video/recent/list?size=3&offset=0`, (err, res, body)  => {
+					let _body  = JSON.parse(body);
+					if(!err && res.statusCode == 200){
+						if(_body.success){
+							cb(null, _body);
+						}else{
+							cb('Video', null);
+						}
+					}else{
+						console.error('[video] recent 3 videos');
+						cb(err, null);
+					}
+				});
 			}
-			// ,
-			// (cb) => {
-			// 	request.get(`${HOST}/navigation/channel/all`, (err, res, body)=>{
-			// 		let _body = JSON.parse(body);
-			// 		if(!err && res.statusCode == 200){
-			// 			if(_body.success){
-			// 				cb(null, _body);
-			// 			}else{
-			// 				console.error('[navi] success status is false');
-			// 				cb(err, null);
-			// 			}
-			// 		}else{
-			// 			cb(err, null);
-			// 			console.error(err);
-			// 		}
-			// 	});
-			// }
 		], (err, result) => {
 		if (!err) {
 
@@ -152,10 +167,12 @@ router.get('/', (req, res) => {
 
 			res.render('index', {
 				current_path: 'INDEX',
+				static : STATIC_URL,
 				title: PROJ_TITLE,
 				loggedIn: req.user,
-				live : result[0]
-				//,channels : result[1]
+				live : result[0].result,
+				channels : result[1].result,
+				videos : result[2].result
 			});
 		} else {
 			console.error(err);

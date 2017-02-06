@@ -46,42 +46,31 @@
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
 			<key>contentFilter</key>
-			<dict>
-				<key>filterComparison</key>
-				<string>=</string>
-				<key>filterComparisonTag</key>
-				<integer>0</integer>
-				<key>filterField</key>
-				<string>channel_id</string>
-				<key>filterValue</key>
-				<string>e62f3db0-8ba1-11e6-b572-b512822291cd</string>
-				<key>firstBetweenField</key>
-				<string></string>
-				<key>menuLabel</key>
-				<string>`channel_id` = 'e62f3db0-8ba1-11e6-b572-b512822291cd'</string>
-				<key>secondBetweenField</key>
-				<string></string>
-			</dict>
+			<dict/>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
 			<data>
-			YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFy
-			Y2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJX
-			TlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAF
-			gAdUdHlwZVRyb3dzXxAdU2VsZWN0aW9uRGV0YWlsVHlwZU5TSW5k
-			ZXhTZXTSFwsYGVxOU1JhbmdlQ291bnQQAIAG0hscHR5aJGNsYXNz
-			bmFtZVgkY2xhc3Nlc1pOU0luZGV4U2V0oh8gWk5TSW5kZXhTZXRY
-			TlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVk
-			QXJjaGl2ZXLRJidUZGF0YYABAAgAEQAaACMALQAyADcAQABGAE0A
-			VQBgAGcAagBsAG4AcQBzAHUAdwB8AIEAoQCmALMAtQC3ALwAxwDQ
-			ANsA3gDpAPIA9wEEAQcBGQEcASEAAAAAAAACAQAAAAAAAAAoAAAA
-			AAAAAAAAAAAAAAABIw==
+			YnBsaXN0MDDUAQIDBAUGNjdYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoK0HCBUWFxgZHSQoLDA0VSRudWxs0wkK
+			CwwQFFdOUy5rZXlzWk5TLm9iamVjdHNWJGNsYXNzow0OD4ACgAOA
+			BKMREhOABYAGgAiADFR0eXBlVHJvd3NUa2V5c18QJlNlbGVjdGlv
+			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
+			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
+			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
+			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClhyZWNvbV9pZNIeHy0u
+			XxAPTlNNdXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5T
+			TXV0YWJsZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tl
+			eWVkQXJjaGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBL
+			AFIAWgBlAGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIA
+			wwDFAMoA1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEzATgBSgFO
+			AVcBXAFrAW8BdwF8AX8BkQGUAZkAAAAAAAACAQAAAAAAAAA6AAAA
+			AAAAAAAAAAAAAAABmw==
 			</data>
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {2817, 1132}}</string>
+			<string>{{0, 0}, {1880, 1132}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -669,13 +658,34 @@ where ch.type != 'U'
 group by ch.group_id
 order by ch.priority desc;
 
+
+
+select * from `broadcast` order by `start_dt` desc limit 1;
+
+
+
+# 최근 업데이트 비디오를 3개를 가져온다.
+# 최근 업데이트된 채널의 비디오를 {N}개 가져온다.
+
+
+select * from `video`
+order by `created_dt` desc
+limit 0, 3;
+
+
+select * from `broadcast` order by `start_dt` desc limit 1;
+
+
+## 추천 방송 가져오기
+
+
 </string>
 			<key>table</key>
-			<string>channel_new</string>
+			<string>recommend_channel</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
-			<real>191</real>
+			<real>224</real>
 		</dict>
 	</dict>
 	<key>encrypted</key>
@@ -686,6 +696,47 @@ order by ch.priority desc;
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string>##########################################################
+################# 좌측 채널을 순서대로 가져오는 쿼리 ################
+##########################################################
+select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title, ch.priority
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U'
+group by ch.group_id
+order by ch.priority desc</string>
+		<string>select * from `broadcast` order by `start_dt` desc limit 1</string>
+		<string># 최근 업데이트 비디오를 3개를 가져온다.
+# 최근 업데이트된 채널의 비디오를 {N}개 가져온다.
+
+
+select * from `video`
+order by `created_dt` desc
+limit 0, 3</string>
+		<string># 최근 업데이트 비디오를 3개를 가져온다.
+# 최근 업데이트된 채널의 비디오를 {N}개 가져온다.
+
+
+select * from `video`
+order by `created_dt` desc
+limit 0, 10</string>
+		<string># 최근 업데이트 비디오를 3개를 가져온다.
+# 최근 업데이트된 채널의 비디오를 {N}개 가져온다.
+
+
+select * from `video`
+order by `created_dt` desc</string>
+		<string># 최근 업데이트 비디오를 3개를 가져온다.
+# 최근 업데이트된 채널의 비디오를 {N}개 가져온다.
+
+
+select * from `video`</string>
 		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title, ch.priority
 from `channel_new` as cn
 inner join (
@@ -819,60 +870,6 @@ on ch.channel_id = cn.channel_id</string>
 		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, ch.group_id, ch.channel_id as sub_channel, cn.title as sub_title from 
 `channel_new` as cn
 inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, ch.group_id, ch.channel_id as sub_channel, cn.title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, ch.group_id, ch.channel_id as sub_channel cn.title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, ch.group_id, cn.title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, cn.title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, cn.title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, cn.title from 
-`channel_new` as cn
-left join (
 	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
 	from `channel_new` as cn
 	left join `channel_group` as cg

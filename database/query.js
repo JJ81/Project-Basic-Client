@@ -64,4 +64,12 @@ QUERY.NAVI = {
 		'order by ch.priority desc;'
 };
 
+
+QUERY.CONTENTS = {
+	RECENT_VIDEO_LIST :
+		'select * from `video` ' +
+		'order by `created_dt` desc ' +
+		'limit ?, ?;'
+};
+
 module.exports = QUERY;

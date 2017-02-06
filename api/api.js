@@ -236,6 +236,9 @@ router.delete('/reply/delete', (req, res) => {
 
 ////////////////////////////////////////// API v2.0 //////////////////////////////////////////////////ㅍ
 
+// TODO API_KEY를 제공할 수 있도록 한다?
+// TODO 허용된 도메인에서만 호출이 될 수 있도록 설정한다.
+
 const mysql_dbc = require('../commons/db_conn')();
 const connection = mysql_dbc.init();
 const QUERY = require('../database/query');
@@ -248,7 +251,7 @@ router.get('/broadcast/live', (req, res) => {
 		if(!err){
 			res.json({
 				success : true,
-				live : rows
+				result : rows
 			});
 		}else{
 			res.json({
@@ -265,7 +268,7 @@ router.get('/navigation/channel/list', (req, res) => {
 		if(!err){
 			res.json({
 				success : true,
-				list : rows
+				result : rows
 			});
 		}else{
 			res.json({
@@ -274,6 +277,34 @@ router.get('/navigation/channel/list', (req, res) => {
 			});
 		}
 	});
+});
+
+
+router.get('/video/recent/list', (req, res) => {
+	'use strict';
+
+	let _info = {
+		offset : parseInt(req.query.offset),
+		limit : parseInt(req.query.size)
+	};
+
+	console.info(_info);
+
+	connection.query(QUERY.CONTENTS.RECENT_VIDEO_LIST,
+		[_info.offset, _info.limit],
+		(err, rows) => {
+			if(!err){
+				res.json({
+					success : true,
+					result : rows
+				});
+			}else{
+				res.json({
+					success: false,
+					msg : err
+				});
+			}
+		});
 });
 
 
