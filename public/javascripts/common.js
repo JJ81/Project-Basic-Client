@@ -5,19 +5,18 @@
 'use strict';
 
 define(
-	[
-		'jquery',
-		'bootstrap',
-		'bootstrapProgressbar',
-		'custom',
-		'npPogress',
-		'iCheck',
-		'fastclick',
+    [
+        'jquery',
+        'jqueryForm',
+        'bootstrap',
+        'bootstrapProgressbar',
+        'custom',
+        'npPogress',
+        'iCheck',
+        'fastclick',
+        'jqueryForm'
     
-	], function ($) {
-        
-        
-        
+    ], function ($) {
         // 로직 설명
         /**
          * todo
@@ -33,56 +32,75 @@ define(
          */
             
             // TODO 일단 여기에 작성하고 어디로 뺄지 결정하자
-	const API = {
-		baseURL: '/api/v1'
+    const API = {
+        baseURL: '/api/v1'
+    };
+        
+    const utils = {
+            
+        broadcastLiveOn: (link, callback) => {
+            $.ajax({
+                url: API.baseURL + '/broadcast/live',
+                type: 'post',
+                data: {link: link},
+                success: function (data, textStatus, jqXHR) {
+                    callback(null, data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    callback(textStatus, null);
+                }
+            });
+        },
+    
+        broadcastLiveOff: (id, callback) => {
+            $.ajax({
+                url: API.baseURL + '/broadcast/live',
+                type: 'put',
+                data: {id: id},
+                success: function (data, textStatus, jqXHR) {
+                    callback(null, data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    callback(textStatus, null);
+                }
+            });
+        },
+            
+        broadcastCalendarUpload: (id) => {
                 
-	};
-        
-	const utils = {
+        },
             
-		broadcastLiveOn: (link, callback) => {
-			$.ajax({
-				url: API.baseURL + '/broadcast/live',
-				type: 'post',
-				data: {link: link},
-				success: function (data, textStatus, jqXHR) {
-					callback(null, data);
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					callback(textStatus, null);
-				}
-			});
-		},
-            
-		broadcastLiveOff: (id, callback) => {
-			$.ajax({
-				url: API.baseURL + '/broadcast/live',
-				type: 'put',
-				data: {id: id},
-				success: function (data, textStatus, jqXHR) {
-					callback(null, data);
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					callback(textStatus, null);
-				}
-			});
-		},
-            
-		broadcastCalendarUpload: (id) => {
+        broadcastCalendarDelete: (id) => {
                 
-		},
+        },
             
-		broadcastCalendarDelete: (id) => {
-                
-		},
-            
-            
-	};
+        /*Form 전송은 이곳에서 전부 담당한다.*/
+        AjaxFormSubmit: function (form, callback) {
+            form.ajaxForm({
+                url: form.attr('action'),
+                type: $(form).find('.method').val() || form.method,
+                data: form.serialize(),
+                success: function (data, textStatus, jqXHR) {
+                    callback(null, data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    callback(textStatus, null);
+                }
+            });
+        }
+    };
         
         
-	window.util = utils;
+    $('.modal').on('hidden.bs.modal', function (e) {
+        $(this).find('form')[0].reset();
+    });
+    
+    
         
-	return utils;
+        
+    window.util = utils;
+        
+    return utils;
         
         
 });

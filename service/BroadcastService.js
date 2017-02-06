@@ -9,7 +9,7 @@ const
     Upload = require('../service/UploadService'),
     Broadcast = {},
     s3Keys = {
-        calendar: 'broadcast/calendar'
+        calendar: 'broadcast/calendar/'
     };
 
 
@@ -31,12 +31,17 @@ Broadcast.onLive = (link, callback) => {
 
 Broadcast.endLive = (id, callback) => {
     connection.query(QUERY.Broadcast.LiveEnd, [new Date(), id], (err, result) => {
-        console.log(err);
         if (!err) {
             callback(null, {success: true, msg: '생방송 종료 완료'});
         } else {
             callback(err, {success: false, msg: '다시 시도해주세요'});
         }
+    });
+};
+
+Broadcast.getList = (callback) => {
+    connection.query(QUERY.Broadcast.LiveGetList, (err, result) => {
+        callback(err, result);
     });
 };
 
@@ -46,29 +51,30 @@ Broadcast.calendarUpload = (req, callback) => {
      *      1.formidable 파일 업로드
      *      2.S3 업로드 (formidable 업로드한 파일을 다시 S3에 업로드)
      *      3. 데이터베이스에 저장
-     *     TODO 4. 업로드된 파일삭제(S3 파일이 정상적으로 업로드되면 로컬에 남아있는 파일을 삭제한다.)
+     *     TODO 4. 업로드된 파일삭제(S3 파일이 정상적으로 업로드되면 로컬에 남아있는 파일을 삭제한다.) 이건 공통로직이니 Common Server 에 작성해야 될까???
+     *     TODO 추가 작업 이미지 최적화 작업
+     *
      */
     const tasks = [
         (callback) => {
-            Upload.formidable(req, (err, files) => {
-                callback(err, files);
+            Upload.formidable(req, (err, files, field) => {
+                callback(err, files, field);
             });
         },
-        (files, callback) => {
-            Upload.s3(files, s3Keys.calendar, (err, result) => {
-                console.log('====================');
-                console.log(files);
-                console.log(result);
-                console.log('====================');
+        (files, field, callback) => {
+            Upload.s3(files, s3Keys.calendar, (err, result, s3_file_name) => {
+                callback(err, s3_file_name, field);
+            });
+        },
+        (s3_file_name, field, callback) => {
+            const _obj = {
+                title: field.link,
+                img_name: s3_file_name
+            };
+            connection.query(QUERY.Broadcast.CalendarWrite, _obj, (err, result) => {
                 callback(err, result);
             });
-        },
-        // (result, cllback) => {
-        // console.log(result);
-        //     connection.query(QUERY.Broadcast.CalendarWrite, [], (err, result) => {
-        //         callback(err, result);
-        //     });
-        // }
+        }
     ];
     
     async.waterfall(tasks, (err, result) => {
@@ -77,15 +83,18 @@ Broadcast.calendarUpload = (req, callback) => {
         } else {
             callback(err, {success: false, msg: '다시 시도해주세요'});
         }
-        
     });
-    
-    
 };
 
 Broadcast.calendarDelete = (what) => {
     
 };
+
+function test() {
+    
+}
+
+
 
 
 module.exports = Broadcast;

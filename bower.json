@@ -28,6 +28,7 @@
     "requirejs": "^2.3.2",
     "jquery-validation": "jquery.validate#^1.13.0",
     "swiper": "^3.4.1",
-    "gentelella": "^1.4.0"
+    "gentelella": "^1.4.0",
+    "jquery-form": "^3.46.0"
   }
 }

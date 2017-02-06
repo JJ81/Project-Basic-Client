@@ -1,55 +1,64 @@
 const
-	formidable = require('formidable'),
-	AWS = require('aws-sdk'),
-	s3 = new AWS.S3(),
-	Upload = {};
+    formidable = require('formidable'),
+    md5 = require('md5'),
+    Upload = {};
+
+let AWS = require('aws-sdk');
+AWS.config.region = 'ap-northeast-2'; //지역 서울 설정
+let s3 = new AWS.S3();
 
 
 
 const form = new formidable.IncomingForm({
-	encoding: 'utf-8',
-	multiples: true,
-	keepExtensions: false //확장자 제거
+    encoding: 'utf-8',
+    multiples: true,
+    keepExtensions: false //확장자 제거
 });
 
 /*S3 버킷 설정*/
-const params = {
-	Bucket: 'holdemclub',
-	Key: null,
-	ACL: 'public-read',
-	Body: null
+let params = {
+    Bucket: 'holdemclub',
+    Key: null,
+    ACL: 'public-read',
+    Body: null
 };
 
 Upload.formidable =(req, callback) =>{
+    let field;
     
-	form.parse(req, (err, fields, files)=>{
-		console.log(fields);
-		console.log(files);
-	});
+    form.parse(req, (err, fields, files)=>{
+        field = fields;
+    });
     
+    form.on('end', function () {
+        callback(null, this.openedFiles, field);
+    });
     
-	form.on('end', function () {
-		callback(null, this.openedFiles);
-	});
+    form.on('error', function (err) {
+        callback('form.on(error) :' + err, null);
+    });
     
-	form.on('error', function (err) {
-		callback('form.on(error) :' + err);
-	});
-    
-	form.on('aborted', function () {
-		callback('form.on(aborted)');
-	});
+    form.on('aborted', function () {
+        callback('form.on(aborted)', null);
+    });
 };
 
-
-Upload.s3 = (file_path, key, callback) => {
-	params.Key = key;
-	params.Body = require('fs').createReadStream(file_path);
+Upload.s3 = (files, key, callback) => {
     
-	s3.upload(params, function(err, result){
-		callback(err, result);
-	});
+    const s3_file_name = makeS3FilesName(files);
+    params.Key = key + s3_file_name;
+    params.Body = require('fs').createReadStream(files[0].path);
+
+    s3.upload(params, function(err, result){
+        callback(err, result, s3_file_name);
+    });
 };
+
+/*TODO 파일 이름이 여러개 일 경우는 어떻게 처리할것인가?*/
+function makeS3FilesName(files) {
+    return (md5(files[0].name));
+}
+
 
 
 module.exports =Upload;
