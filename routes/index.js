@@ -144,7 +144,7 @@ router.get('/', (req, res) => {
 					}
 				});
 			},
-			(cb) => {
+			(cb) => { // 최신 업데이트 비디오
 				request.get(`${HOST}/video/recent/list?size=3&offset=0`, (err, res, body)  => {
 					let _body  = JSON.parse(body);
 					if(!err && res.statusCode == 200){
@@ -155,6 +155,21 @@ router.get('/', (req, res) => {
 						}
 					}else{
 						console.error('[video] recent 3 videos');
+						cb(err, null);
+					}
+				});
+			},
+			(cb) => { // 추천 채널 리스트
+				request.get(`${HOST}/navigation/recommend/list`, (err, res, body) => {
+					let _body  = JSON.parse(body);
+					if(!err && res.statusCode == 200){
+						if(_body.success){
+							cb(null, _body);
+						}else{
+							cb('Recom', null);
+						}
+					}else{
+						console.error('[Recom] ');
 						cb(err, null);
 					}
 				});
@@ -172,13 +187,129 @@ router.get('/', (req, res) => {
 				loggedIn: req.user,
 				live : result[0].result,
 				channels : result[1].result,
-				videos : result[2].result
+				videos : result[2].result,
+				recom : result[3].result
 			});
 		} else {
 			console.error(err);
 			throw new Error(err);
 		}
 	});
+});
+
+// TODO 모든 라우터에서 항상 추춴방송, 전체 채널, 방송 여부에 대한 데이터를 항상 데이터를 가져와야 한다
+// TODO 위의 데이터는 Redis에 캐시를 하도록 한다
+
+
+router.get('/event', (req, res) => {
+	'use strict';
+
+	// 임시로 100개의 이벤트 리스트를 가져온다.
+	request.get(`${HOST}/event/list?offset=0&size=100`, (err, response, body) => {
+		let _body  = JSON.parse(body);
+		if(!err && response.statusCode == 200){
+			if(_body.success){
+				res.render('event', {
+					current_path: 'EVENT',
+					static : STATIC_URL,
+					title: PROJ_TITLE,
+					loggedIn: req.user,
+					list : _body.result
+				});
+			}else{
+				console.error(err);
+				throw new Error(err);
+			}
+		}else{
+			console.error(err);
+			throw new Error(err);
+		}
+	});
+});
+
+// 이벤트 결과 페이지
+router.get('/event/:id/result', (req, res) => {
+	'use strict';
+
+	request.get(`${HOST}/event/result/${req.params.id}`, (err, response, body) => {
+		let _body  = JSON.parse(body);
+		if(!err && response.statusCode == 200){
+			if(_body.success){
+				res.render('event_result', {
+					current_path: 'EVENT',
+					static : STATIC_URL,
+					title: PROJ_TITLE,
+					loggedIn: req.user,
+					result : _body.result
+				});
+			}else{
+				console.error(err);
+				throw new Error(err);
+			}
+		}else{
+			console.error(err);
+			throw new Error(err);
+		}
+	});
+});
+
+/**
+ * 진행중인 혹은 진행이 되기 전 이벤트에 대한 정보 페이지
+ */
+router.get('/event/:ref_id/information', (req, res) => {
+	'use strict';
+
+	async.parallel(
+		[
+			(cb) => {
+				request.get(`${HOST}/event/vote/question/${req.params.ref_id}`, (err, response, body) => {
+					if(!err && response.statusCode == 200){
+						let _body = JSON.parse(body);
+						if(_body.success){
+							cb(null, _body);
+						}else{
+							console.error('[vote | question] success status is false');
+							cb(null, null);
+						}
+					}else{
+						cb(err, null);
+						console.error(err);
+					}
+				});
+			},
+			(cb) => {
+				request.get(`${HOST}/event/vote/answer/${req.params.ref_id}`, (err, response, body) => {
+					if(!err && response.statusCode == 200){
+						let _body = JSON.parse(body);
+						if(_body.success){
+							cb(null, _body);
+						}else{
+							console.error('[vote | answer] success status is false');
+							cb(null, null);
+						}
+					}else{
+						cb(err, null);
+						console.error(err);
+					}
+				});
+			}
+		],
+		(err, result) => {
+			if (!err) {
+				res.render('event_details', {
+					current_path: 'EVENT',
+					static : STATIC_URL,
+					title: PROJ_TITLE,
+					loggedIn: req.user,
+					question : result[0].result,
+					answer : result[1].result
+				});
+			} else {
+				console.error(err);
+				throw new Error(err);
+			}
+	});
+
 });
 
 router.get('/test', (req, res) => {

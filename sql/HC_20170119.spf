@@ -45,8 +45,6 @@
 		<dict>
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
-			<key>contentFilter</key>
-			<dict/>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
@@ -58,19 +56,19 @@
 			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
 			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
 			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
-			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClhyZWNvbV9pZNIeHy0u
-			XxAPTlNNdXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5T
-			TXV0YWJsZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tl
-			eWVkQXJjaGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBL
-			AFIAWgBlAGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIA
-			wwDFAMoA1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEzATgBSgFO
-			AVcBXAFrAW8BdwF8AX8BkQGUAZkAAAAAAAACAQAAAAAAAAA6AAAA
-			AAAAAAAAAAAAAAABmw==
+			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClJpZNIeHy0uXxAPTlNN
+			dXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5TTXV0YWJs
+			ZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tleWVkQXJj
+			aGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBLAFIAWgBl
+			AGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIAwwDFAMoA
+			1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEtATIBRAFIAVEBVgFl
+			AWkBcQF2AXkBiwGOAZMAAAAAAAACAQAAAAAAAAA6AAAAAAAAAAAA
+			AAAAAAABlQ==
 			</data>
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1880, 1132}}</string>
+			<string>{{0, 0}, {1212, 720}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -676,12 +674,125 @@ limit 0, 3;
 select * from `broadcast` order by `start_dt` desc limit 1;
 
 
-## 추천 방송 가져오기
+## 추천 방송 {N}개 가져오기
+drop table `content_recommend`;
+create table `content_recommend` (
+	`id` bigint unsigned not null auto_increment,
+	`channel_id` varchar(255) character set utf8 not null,
+	`priority` bigint unsigned default null comment '추천 콘텐츠 간 우선순위',
+	`registered_dt` datetime default CURRENT_TIMESTAMP comment '추천 콘텐츠 등록일',
+	primary key(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT;
+
+alter table `content_recommend`
+add foreign key (`channel_id`)
+references `channel_new`(`channel_id`);
+
+select * from `content_recommend`
+order by `priority` desc, `registered_dt` desc;
+
+select channel_id from `content_recommend`
+order by `priority` desc, `registered_dt` desc;
+
+select group_concat(channel_id order by `priority` desc, `registered_dt` desc) as channel from `content_recommend`;
+
+
+
+select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U' 
+group by ch.group_id
+order by ch.priority desc;
+
+## 추천 콘텐츠 가져오기
+select channels.*, cr.priority as recom_priority 
+from
+(select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U' 
+group by ch.group_id
+) as channels
+inner join `content_recommend` as cr
+on channels.super_channel = cr.channel_id
+order by cr.priority desc;
+
+
+### 이벤트 결과 관련 테이블, 이벤트 결과를 이미지 업로드 하여 출력한다.
+drop table `event_result`;
+create table `event_result` (
+	`id` bigint not null auto_increment,
+	`event_id` bigint not null,
+	`result_img` varchar(255) character set utf8 not null,
+	`created_dt` datetime default CURRENT_TIMESTAMP,
+	primary key(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT;
+
+alter table `event_result`
+add foreign key (`event_id`)
+references `event`(`id`);
+
+drop table `event`;
+create table `event` (
+	`id` bigint not null auto_increment,
+	`title` varchar(255) character set utf8 not null,
+	`description` text character set utf8 default null,
+	`created_dt` datetime default CURRENT_TIMESTAMP,
+	primary key(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT;
+
+
+## 이벤트 리스트 가져오기
+select * from `event`
+order by `created_dt` desc
+limit 0, 10;
+
+## 이벤트 결과 가져오기
+select * from `event_result`
+where `event_id`=3;
+
+alter table `event` add column `thumbnail` varchar(255) character set utf8 not null after `title`;
+
+alter table `event` add column `status` enum('C', 'P', 'N') not null comment 'Completed, Progress, Not Yet' after `thumbnail`;
+
+
+## 이벤트를 생성할 경우 테이블 처리
+alter table `event` add column `type` enum('V') default 'V' comment 'Vote' after `thumbnail`;
+alter table `event` add column `ref_id` bigint default null comment 'type에 따른 참조 id' after `type`;
+
+select * from `vote_question`
+where `id`=14;
+
+select * from `vote_answer`
+where vote_id=14;
+
+
+
+
+
+
+
+
+
+
 
 
 </string>
 			<key>table</key>
-			<string>recommend_channel</string>
+			<string>event</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -696,186 +807,58 @@ select * from `broadcast` order by `start_dt` desc limit 1;
 	<array/>
 	<key>queryHistory</key>
 	<array>
-		<string>##########################################################
-################# 좌측 채널을 순서대로 가져오는 쿼리 ################
-##########################################################
-select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title, ch.priority
-from `channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-where ch.type != 'U'
-group by ch.group_id
-order by ch.priority desc</string>
-		<string>select * from `broadcast` order by `start_dt` desc limit 1</string>
-		<string># 최근 업데이트 비디오를 3개를 가져온다.
-# 최근 업데이트된 채널의 비디오를 {N}개 가져온다.
-
-
-select * from `video`
-order by `created_dt` desc
-limit 0, 3</string>
-		<string># 최근 업데이트 비디오를 3개를 가져온다.
-# 최근 업데이트된 채널의 비디오를 {N}개 가져온다.
-
-
-select * from `video`
+		<string>select * from `vote_question`
+where `id`=14</string>
+		<string>select * from `vote_question`
+where `id`=14
+union
+select * from `vote_answer`
+where vote_id=14</string>
+		<string>select * from `vote_answer`
+where vote_id=14</string>
+		<string>select * from `vote_answer`
+where vote_id=13</string>
+		<string>select * from `vote_question` as vq
+inner join `vote_answer` as va
+on vq.`id` = va.`vote_id`</string>
+		<string>select * from `vote_question`
+where `id`=13</string>
+		<string>select * from `vote_question`
+where `id`=1</string>
+		<string>select * from `vote_question`
+where `id`=3</string>
+		<string>select * from `vote_question`
+where id='13'</string>
+		<string>alter table `event` add column `ref_id` bigint default null comment 'type에 따른 참조 id를' after `type`</string>
+		<string>## 이벤트를 생성할 경우 테이블 처리
+alter table `event` add column `type` enum('V') default 'V' comment 'Vote' after `thumbnail`</string>
+		<string>## 이벤트 리스트 가져오기
+select * from `event`
 order by `created_dt` desc
 limit 0, 10</string>
-		<string># 최근 업데이트 비디오를 3개를 가져온다.
-# 최근 업데이트된 채널의 비디오를 {N}개 가져온다.
-
-
-select * from `video`
+		<string>alter table `event` add column `status` enum('C', 'P', 'N') not null comment 'Completed, Progress, Not Yet' after `thumbnail`</string>
+		<string>## 이벤트 결과 가져오기
+select * from `event_result`
+where `event_id`=3</string>
+		<string>## 이벤트 결과 가져오기
+select * from `event_result`
+where `event_id`=1</string>
+		<string>alter table `event` add column `thumbnail` varchar(255) character set utf8 not null after `title`</string>
+		<string>## 이벤트 리스트 가져오기
+select * from `event`
 order by `created_dt` desc</string>
-		<string># 최근 업데이트 비디오를 3개를 가져온다.
-# 최근 업데이트된 채널의 비디오를 {N}개 가져온다.
-
-
-select * from `video`</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title, ch.priority
-from `channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-where ch.type != 'U'
-group by ch.group_id
-order by ch.priority desc</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title, order by ch.priority desc) as sub_title, ch.priority
-from `channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-where ch.type != 'U'
-group by ch.group_id
-order by ch.priority desc</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title) as sub_title, ch.priority
-from `channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-where ch.type != 'U'
-group by ch.group_id
-order by ch.priority desc</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id) as sub_channel, group_concat(cn.title) as sub_title, ch.priority
-from `channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-where ch.type != 'U'
-group by ch.group_id
-order by ch.priority desc</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id) as sub_channel, group_concat(cn.title) as sub_title, ch.priority
-from `channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-where ch.type != 'U'
-group by ch.group_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, group_concat(ch.channel_id) as sub_channel, group_concat(cn.title) as sub_title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-where ch.type != 'U'
-group by ch.group_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, ch.group_id, group_concat(ch.channel_id) as sub_channel, group_concat(cn.title) as sub_title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-where ch.type != 'U'
-group by ch.group_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, ch.group_id, group_concat(ch.channel_id) as sub_channel, group_concat(cn.title) as sub_title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-group by ch.group_id</string>
-		<string>select * from channel_new</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, ch.group_id, group_concat(`ch.channel_id`) as sub_channel, group_concat(`cn.title`) as sub_title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-group by ch.group_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, ch.group_id, group_concat(`ch.channel_id`) as sub_channel, group_concat(`cn.title`) as sub_title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-group by ch.channel_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.type, ch.priority, ch.group_id, ch.channel_id as sub_channel, cn.title as sub_title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, ch.group_id, ch.channel_id as sub_channel, ch.type, cn.title as sub_title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id</string>
-		<string>select ch.channel as super_channel, ch.title as super_title, ch.priority, ch.group_id, ch.channel_id as sub_channel, cn.title as sub_title from 
-`channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id</string>
+		<string>## 이벤트 리스트 가져오기
+select * from `event`</string>
+		<string>alter table `event_result`
+add foreign key (`event_id`)
+references `event`(`id`)</string>
+		<string>create table `event_result` (
+	`id` bigint not null auto_increment,
+	`event_id` bigint not null,
+	`result_img` varchar(255) character set utf8 not null,
+	`created_dt` datetime default CURRENT_TIMESTAMP,
+	primary key(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=COMPACT</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

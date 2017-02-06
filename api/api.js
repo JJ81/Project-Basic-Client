@@ -262,7 +262,9 @@ router.get('/broadcast/live', (req, res) => {
 	});
 });
 
-
+/**
+ * 채널 리스트
+ */
 router.get('/navigation/channel/list', (req, res) => {
 	connection.query(QUERY.NAVI.CHANNEL_ALL_ORDERED, (err, rows) => {
 		if(!err){
@@ -279,7 +281,9 @@ router.get('/navigation/channel/list', (req, res) => {
 	});
 });
 
-
+/**
+ * 최근 업데이트된 비디오
+ */
 router.get('/video/recent/list', (req, res) => {
 	'use strict';
 
@@ -306,6 +310,119 @@ router.get('/video/recent/list', (req, res) => {
 			}
 		});
 });
+
+
+/**
+ * 추천 방송
+ */
+router.get('/navigation/recommend/list', (req, res) => {
+	connection.query(QUERY.NAVI.CHANNEL_RECOM, (err, rows) => {
+		if(!err){
+			res.json({
+				success : true,
+				result : rows
+			});
+		}else{
+			res.json({
+				success : false,
+				msg : err
+			});
+		}
+	});
+});
+
+
+/**
+ * 이벤트 리스트 가져오기
+ */
+router.get('/event/list', (req, res) => {
+	'use strict';
+	let _info = {
+		offset : parseInt(req.query.offset),
+		limit : parseInt(req.query.size)
+	};
+	connection.query(QUERY.EVENT.LIST, [_info.offset, _info.limit], (err, rows) => {
+		if(!err){
+			res.json({
+				success : true,
+				result : rows
+			});
+		}else{
+			res.json({
+				success : false,
+				msg : err
+			});
+		}
+	});
+});
+
+/**
+ * 이벤트 결과 가져오기
+ */
+router.get('/event/result/:id', (req, res) => {
+	console.log('@@ event id ');
+	console.log(req.params.id);
+
+	connection.query(QUERY.EVENT.RESULT, [req.params.id], (err, rows) => {
+		if(!err){
+			res.json({
+				success : true,
+				result : rows
+			});
+		}else{
+			res.json({
+				success : false,
+				msg : err
+			});
+		}
+	});
+});
+
+/**
+ * 투표 질문 관련 데이터 출력
+ */
+router.get('/event/vote/question/:id', (req, res) => {
+	'use strict';
+	connection.query(QUERY.EVENT.VOTE_QUESTION,
+		[req.params.id],
+		(err, rows) => {
+			if(!err){
+				res.json({
+					success : true,
+					result : rows
+				});
+			}else{
+				res.json({
+					success : false,
+					msg : err
+				});
+			}
+		});
+});
+
+/**
+ * 투표 결과에 대한 데이터 출력
+ */
+router.get('/event/vote/answer/:id', (req, res) => {
+	'use strict';
+	connection.query(QUERY.EVENT.VOTE_ANSWER,
+		[req.params.id],
+		(err, rows) => {
+			if(!err){
+				res.json({
+					success : true,
+					result : rows
+				});
+			}else{
+				res.json({
+					success : false,
+					msg : err
+				});
+			}
+		});
+
+});
+
 
 
 module.exports = router;

@@ -1,0 +1,26 @@
+<h3>이벤트 페이지</h3>
+<ul>
+    {{#each list}}
+    <li>
+        {{#if (isEquals status 'C')}}
+        <a href="/event/{{id}}/result">
+            <img src="{{../static}}event/{{thumbnail}}"
+                 alt="{{title}}" />
+            {{title}}
+        </a>
+        {{else if (isEquals status 'P') }}
+        <a href="/event/{{ref_id}}/information">
+            <img src="{{../static}}event/{{thumbnail}}"
+                 alt="{{title}}" />
+            {{title}}
+        </a>
+        {{else if (isEquals status 'N') }}
+        <a href="/event/{{ref_id}}/information">
+            <img src="{{../static}}event/{{thumbnail}}"
+                 alt="{{title}}" />
+            {{title}}
+        </a>
+        {{/if}}
+    </li>
+    {{/each}}
+</ul>
