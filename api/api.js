@@ -464,4 +464,69 @@ router.get('/channel/:channel_id/information', (req, res) => {
 		});
 });
 
+/**
+ * 홀클 대표 콘텐츠 가져오기
+ */
+router.get('/contents/representative/list', (req, res) => {
+	connection.query(QUERY.CONTENTS.RepresentativeList,
+		[parseInt(req.query.offset), parseInt(req.query.size)],
+		(err, rows) => {
+			if(!err){
+				res.json({
+					success : true,
+					result : rows
+				});
+			}else{
+				res.json({
+					success : false,
+					msg : err
+				});
+			}
+		});
+});
+
+/**
+ * 교육 콘텐츠 가져오기
+ */
+router.get('/contents/education/list', (req, res) => {
+	connection.query(QUERY.CONTENTS.EducationList,
+		[parseInt(req.query.offset), parseInt(req.query.size)],
+		(err, rows) => {
+			if(!err){
+				res.json({
+					success : true,
+					result : rows
+				});
+			}else{
+				res.json({
+					success : false,
+					msg : err
+				});
+			}
+		});
+});
+
+/**
+ * 요약 콘텐츠 가져오기
+ */
+router.get('/contents/summary/list', (req, res) => {
+	connection.query(QUERY.CONTENTS.SummaryList,
+		[parseInt(req.query.offset), parseInt(req.query.size)],
+		(err, rows) => {
+			if(!err){
+				res.json({
+					success : true,
+					result : rows
+				});
+			}else{
+				res.json({
+					success : false,
+					msg : err
+				});
+			}
+		});
+});
+
+
+
 module.exports = router;

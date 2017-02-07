@@ -75,17 +75,35 @@ QUERY.NAVI = {
 		'on ch.channel_id = cn.channel_id ' +
 		'where ch.type != \'U\' ' +
 		'group by ch.group_id) as channels ' +
-		'inner join `content_recommend` as cr ' +
-		'on channels.super_channel = cr.channel_id ' +
+		'inner join ' +
+		'(select * from `contents` ' +
+		'where `type`=\'R\' '+
+		'order by `priority` desc, `created_dt` desc)' +
+		' as cr ' +
+		'on channels.super_channel = cr.ref_id ' +
 		'order by cr.priority desc;'
 };
-
 
 QUERY.CONTENTS = {
 	RECENT_VIDEO_LIST :
 		'select * from `video` ' +
-		'order by `created_dt` desc ' +
-		'limit ?, ?;'
+		'order by `priority` desc, `created_dt` desc ' +
+		'limit ?, ?;',
+	RepresentativeList :
+		'select * from `contents` ' +
+		'where `type`=\'RT\' ' +
+		'order by `priority` desc, `created_dt` desc ' +
+		'limit ?,?;',
+	EducationList :
+		'select * from `contents` ' +
+		'where `type`=\'E\' ' +
+		'order by `priority` desc, `created_dt` desc ' +
+		'limit ?,?;',
+	SummaryList :
+		'select * from `contents` ' +
+		'where `type`=\'S\' ' +
+		'order by `priority` desc, `created_dt` desc ' +
+		'limit ?,?;',
 };
 
 QUERY.EVENT = {
@@ -113,5 +131,7 @@ QUERY.CHANNEL = {
 	GetById :
 		'select * from `channel_new` where channel_id=?;'
 };
+
+
 
 module.exports = QUERY;

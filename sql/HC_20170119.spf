@@ -45,29 +45,30 @@
 		<dict>
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
-			<key>contentFilter</key>
-			<dict/>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
 			<data>
-			YnBsaXN0MDDUAQIDBAUGJyhYJHZlcnNpb25YJG9iamVjdHNZJGFy
-			Y2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYdJFUkbnVsbNMJCgsMDxJX
-			TlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAF
-			gAdUdHlwZVRyb3dzXxAdU2VsZWN0aW9uRGV0YWlsVHlwZU5TSW5k
-			ZXhTZXTUFwsYGRobHBxaTlNMb2NhdGlvblxOU1JhbmdlQ291bnRY
-			TlNMZW5ndGgQAIAGEAHSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2Vz
-			Wk5TSW5kZXhTZXSiIiNaTlNJbmRleFNldFhOU09iamVjdNIeHyUm
-			XE5TRGljdGlvbmFyeaIlI18QD05TS2V5ZWRBcmNoaXZlctEpKlRk
-			YXRhgAEACAARABoAIwAtADIANwBAAEYATQBVAGAAZwBqAGwAbgBx
-			AHMAdQB3AHwAgQChAKoAtQDCAMsAzQDPANEA1gDhAOoA9QD4AQMB
-			DAERAR4BIQEzATYBOwAAAAAAAAIBAAAAAAAAACsAAAAAAAAAAAAA
-			AAAAAAE9
+			YnBsaXN0MDDUAQIDBAUGNjdYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoK0HCBUWFxgZHSQoLDA0VSRudWxs0wkK
+			CwwQFFdOUy5rZXlzWk5TLm9iamVjdHNWJGNsYXNzow0OD4ACgAOA
+			BKMREhOABYAGgAiADFR0eXBlVHJvd3NUa2V5c18QJlNlbGVjdGlv
+			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
+			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
+			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
+			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClJpZNIeHy0uXxAPTlNN
+			dXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5TTXV0YWJs
+			ZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tleWVkQXJj
+			aGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBLAFIAWgBl
+			AGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIAwwDFAMoA
+			1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEtATIBRAFIAVEBVgFl
+			AWkBcQF2AXkBiwGOAZMAAAAAAAACAQAAAAAAAAA6AAAAAAAAAAAA
+			AAAAAAABlQ==
 			</data>
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1212, 720}}</string>
+			<string>{{0, 0}, {1941, 960}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -783,8 +784,81 @@ select * from `video`
 where `channel_id`='385bc900-90f7-11e6-876f-719554daeebf';
 
 
+select * from `channel_new`
+where channel_id=?;
 
 
+
+# 홀클 대표 콘텐츠, 교육 콘텐츠, 기타 콘텐츠
+create table `contents` (
+	`id` bigint not null auto_increment,
+	`video_id` varchar(255) character set utf8 not null,
+	`type` enum('R', 'E', 'S') default 'E',
+	`created_dt` datetime default CURRENT_TIMESTAMP,
+	`priority` bigint default null,
+	`active` boolean default true,
+	primary key(`id`)
+) engine=Innodb default charset=utf8mb4 collate=utf8mb4_bin row_format=COMPACT;
+
+alter table `contents`
+add foreign key (`video_id`)
+references `video`(`video_id`);
+
+
+
+# 홀클 대표 콘텐츠
+select * from `contents`
+where `type`='R'
+order by `priority` desc
+limit 0,10;
+
+
+# 교육 콘텐츠
+select * from `contents`
+where `type`='E'
+order by `priority` desc
+limit 0,10;
+
+# 요약 콘텐츠
+select * from `contents`
+where `type`='S'
+order by `priority` desc
+limit 0,10;
+
+
+
+## 추천 채널 가져오기 수정본
+# contents에서 추천만 가져온다. ref_id as channel_id로 변경한다.
+select * from `contents`
+where `type`='R'
+order by `priority` desc, `created_dt` desc;
+
+
+select channels.*, cr.priority as recom_priority 
+from
+(select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U' 
+group by ch.group_id
+) as channels
+inner join (
+	select * from `contents`
+	where `type`='R'
+	order by `priority` desc, `created_dt` desc
+) as cr
+on channels.super_channel = cr.ref_id
+order by cr.priority desc;
+
+
+## contents 테이블에 통합됨
+drop table `content_recommend`;
 
 
 
@@ -792,11 +866,11 @@ where `channel_id`='385bc900-90f7-11e6-876f-719554daeebf';
 
 </string>
 			<key>table</key>
-			<string>channel_new</string>
+			<string>contents</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
-			<real>224</real>
+			<real>225</real>
 		</dict>
 	</dict>
 	<key>encrypted</key>
@@ -807,49 +881,144 @@ where `channel_id`='385bc900-90f7-11e6-876f-719554daeebf';
 	<array/>
 	<key>queryHistory</key>
 	<array>
-		<string>select * from `video`
-where `channel_id`='385bc900-90f7-11e6-876f-719554daeebf'</string>
-		<string>where `channel_id`='385bc900-90f7-11e6-876f-719554daeebf'</string>
-		<string>select * from `video`</string>
-		<string>select * from `video`
-where `channel_id`='396b78f0-ce7c-11e6-a239-43548c5e1547'</string>
-		<string>select * from `vote_question`
-where `id`=14</string>
-		<string>select * from `vote_question`
-where `id`=14
-union
-select * from `vote_answer`
-where vote_id=14</string>
-		<string>select * from `vote_answer`
-where vote_id=14</string>
-		<string>select * from `vote_answer`
-where vote_id=13</string>
-		<string>select * from `vote_question` as vq
-inner join `vote_answer` as va
-on vq.`id` = va.`vote_id`</string>
-		<string>select * from `vote_question`
-where `id`=13</string>
-		<string>select * from `vote_question`
-where `id`=1</string>
-		<string>select * from `vote_question`
-where `id`=3</string>
-		<string>select * from `vote_question`
-where id='13'</string>
-		<string>alter table `event` add column `ref_id` bigint default null comment 'type에 따른 참조 id를' after `type`</string>
-		<string>## 이벤트를 생성할 경우 테이블 처리
-alter table `event` add column `type` enum('V') default 'V' comment 'Vote' after `thumbnail`</string>
-		<string>## 이벤트 리스트 가져오기
-select * from `event`
-order by `created_dt` desc
-limit 0, 10</string>
-		<string>alter table `event` add column `status` enum('C', 'P', 'N') not null comment 'Completed, Progress, Not Yet' after `thumbnail`</string>
-		<string>## 이벤트 결과 가져오기
-select * from `event_result`
-where `event_id`=3</string>
-		<string>## 이벤트 결과 가져오기
-select * from `event_result`
-where `event_id`=1</string>
-		<string>alter table `event` add column `thumbnail` varchar(255) character set utf8 not null after `title`</string>
+		<string>drop table `content_recommend`</string>
+		<string>## 추천 콘텐츠 가져오기
+select channels.*, cr.priority as recom_priority 
+from
+(select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U' 
+group by ch.group_id
+) as channels
+inner join `content_recommend` as cr
+on channels.super_channel = cr.channel_id
+order by cr.priority desc</string>
+		<string>select channels.*, cr.priority as recom_priority 
+from
+(select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U' 
+group by ch.group_id
+) as channels
+inner join (
+	select * from `contents`
+	where `type`='R'
+	order by `priority` desc, `created_dt` desc
+) as cr
+on channels.super_channel = cr.ref_id
+order by cr.priority desc</string>
+		<string>select channels.*, cr.priority as recom_priority 
+from
+(select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title
+from `channel_new` as cn
+inner join (
+	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
+	from `channel_new` as cn
+	left join `channel_group` as cg
+	on cn.group_id = cg.group_id
+) as ch
+on ch.channel_id = cn.channel_id
+where ch.type != 'U' 
+group by ch.group_id
+) as channels
+inner join (
+	select * from `contents`
+	where `type`='R'
+	order by `priority` desc, `created_dt` desc
+) as cr
+on channels.super_channel = cr.channel_id
+order by cr.priority desc</string>
+		<string>## 추천 채널 가져오기 수정본
+# contents에서 추천만 가져온다. ref_id as channel_id로 변경한다.
+select * from `contents`
+where `type`='R'
+order by `priority` desc, `created_dt` desc</string>
+		<string>## 추천 채널 가져오기 수정본
+# contents에서 추천만 가져온다. ref_id as channel_id로 변경한다.
+select * from `contents`
+where `type`='R'
+order by `priority` desc</string>
+		<string>## 추천 채널 가져오기 수정본
+# contents에서 추천만 가져온다. ref_id as channel_id로 변경한다.
+select * from `contents`
+where `type`='R'</string>
+		<string># 교육 콘텐츠
+select * from `contents`
+where `type`='E'
+order by `priority` desc
+limit 0,10</string>
+		<string># 요약 콘텐츠
+select * from `contents`
+where `type`='S'
+order by `priority` desc
+limit 0,10</string>
+		<string># 홀클 대표 콘텐츠
+select * from `contents`
+where `type`='R'
+order by `priority` desc
+limit 0,10</string>
+		<string># 홀클 대표 콘텐츠
+select * from `contents`
+where `type`='R'
+order by `priority` desc
+limit 0,1</string>
+		<string># 홀클 대표 콘텐츠
+select * from `contents`
+where `type`='R'
+order by `priority` desc</string>
+		<string># 교육 콘텐츠
+select * from `contents`
+where `type`='E'
+order by `priority` desc</string>
+		<string># 요약 콘텐츠
+select * from `contents`
+where `type`='S'
+order by `priority` desc</string>
+		<string># 홀클 대표 콘텐츠
+select * from `contents`
+where `type`='R'</string>
+		<string>alter table `contents`
+add foreign key (`video_id`)
+references `video`(`video_id`)</string>
+		<string># 홀클 대표 콘텐츠, 교육 콘텐츠, 기타 콘텐츠
+create table `contents` (
+	`id` bigint not null auto_increment,
+	`video_id` varchar(255) character set utf8 not null,
+	`type` enum('R', 'E', 'S') default 'E',
+	`created_dt` datetime default CURRENT_TIMESTAMP,
+	`priority` bigint default null,
+	`active` boolean default true,
+	primary key(`id`)
+) engine=Innodb default charset=utf8mb4 collate=utf8mb4_bin row_format=COMPACT</string>
+		<string># 홀클 대표 콘텐츠, 교육 콘텐츠, 기타 콘텐츠
+create table `contents` (
+	`id` bigint not null auto_increment,
+	`video_id` varchar(255) character set utf8 not null,
+	`type` enum('R', 'E', 'S') default 'E',
+	`created_dt` datetime default CURRENT_TIMESTAMP,
+	`priority` bigint default null,
+	`active` boolean default true,
+	primary key(`id`)
+) engine=Innodb default charset=utf8mb4 collate=utf8mb4 row_format=COMPACT</string>
+		<string>select * from `channel_new`</string>
+		<string># type이 G 혹은 U인 채널 아이디로 비디오 리스트를 가져온다.
+select * from `video`
+where `channel_id`='385bc900-90f7-11e6-876f-719554daeebf'
+order by `created_dt` desc</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>
