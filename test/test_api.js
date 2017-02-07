@@ -16,8 +16,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Broadcast Signal', () => {
 		it('/broadcast/live', (done) =>{
 			request.get(`${HOST_API}broadcast/live`, (err, res, body) => {
+				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
-				console.info(body);
+				expect(_body.success).to.be.true;
+				//console.info(body);
 				done();
 			});
 		});
@@ -26,8 +28,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('[Navigation] channel list', () => {
 		it('/navigation/channel/list', (done) => {
 			request.get(`${HOST_API}navigation/channel/list`, (err, res, body) => {
+				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
-				console.info(body);
+				expect(_body.success).to.be.true;
+				// console.info(body);
 				done();
 			});
 		});
@@ -37,8 +41,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Navigation Recommend list', () => {
 		it('/navigation/recommend/list', (done) => {
 			request.get(`${HOST_API}navigation/recommend/list`, (err, res, body) => {
+				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
-				console.info(body);
+				expect(_body.success).to.be.true;
+				// console.info(body);
 				done();
 			});
 		});
@@ -48,8 +54,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Event', () => {
 		it('/event/list', (done) => {
 			request.get(`${HOST_API}event/list?offset=0&size=100`, (err, res, body) => {
+				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
-				console.info(body);
+				expect(_body.success).to.be.true;
+				//console.info(body);
 				done();
 			});
 		});
@@ -57,11 +65,13 @@ describe('[API 2.0] Should return 200', () => {
 
 
 	describe('Event Result', () => {
-		it('/event/result/1', (done) => {
-			request.get(`${HOST_API}event/result/1`, (err, res, body) => {
+		it('/event/result/3', (done) => {
+			request.get(`${HOST_API}event/result/3`, (err, res, body) => {
 				expect(res.statusCode).to.equal(200);
 				let _body = JSON.parse(body);
 				expect(_body.result.length).to.not.equal(0);
+				expect(_body.success).to.be.true;
+				// console.log(body);
 				done();
 			});
 		});
@@ -74,7 +84,8 @@ describe('[API 2.0] Should return 200', () => {
 				expect(res.statusCode).to.equal(200);
 				let _body = JSON.parse(body);
 				expect(_body.result.length).to.not.equal(0);
-				console.info(body);
+				expect(_body.success).to.be.true;
+				//console.info(body);
 				done();
 			});
 		});
@@ -86,7 +97,8 @@ describe('[API 2.0] Should return 200', () => {
 				expect(res.statusCode).to.equal(200);
 				let _body = JSON.parse(body);
 				expect(_body.result.length).to.not.equal(0);
-				console.info(body);
+				expect(_body.success).to.be.true;
+				// console.info(body);
 				done();
 			});
 		});
@@ -96,8 +108,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Recent updated Video', () => {
 		it('/video/recent/list?offset=0&size=4', (done) => {
 			request.get(`${HOST_API}video/recent/list?offset=0&size=4`, (err, res, body) => {
+				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
-				console.info(body);
+				expect(_body.success).to.be.true;
+				// console.info(body);
 				done();
 			});
 		});
@@ -107,8 +121,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Representative Channel List', () => {
 		it('/contents/representative/list?offset=0&size=4', (done) => {
 			request.get(`${HOST_API}contents/representative/list?offset=0&size=4`, (err, res, body) => {
+				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
-				console.info(body);
+				expect(_body.success).to.be.true;
+				//console.info(body);
 				done();
 			});
 		});
@@ -118,8 +134,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Education Video List', () => {
 		it('/contents/education/list?offset=0&size=4', (done) => {
 			request.get(`${HOST_API}contents/education/list?offset=0&size=4`, (err, res, body) => {
+				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
-				console.info(body);
+				expect(_body.success).to.be.true;
+				//console.info(body);
 				done();
 			});
 		});
@@ -129,8 +147,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Summary Video List', () => {
 		it('/contents/summary/list?offset=0&size=4', (done) => {
 			request.get(`${HOST_API}contents/summary/list?offset=0&size=4`, (err, res, body) => {
+				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
-				console.info(body);
+				expect(_body.success).to.be.true;
+				//console.info(body);
 				done();
 			});
 		});
@@ -140,8 +160,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Get Video List by Channel_id', () => {
 		it('/video/list/:channel_id', (done) => {
 			request.get(`${HOST_API}video/list/385bc900-90f7-11e6-876f-719554daeebf`, (err, res, body) => {
+				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
-				console.info(body);
+				expect(_body.success).to.be.true;
+				//console.info(body);
 				done();
 			});
 		});
@@ -151,8 +173,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Get Channel info by its ID', () => {
 		it('/channel/:channel_id/information', (done) => {
 			request.get(`${HOST_API}channel/385bc900-90f7-11e6-876f-719554daeebf/information`, (err, res, body) => {
+				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
-				console.info(body);
+				expect(_body.success).to.be.true;
+				//console.info(body);
 				done();
 			});
 		});
