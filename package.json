@@ -20,6 +20,7 @@
   "dependencies": {
     "JSON": "^1.0.0",
     "async": "^2.1.4",
+    "axios": "^0.15.3",
     "bcrypt": "^0.8.7",
     "body-parser": "~1.13.2",
     "connect-flash": "^0.1.1",

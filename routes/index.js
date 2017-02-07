@@ -9,9 +9,11 @@ const bcrypt = require('bcrypt');
 const async = require('async');
 const QUERY = require('../database/query');
 const JSON = require('JSON');
+
 require('../database/redis')(router, 'local'); // redis
 require('../helpers/helpers');
 
+const axios = require('axios');
 const request = require('request');
 const STATIC_URL = 'http://static.holdemclub.tv/';
 
@@ -311,6 +313,43 @@ router.get('/event/:ref_id/information', (req, res) => {
 		});
 });
 
+/**
+ * 비디오 리스트 가져오기
+ */
+router.get('/channel/:channel_id', (req, res) => {
+	async.parallel(
+		[
+			// todo 네비게이션 데이터 가져오기
+
+			// todo 비디오 리스트 가져오기
+			(cb) => {
+				axios.get(`${HOST}/video/list/${req.params.channel_id}`)
+					.then((response)=>{
+						cb(null, response);
+						console.log(response);
+
+					}).catch((error)=>{
+						console.error(error);
+						cb(error, null);
+					});
+			}
+		],
+		(err, result) => {
+			if(!err){
+
+				res.render('video_list', {
+					current_path: 'VIDEOLIST',
+					static : STATIC_URL,
+					title: PROJ_TITLE,
+					loggedIn: req.user,
+					videos : result[0].data.result
+				});
+			}else{
+				console.error(err);
+				throw new Error(err);
+			}
+		});
+});
 
 
 // router.get('/test', (req, res) => {

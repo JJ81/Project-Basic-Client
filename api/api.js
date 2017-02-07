@@ -443,6 +443,25 @@ router.get('/video/list/:channel_id', (req, res) => {
 		});
 });
 
-
+/**
+ * 각 채널에 대한 정보를 하나씩 가져온다.
+ */
+router.get('/channel/:channel_id/information', (req, res) => {
+	connection.query(QUERY.CHANNEL.GetById,
+		[req.params.channel_id],
+		(err, rows) => {
+			if(!err){
+				res.json({
+					success : true,
+					result : rows
+				});
+			}else{
+				res.json({
+					success : false,
+					msg : err
+				});
+			}
+		});
+});
 
 module.exports = router;

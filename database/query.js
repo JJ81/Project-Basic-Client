@@ -109,4 +109,9 @@ QUERY.VIDEO = {
 		'order by `created_dt` desc;'
 };
 
+QUERY.CHANNEL = {
+	GetById :
+		'select * from `channel_new` where channel_id=?;'
+};
+
 module.exports = QUERY;
