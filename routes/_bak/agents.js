@@ -6,7 +6,7 @@ var connection = mysql_dbc.init();
 var async = require('async');
 var QUERY = require('../../database/query');
 var UTIL = require('../../util/util');
-var HomeDAO = require('../../RedisDAO/HomeDAO');
+var HomeDAO = require('../../RedisDAO/_bak/HomeDAO');
 // var JSON = require('JSON');
 
 

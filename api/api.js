@@ -242,6 +242,7 @@ router.delete('/reply/delete', (req, res) => {
 const mysql_dbc = require('../commons/db_conn')();
 const connection = mysql_dbc.init();
 const QUERY = require('../database/query');
+const RedisDAO = require('../RedisDAO/RedisDAO');
 
 /**
  * 라이브 방송 여부 체크
@@ -262,16 +263,71 @@ router.get('/broadcast/live', (req, res) => {
 	});
 });
 
+
 /**
- * 채널 리스트
+ * 캐시한 데이터를 찾는 로직
+ * 키 규칙 HC:NAVIGATION{API}
+ * @param req
+ * @param res
+ * @param next
  */
-router.get('/navigation/channel/list', (req, res) => {
+const getCacheInRedis = (req, res, next) => {
+	'use strict';
+	let _REDIS_KEY = `HC:${req.originalUrl}`;
+
+	console.info('Redis key : ' + _REDIS_KEY);
+	RedisDAO.QueryDataByKeyName(req.cache, _REDIS_KEY, (err, cached) => {
+		if(!err){
+			if(cached !== null){
+				res.json({
+					success : true,
+					result : JSON.parse(cached)
+				});
+			}else{
+				next();
+			}
+		}else{
+			next();
+		}
+	});
+};
+
+/**
+ * 조회한 데이터 캐시하고 리턴
+ * @param req
+ * @param res
+ * @param data
+ */
+var setCacheInRedis = (req, res, data) => {
+	RedisDAO.CacheWithKeyName(req.cache, `HC:${req.originalUrl}`, // Key
+		JSON.stringify(data), // Value
+		(redis_err, redis_result) => { // callback
+			if(!redis_err){
+				console.info(redis_result);
+
+				res.json({
+					success : true,
+					result : data
+				});
+			}else{
+				console.error(redis_err);
+
+				res.json({
+					success : true,
+					result : data
+				});
+			}
+		});
+};
+
+
+/**
+ * [Navigation] 채널 리스트
+ */
+router.get('/navigation/channel/list', getCacheInRedis, (req, res, next) => {
 	connection.query(QUERY.NAVI.CHANNEL_ALL_ORDERED, (err, rows) => {
 		if(!err){
-			res.json({
-				success : true,
-				result : rows
-			});
+			setCacheInRedis(req, res, rows);
 		}else{
 			res.json({
 				success : false,
@@ -280,6 +336,24 @@ router.get('/navigation/channel/list', (req, res) => {
 		}
 	});
 });
+
+
+/**
+ * [Navigation] 추천 방송
+ */
+router.get('/navigation/recommend/list', getCacheInRedis, (req, res) => {
+	connection.query(QUERY.NAVI.CHANNEL_RECOM, (err, rows) => {
+		if(!err){
+			setCacheInRedis(req, res, rows);
+		}else{
+			res.json({
+				success : false,
+				msg : err
+			});
+		}
+	});
+});
+
 
 /**
  * 최근 업데이트된 비디오
@@ -291,8 +365,6 @@ router.get('/video/recent/list', (req, res) => {
 		offset : parseInt(req.query.offset),
 		limit : parseInt(req.query.size)
 	};
-
-	console.info(_info);
 
 	connection.query(QUERY.CONTENTS.RECENT_VIDEO_LIST,
 		[_info.offset, _info.limit],
@@ -311,25 +383,6 @@ router.get('/video/recent/list', (req, res) => {
 		});
 });
 
-
-/**
- * 추천 방송
- */
-router.get('/navigation/recommend/list', (req, res) => {
-	connection.query(QUERY.NAVI.CHANNEL_RECOM, (err, rows) => {
-		if(!err){
-			res.json({
-				success : true,
-				result : rows
-			});
-		}else{
-			res.json({
-				success : false,
-				msg : err
-			});
-		}
-	});
-});
 
 
 /**
@@ -360,9 +413,6 @@ router.get('/event/list', (req, res) => {
  * 이벤트 결과 가져오기
  */
 router.get('/event/result/:id', (req, res) => {
-	console.log('@@ event id ');
-	console.log(req.params.id);
-
 	connection.query(QUERY.EVENT.RESULT, [req.params.id], (err, rows) => {
 		if(!err){
 			res.json({

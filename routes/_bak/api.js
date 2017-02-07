@@ -10,7 +10,7 @@ var QUERY = require('../../database/query');
 
 var TWOACEAPI = require('../../secret/twoace_api')('dev');
 var util = require('../../util/util');
-var CommonDAO = require('../../RedisDAO/CommonDAO');
+var CommonDAO = require('../../RedisDAO/RedisDAO');
 var UTIL = require('../../util/util');
 
 /**

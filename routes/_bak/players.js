@@ -11,7 +11,7 @@ var async = require('async');
 var QUERY = require('../../database/query');
 require('../../commons/helpers');
 var UTIL = require('../../util/util');
-var CommonDAO = require('../../RedisDAO/CommonDAO');
+var CommonDAO = require('../../RedisDAO/RedisDAO');
 var AgentService = require('../../service/_bak/AgentService');
 
 /**
