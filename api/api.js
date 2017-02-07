@@ -187,10 +187,27 @@ router.delete('/broadcast/calendar', (req, res) => {
 //broadcast API END
 
 //event API Start
-router.post('/event', (req, res)=>{
-    Event.Upload(req, (err, result) =>{
+
+router.post('/event/result', (req, res)=>{
+    Event.uploadResult(req, (err, result) =>{
         res.json(result);
     });
+});
+
+router.delete('/event/result', (req, res)=>{
+    const event_id = req.body.event_id;
+    
+    console.log(event_id);
+    
+    Event.delete(event_id, (err, result)=>{
+        console.log(err);
+        if(!err){
+            res.json({success:true, msg:'삭제를 완료했습니다.'});
+        }else{
+            res.json({success:false, msg:'다시 시도해주세요.'});
+        }
+    });
+    
 });
 
 //event API END

@@ -2,17 +2,29 @@
  * Created by cheese on 2017. 2. 2..
  */
 
-const express = require('express');
-const router = express.Router();
+const
+    express = require('express'),
+    router = express.Router(),
+    Event = require('../service/Eventservice');
 
 
 
-router.get('/', (req, res)=>{
+router.get('/result', (req, res)=>{
     
-    res.render('event',{
-        current_path: 'event',
-        title: PROJ_TITLE + '이벤트',
+    Event.getList((err, result)=>{
+        if(!err){
+            res.render('event_result',{
+                current_path: 'event_result',
+                title: PROJ_TITLE + '이벤트',
+                result: result
+            });
+        }else{
+            res.status(500).send({ error: err});
+        }
+        
     });
+    
+    
     
 });
 

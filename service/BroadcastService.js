@@ -7,10 +7,10 @@ const
     QUERY = require('../database/query'),
     async = require('async'),
     Upload = require('../service/UploadService'),
-    Broadcast = {},
-    s3Keys = {
-        calendar: 'broadcast/calendar/'
-    };
+    Broadcast = {};
+    // s3Keys = {
+    //     calendar: 'broadcast/calendar/'
+    // };
 
 
 Broadcast.onLive = (link, callback) => {
@@ -69,7 +69,7 @@ Broadcast.uploadCalendar = (req, callback) => {
             });
         },
         (files, field, callback) => {
-            Upload.s3(files, s3Keys.calendar, (err, result, s3_file_name) => {
+            Upload.s3(files, Upload.s3Keys.calendar, (err, result, s3_file_name) => {
                 callback(err, s3_file_name, field);
             });
         },

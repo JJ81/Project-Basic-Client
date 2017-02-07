@@ -58,6 +58,9 @@ QUERY.Broadcast = {
 };
 
 QUERY.Event = {
-    Register :'....'
+    ResultRegister :'insert into `event_result` set ?;',
+    ResultDelete:'delete from `event_result` where `event_id` = ?;',
+    StatusChange :'update `event` set `status` =? where `id`=?;',
+    ListGet :'select *from `event`;'
 };
 module.exports = QUERY;

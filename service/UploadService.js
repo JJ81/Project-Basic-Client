@@ -7,8 +7,6 @@ let AWS = require('aws-sdk');
 AWS.config.region = 'ap-northeast-2'; //지역 서울 설정
 let s3 = new AWS.S3();
 
-
-
 const form = new formidable.IncomingForm({
     encoding: 'utf-8',
     multiples: true,
@@ -21,6 +19,11 @@ let params = {
     Key: null,
     ACL: 'public-read',
     Body: null
+};
+
+Upload.s3Keys = {
+    calendar: 'broadcast/calendar/',
+    event: 'event/result',
 };
 
 Upload.formidable =(req, callback) =>{

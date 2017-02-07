@@ -78,7 +78,20 @@ define(
                     callback(textStatus, null);
                 }
             });
-                
+        },
+        
+        eventResultDelete : (event_id, callback)=>{
+            $.ajax({
+                url: API.baseURL + '/event/result',
+                type: 'DELETE',
+                data: {event_id: event_id},
+                success: function (data, textStatus, jqXHR) {
+                    callback(null, data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    callback(textStatus, null);
+                }
+            });
         },
             
             /*Form 전송은 이곳에서 전부 담당한다.*/
