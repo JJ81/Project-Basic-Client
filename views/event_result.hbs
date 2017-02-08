@@ -34,11 +34,11 @@
                         </div>
 
                         <div class="col-md-4">
-                            <button class="btn btn-success btn-block btn-lg btn_event_result_register {{#unless (isEquals  status 'P')}}disabled{{/unless}}" data-toggle="modal" data-target="#registerEvent" data-event-id="{{id}}">
+                            <button class="btn btn-success btn-block btn-lg btn_event_result_register" {{#unless (isEquals  status 'P')}}disabled="disabled"{{/unless}} data-toggle="modal" data-target="#registerEvent" data-event-id="{{id}}">
                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;이벤트 결과 등록
                             </button>
 
-                            <button class="btn btn-danger btn-block btn-lg btn_event_result_delete {{#unless (isEquals  status 'C')}}disabled{{/unless}}" data-event-id="{{id}}">
+                            <button class="btn btn-danger btn-block btn-lg btn_event_result_delete" {{#unless (isEquals  status 'C')}}disabled="disabled"{{/unless}}data-event-id="{{id}}">
                                 <i class="fa fa-minus-circle" aria-hidden="true"></i>&nbsp;&nbsp;이벤트 결과 삭제
                             </button>
                         </div>

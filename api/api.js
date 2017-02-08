@@ -14,7 +14,8 @@ const
     User = require('../service/UserService'),
     Common = require('../service/CommonService'),
     Broadcast = require('../service/BroadcastService'),
-    Event =require('../service/Eventservice'),
+    Event = require('../service/Eventservice'),
+    Content = require('../service/ContentService'),
     Reply = require('../service/UserService');
 
 
@@ -178,39 +179,77 @@ router.delete('/broadcast/calendar', (req, res) => {
     const id = req.body.id;
     Broadcast.deleteCalendar(id, (err, result) => {
         if (!err) {
-            res.json({success:true, msg:'삭제를 완료했습니다.'});
+            res.json({success: true, msg: '삭제를 완료했습니다.'});
         } else {
-            res.json({success:false, msg:'다시 시도해주세요'});
+            res.json({success: false, msg: '다시 시도해주세요'});
         }
     });
 });
 //broadcast API END
 
 //event API Start
-
-router.post('/event/result', (req, res)=>{
-    Event.uploadResult(req, (err, result) =>{
+router.post('/event/result', (req, res) => {
+    Event.uploadResult(req, (err, result) => {
         res.json(result);
     });
 });
 
-router.delete('/event/result', (req, res)=>{
+router.delete('/event/result', (req, res) => {
     const event_id = req.body.event_id;
-    
-    console.log(event_id);
-    
-    Event.delete(event_id, (err, result)=>{
-        console.log(err);
-        if(!err){
-            res.json({success:true, msg:'삭제를 완료했습니다.'});
-        }else{
-            res.json({success:false, msg:'다시 시도해주세요.'});
+    Event.delete(event_id, (err, result) => {
+        if (!err) {
+            res.json({success: true, msg: '삭제를 완료했습니다.'});
+        } else {
+            res.json({success: false, msg: '다시 시도해주세요.'});
         }
     });
-    
+});
+//event API END
+
+//content API END
+router.post('/content', (req, res) => {
+    const
+        ref_id = req.body.ref_id,
+        type = req.body.type;
+    Content.register(ref_id, type, (err, result) => {
+        if (!err) {
+            res.json({success: true, msg: '등록완료'});
+        } else {
+            res.json({success: false, msg: '다시 시도해주세요.'});
+        }
+    });
 });
 
-//event API END
+router.delete('/content', (req, res) => {
+    const
+        id = req.body.id;
+    Content.delete(id, (err, result) => {
+        if (!err) {
+            res.json({success: true, msg: '삭제 완료'});
+        } else {
+            res.json({success: false, msg: '다시 시도해주세요.'});
+        }
+    });
+});
+
+router.put('/content', (req, res)=>{
+    const
+        id = req.body.id,
+        ref_id = req.body.ref_id,
+        type = req.body.type;
+    
+    Content.update(id, ref_id, type, (err, result)=>{
+        if (!err) {
+            res.json({success: true, msg: '수정 완료'});
+        } else {
+            res.json({success: false, msg: '다시 시도해주세요.'});
+        }
+    });
+});
+
+//content API END
+
+
 /**
  * HC_TV API
  */

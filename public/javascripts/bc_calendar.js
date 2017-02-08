@@ -29,7 +29,6 @@ requirejs(
         /**
          * 편성표 삭제
          */
-
         btn_calendar_delete.on('click', function () {
             
             const check_confirm = confirm('삭제를 진해하시겠습니까?');
@@ -41,8 +40,6 @@ requirejs(
                     if (!err) {
                         alert(result.msg);
                         Common.refreshDisplay('body_bc_calendar');
-                        
-                        // $('#body_bc_calendar').load(location.href+' #body_bc_calendar>*', '');
                     } else {
                         alert(result.msg);
                     }

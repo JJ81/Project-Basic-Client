@@ -44,23 +44,28 @@ QUERY.ReReply = {
 };
 
 QUERY.Common = {
-    SearchAdminById : 'select *from `admin` where `admin_id` = ?;'
+    SearchAdminById: 'select *from `admin` where `admin_id` = ?;'
 };
 
-
 QUERY.Broadcast = {
-    LiveOn : 'insert into `broadcast` set ?;',
-    LiveEnd : 'update `broadcast` set `end_dt` = ?, `status` = 0 where `id` = ?',
-    LiveGetList : 'select *from `broadcast` where `status` = 1;',
+    LiveOn: 'insert into `broadcast` set ?;',
+    LiveEnd: 'update `broadcast` set `end_dt` = ?, `status` = 0 where `id` = ?',
+    LiveGetList: 'select *from `broadcast` where `status` = 1;',
     CalendarWrite: 'insert into `broadcast_calendar` set ?;',
-    CalendarList : 'select *from `broadcast_calendar`;',
+    CalendarList: 'select *from `broadcast_calendar`;',
     CalendarDelete: 'delete from `broadcast_calendar` where `id` =?;'
 };
 
 QUERY.Event = {
-    ResultRegister :'insert into `event_result` set ?;',
-    ResultDelete:'delete from `event_result` where `event_id` = ?;',
-    StatusChange :'update `event` set `status` =? where `id`=?;',
-    ListGet :'select *from `event`;'
+    ResultRegister: 'insert into `event_result` set ?;',
+    ResultDelete: 'delete from `event_result` where `event_id` = ?;',
+    StatusChange: 'update `event` set `status` =? where `id`=?;',
+    ListGet: 'select *from `event`;'
+};
+
+QUERY.Content = {
+    Register: 'insert into `contents` set ?;',
+    Delete :'delete from `contents`where `id`= ?',
+    Update : 'update `contents` set `ref_id` = ?, `type` = ? where `id` =?;'
 };
 module.exports = QUERY;

@@ -4,8 +4,12 @@ const router = express.Router();
 
 
 
-router.get('/result', (req, res)=>{
-    console.log('asdasdasdasd');
-    res.json({result: 'Hello World'});
+router.get('/', (req, res)=>{
+    res.render('content', {
+        current_path: 'content',
+        title: PROJ_TITLE + '이벤트',
+        // result: result
+    });
+    
 });
 module.exports = router;

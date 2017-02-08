@@ -20,7 +20,6 @@ requirejs(
                 if (!err) {
                     alert(result.msg);
                     Common.refreshDisplay('body_event');
-                    
                 } else {
                     alert(result.msg);
                 }

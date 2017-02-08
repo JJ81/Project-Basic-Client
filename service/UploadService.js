@@ -65,4 +65,3 @@ function makeS3FilesName(files) {
 
 
 module.exports =Upload;
-
