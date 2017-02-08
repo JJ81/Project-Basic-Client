@@ -190,6 +190,7 @@ router.delete('/broadcast/calendar', (req, res) => {
 //event API Start
 router.post('/event/result', (req, res) => {
     Event.uploadResult(req, (err, result) => {
+        console.log(err);
         res.json(result);
     });
 });
