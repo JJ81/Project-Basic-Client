@@ -20,15 +20,21 @@
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
 
-                    <div class="row top_tiles">
-                        <div class="_animated flipInY col-md-12 col-sm-12 col-xs-12">
-                            <div class="tile-stats col-md-12">
-                                <div class="icon"><i class="fa fa-close"></i></div>
-                                <div class="count">리스트들은 어떻게 보여줘야 할까요?</div>
-                                <h3>블라블라...</h3>
+                    {{#each result}}
+                        <div class="row top_tiles">
+                            <div class="_animated flipInY col-md-12 col-sm-12 col-xs-12">
+                                <div class="tile-stats col-md-12">
+                                    <div class="icon"><i class="fa fa-close"></i></div>
+                                    <div class="count">{{showContentType type}}</div>
+                                    <h3>{{!showContentType type}}</h3>
+                                    <p>
+                                        <button class="btn btn-success btn_content_modify" data-id="{{id}}"  data-toggle="modal" data-target="#modifyContent"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;&nbsp;수정</button>
+                                        <button class="btn btn-danger btn_content_delete" data-id="{{id}}" role="button">삭제</button>
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        {{/each}}
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -37,3 +43,4 @@
 </div>
 
 {{>modal_content_register}}
+{{>modal_content_modify}}

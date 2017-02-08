@@ -93,8 +93,22 @@ define(
                 }
             });
         },
+        
+        contentDelete  : (id, callback)=>{
+            $.ajax({
+                url: API.baseURL + '/content',
+                type: 'DELETE',
+                data: {id: id},
+                success: function (data, textStatus, jqXHR) {
+                    callback(null, data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    callback(textStatus, null);
+                }
+            });
+        },
             
-            /*Form 전송은 이곳에서 전부 담당한다.*/
+        /*Form 전송은 이곳에서 전부 담당한다.*/
         AjaxFormSubmit: function (form, callback) {
             form.ajaxForm({
                 url: form.attr('action'),

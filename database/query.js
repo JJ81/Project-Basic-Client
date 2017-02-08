@@ -66,6 +66,7 @@ QUERY.Event = {
 QUERY.Content = {
     Register: 'insert into `contents` set ?;',
     Delete :'delete from `contents`where `id`= ?',
-    Update : 'update `contents` set `ref_id` = ?, `type` = ? where `id` =?;'
+    Update : 'update `contents` set `ref_id` = ?, `type` = ? where `id` =?;',
+    ListGet : 'select *from `contents`;'
 };
 module.exports = QUERY;

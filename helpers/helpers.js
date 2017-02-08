@@ -67,6 +67,28 @@ hbs.registerHelper('IndentWithLetter', function (number, letter) {
     return str;
 });
 
+hbs.registerHelper('showContentType', (type) => {
+    let show_type ;
+    
+    switch (type) {
+    case 'RT':
+        show_type = '대표 컨텐츠';
+        break;
+    case 'E':
+        show_type = '교육 컨텐츠';
+        break;
+    case 'S':
+        show_type = '요약 컨텐츠';
+        break;
+    case 'R':
+        show_type = '추천 컨텐츠';
+        break;
+    default:
+        show_type = false;
+        break;
+    }
+    return show_type;
+});
 
 /*
  * http://bdadam.com/blog/comparison-helper-for-handlebars.html

@@ -31,5 +31,11 @@ Content.update= (id, ref_id, type, callback) =>{
         callback(err, result);
     });
 };
+
+Content.getList = (callback) =>{
+    connection.query(QUERY.Content.ListGet, (err, result)=>{
+        callback(err, result);
+    });
+};
 module.exports = Content;
     
