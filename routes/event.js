@@ -22,7 +22,7 @@ const HOST = `${HOST_INFO.LOCAL}${HOST_INFO.VERSION}`;
 
 router.get('/result', (req, res)=>{
     
-    request.get(`${HOST}/event`, (err, response, body) =>{
+    request.get(`${HOST}/event/result`, (err, response, body) =>{
         if (!err && response.statusCode === 200) {
             const _body = JSON.parse(body);
     
@@ -31,13 +31,11 @@ router.get('/result', (req, res)=>{
                 title: PROJ_TITLE + '이벤트',
                 result: _body.result,
             });
-            
         } else {
             console.error(err);
             throw new Error(err);
         }
     });
-    
 });
 
 module.exports = router;

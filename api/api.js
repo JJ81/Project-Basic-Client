@@ -165,6 +165,16 @@ router.delete('/broadcast/live', (req, res) => {
     });
 });
 
+router.get('/broadcast/calendar', (req, res) => {
+    Broadcast.getCalendarList((err, result) => {
+        if (!err) {
+            res.json({success: true, result: result});
+        } else {
+            res.json({success: false, err:err});
+        }
+    });
+});
+
 router.post('/broadcast/calendar', (req, res) => {
     Broadcast.uploadCalendar(req, (err, result) => {
         if (!err) {
@@ -188,7 +198,7 @@ router.delete('/broadcast/calendar', (req, res) => {
 //broadcast API END
 
 //event API Start
-router.get('/event', (req, res) => {
+router.get('/event/result', (req, res) => {
     Event.getList((err, result) => {
         if (!err) {
             res.json({success: true, result: result});

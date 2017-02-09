@@ -124,10 +124,9 @@ define(
                     callback(textStatus, null);
                 }
             });
-                
         },
             
-            /*Form 전송은 이곳에서 전부 담당한다.*/
+        /*Form 전송은 이곳에서 전부 담당한다.*/
         AjaxFormSubmit: function (form, callback) {
             form.ajaxForm({
                 url: form.attr('action'),

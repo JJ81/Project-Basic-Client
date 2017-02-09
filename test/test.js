@@ -88,4 +88,40 @@ describe('[API 2.0] Should return 200', () => {
         });
     });
     
+    describe('Event Result List', ()=>{
+        it('/event/result', (done)=>{
+            req.get(`${HOST_API}event/result`, (err, res ,body)=>{
+                const _body = JSON.parse(body);
+                expect(res.statusCode).to.equal(200);
+                expect(_body.success).to.be.true;
+                done();
+            });
+        });
+    });
+    
+    
+    describe('Calendar Result List', ()=>{
+        it('/broadcast/calendar', (done)=>{
+            req.get(`${HOST_API}broadcast/calendar`, (err, res ,body)=>{
+                const _body = JSON.parse(body);
+                expect(res.statusCode).to.equal(200);
+                expect(_body.success).to.be.true;
+                done();
+            });
+        });
+    });
+    
+    describe('Live Result List', ()=>{
+        it('/broadcast/live', (done)=>{
+            req.get(`${HOST_API}broadcast/live`, (err, res ,body)=>{
+                const _body = JSON.parse(body);
+                expect(res.statusCode).to.equal(200);
+                expect(_body.success).to.be.true;
+                done();
+            });
+        });
+    });
+    
+    
+    
 });
