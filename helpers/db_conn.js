@@ -1,5 +1,6 @@
-var mysql = require('mysql');
-var config = require('../secret/db_info').dev;
+const mysql = require('mysql');
+const config = require('../secret/db_info').local;
+
 
 module.exports = function () {
 	return {

@@ -881,6 +881,17 @@ drop table `content_recommend`;
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string>select * from `event_result`
+where event_id=3</string>
+		<string>select * from `event_result`
+where event_id=1</string>
+		<string>alter table `event` add column `end_dt` datetime default null after `created_dt`</string>
+		<string>## 이벤트 종료 날짜가 있어야 한다. 여러 개의 이벤트를 동시에 진행할 수도 있기 때문
+alter table `event` drop column `end_dt`</string>
+		<string>## 이벤트 종료 날짜가 있어야 한다. 여러 개의 이벤트를 동시에 진행할 수도 있기 때문
+alter table `event` drop colum `end_dt`</string>
+		<string>## 이벤트 종료 날짜가 있어야 한다. 여러 개의 이벤트를 동시에 진행할 수도 있기 때문
+alter table `event` add column `end_dt` datetime default CURRENT_TIMESTAMP after `created_dt`</string>
 		<string>drop table `content_recommend`</string>
 		<string>## 추천 콘텐츠 가져오기
 select channels.*, cr.priority as recom_priority 
@@ -988,37 +999,6 @@ order by `priority` desc</string>
 select * from `contents`
 where `type`='S'
 order by `priority` desc</string>
-		<string># 홀클 대표 콘텐츠
-select * from `contents`
-where `type`='R'</string>
-		<string>alter table `contents`
-add foreign key (`video_id`)
-references `video`(`video_id`)</string>
-		<string># 홀클 대표 콘텐츠, 교육 콘텐츠, 기타 콘텐츠
-create table `contents` (
-	`id` bigint not null auto_increment,
-	`video_id` varchar(255) character set utf8 not null,
-	`type` enum('R', 'E', 'S') default 'E',
-	`created_dt` datetime default CURRENT_TIMESTAMP,
-	`priority` bigint default null,
-	`active` boolean default true,
-	primary key(`id`)
-) engine=Innodb default charset=utf8mb4 collate=utf8mb4_bin row_format=COMPACT</string>
-		<string># 홀클 대표 콘텐츠, 교육 콘텐츠, 기타 콘텐츠
-create table `contents` (
-	`id` bigint not null auto_increment,
-	`video_id` varchar(255) character set utf8 not null,
-	`type` enum('R', 'E', 'S') default 'E',
-	`created_dt` datetime default CURRENT_TIMESTAMP,
-	`priority` bigint default null,
-	`active` boolean default true,
-	primary key(`id`)
-) engine=Innodb default charset=utf8mb4 collate=utf8mb4 row_format=COMPACT</string>
-		<string>select * from `channel_new`</string>
-		<string># type이 G 혹은 U인 채널 아이디로 비디오 리스트를 가져온다.
-select * from `video`
-where `channel_id`='385bc900-90f7-11e6-876f-719554daeebf'
-order by `created_dt` desc</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

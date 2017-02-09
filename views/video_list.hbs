@@ -1,7 +1,7 @@
 <ul>
     {{#each videos}}
     <li>
-        <a href="#">
+        <a href="/channel/{{channel_id}}/video/{{video_id}}">
             <img src="{{../static}}channel/{{channel_id}}/{{video_id}}/thumbnail" alt="{{title}}" />
             <span>타이틀 : {{title}}</span><br />
             <span>조회수 : {{hits}}</span><br />

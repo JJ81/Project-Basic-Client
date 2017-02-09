@@ -1,7 +1,7 @@
 const QUERY = {};
 
 // Deprecated
-QUERY.HOME = {
+/*QUERY.HOME = {
 	GetNavList: 'select v.`created_dt`as updated_dt, ch.`channel_id`, ch.`title`, ch.`created_dt`, sum(v.`hits`)as hits, ch.`group_id`, ch.`active`, ch.`priority` from `channel`as ch left join (select *from `video` where `active`=true order by `created_dt` desc) as v on ch.`channel_id` = v.`channel_id` where ch.`active` =1 and not exists (select *from `group` where `title` = ch.`title`) group by ch.`channel_id` order by ch.`priority` asc;'
 	, GetRecomList: 'select * from `recommend_channel` as rc ' +
 	'where rc.active = true ' +
@@ -18,8 +18,8 @@ QUERY.HOME = {
 	'on c.group_id = g.group_id ' +
 	'where c.active=true ' +
 	'group by group_id ' +
-	'order by c.priority asc;' // todo 우선순위에 대한 로직은 asc가 아니라 desc가 되어야 한다
-};
+	'order by c.priority asc;'
+};*/
 
 QUERY.USER = {
 	Login: 'select `user_id`, `password`, `nickname`, `name`, `email`, `login_fail_count`, `banned`, `market_code` from `user` where `user_id`=?;',
@@ -124,7 +124,9 @@ QUERY.VIDEO = {
 	LIST :
 		'select * from `video` ' +
 		'where `channel_id`=? ' +
-		'order by `created_dt` desc;'
+		'order by `created_dt` desc;',
+	GetInfoByVideoId :
+		'select * from `video` where `video_id`=?;'
 };
 
 QUERY.CHANNEL = {

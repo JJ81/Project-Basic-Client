@@ -17,6 +17,12 @@ const axios = require('axios');
 const request = require('request');
 const STATIC_URL = 'http://static.holdemclub.tv/';
 
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
+const bodyParser = require('body-parser');
+const parseForm = bodyParser.urlencoded({extended:false});
+
+
 passport.serializeUser((user, done) => {
 	console.log(user);
 	done(null, user);
@@ -102,7 +108,7 @@ const HOST_INFO = {
 };
 
 const HOST = `${HOST_INFO.LOCAL}${HOST_INFO.VERSION}`;
-console.log(HOST);
+// console.log(HOST);
 
 router.get('/', (req, res) => {
 	'use strict';
@@ -314,7 +320,7 @@ router.get('/event/:ref_id/information', (req, res) => {
 });
 
 /**
- * 비디오 리스트 가져오기
+ * 비디오 리스트 뷰
  */
 router.get('/channel/:channel_id', (req, res) => {
 	async.parallel(
@@ -352,26 +358,62 @@ router.get('/channel/:channel_id', (req, res) => {
 });
 
 
+/**
+ * 비디오 뷰
+ */
+router.get('/channel/:channel_id/video/:video_id', (req, res) => {
+	async.parallel(
+		[
+			(cb) => { // 비디오 리스트 가져오기
+				axios.get(`${HOST}/video/list/${req.params.channel_id}`)
+					.then((response)=>{
+						cb(null, response);
+						console.log(response);
+					}).catch((error)=>{
+						console.error(error);
+						cb(error, null);
+					});
+			},
+			(cb) => { // 비디오 가져오기
+				axios.get(`${HOST}/video/${req.params.video_id}/information`)
+					.then((response)=>{
+						cb(null, response);
+						console.log(response);
+					}).catch((error)=>{
+						console.error(error);
+						cb(error, null);
+					});
+			}
+		],
+		(err, result) => {
+			if(!err){
+				res.render('video_view', {
+					current_path: 'VIDEOVIEW',
+					static : STATIC_URL,
+					title: PROJ_TITLE,
+					loggedIn: req.user,
+					video : result[1].data.result,
+					videos : result[0].data.result
+				});
+			}else{
+				console.error(err);
+				throw new Error(err);
+			}
+		});
+});
+
+
 // router.get('/test', (req, res) => {
 // 	res.json({result: 'Hello World'});
 // });
 
-
-// TEST CSRF token
-const csrf = require('csurf');
-const csrfProtection = csrf({ cookie: true });
-const bodyParser = require('body-parser');
-const parseForm = bodyParser.urlencoded({extended:false});
-// todo app.js에서 사용하고 있는 global에 바인딩된 것은 왜 사용하지 못하지?
-
-
-router.get('/test/form', csrfProtection, (req, res) => {
-	res.render('form', {
-		title : PROJ_TITLE
-		,csrfToken : req.csrfToken()
-		// test : mysql_location // this is working!!
-	});
-});
+// router.get('/test/form', csrfProtection, (req, res) => {
+// 	res.render('form', {
+// 		title : PROJ_TITLE
+// 		,csrfToken : req.csrfToken()
+// 		// test : mysql_location // this is working!!
+// 	});
+// });
 
 // router.post('/test/form/submit', parseForm, csrfProtection, (req, res) => {
 // 	res.send('data is being processed');

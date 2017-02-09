@@ -183,5 +183,18 @@ describe('[API 2.0] Should return 200', () => {
 	});
 
 
+	describe('Get Video info by its ID', () => {
+		it('/video/:video_id/information', (done) => {
+			request.get(`${HOST_API}video/7475dfb0-90f8-11e6-8318-35085802b5fe/information`, (err, res, body) => {
+				let _body = JSON.parse(body);
+				expect(res.statusCode).to.equal(200);
+				expect(_body.success).to.be.true;
+				//console.info(body);
+				done();
+			});
+		});
+	});
+
+
 
 });

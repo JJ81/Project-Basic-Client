@@ -478,6 +478,8 @@ router.get('/event/list', (req, res) => {
  * 이벤트 결과 가져오기
  */
 router.get('/event/result/:id', (req, res) => {
+	console.log('!!## test');
+	console.log(req.params.id);
 	connection.query(QUERY.EVENT.RESULT, [req.params.id], (err, rows) => {
 		if(!err){
 			res.json({
@@ -564,6 +566,27 @@ router.get('/video/list/:channel_id', (req, res) => {
 router.get('/channel/:channel_id/information', (req, res) => {
 	connection.query(QUERY.CHANNEL.GetById,
 		[req.params.channel_id],
+		(err, rows) => {
+			if(!err){
+				res.json({
+					success : true,
+					result : rows
+				});
+			}else{
+				res.json({
+					success : false,
+					msg : err
+				});
+			}
+		});
+});
+
+/**
+ * 비디오 아이디로 비디오 정보 가져오기
+ */
+router.get('/video/:video_id/information', (req, res) => {
+	connection.query(QUERY.VIDEO.GetInfoByVideoId,
+		[req.params.video_id],
 		(err, rows) => {
 			if(!err){
 				res.json({
