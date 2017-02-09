@@ -20,7 +20,7 @@ requirejs(
             Common.AjaxFormSubmit(form_bc_live_on, (err, result) => {
                 if (!err) {
                     alert(result.msg);
-                    $('#body_bc_live').load(location.href+' #body_bc_live>*', '');
+                    $('#body_bc_live').load(location.href + ' #body_bc_live>*', '');
                 } else {
                     alert(result.msg);
                 }
@@ -31,18 +31,20 @@ requirejs(
          * 생방송 종료
          */
         btn_bc_live_off.on('click', function () {
-            const id = $(this).attr('data-bc-id');
+            const data = {
+                id: $(this).attr('data-bc-id')
+            };
             
-            Common.broadcastLiveOff(id, (err, result) => {
+            Common.AjaxSubmit('broadcast/live', data, 'PUT', (err, result) =>{
                 if(!err){
                     alert(result.msg);
-                    $('#body_bc_live').load(location.href+' #body_bc_live>*', '');
+                    location.reload();
                 }else{
-                    alert('다시 시도해주세요');
+                    alert(result.msg);
                 }
             });
         });
-    
+        
         /**
          * 생방송 수정
          */

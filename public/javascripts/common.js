@@ -33,8 +33,12 @@ define(
             
             // TODO 일단 여기에 작성하고 어디로 뺄지 결정하자
     const API = {
-        baseURL: '/api/v1'
+        HOST_API: 'api/v1'
     };
+        
+    const
+        HOST = 'http://localhost:3002/',
+        HOST_API = `${HOST}api/v1/`;
         
     const utils = {
             
@@ -65,7 +69,7 @@ define(
                 }
             });
         },
-        
+            
         broadcastCalendarDelete: (id, callback) => {
             $.ajax({
                 url: API.baseURL + '/broadcast/calendar',
@@ -79,8 +83,8 @@ define(
                 }
             });
         },
-        
-        eventResultDelete : (event_id, callback)=>{
+            
+        eventResultDelete: (event_id, callback) => {
             $.ajax({
                 url: API.baseURL + '/event/result',
                 type: 'DELETE',
@@ -93,8 +97,8 @@ define(
                 }
             });
         },
-        
-        contentDelete  : (id, callback)=>{
+            
+        contentDelete: (id, callback) => {
             $.ajax({
                 url: API.baseURL + '/content',
                 type: 'DELETE',
@@ -108,7 +112,22 @@ define(
             });
         },
             
-        /*Form 전송은 이곳에서 전부 담당한다.*/
+        AjaxSubmit: function (url, data, type, callback) {
+            $.ajax({
+                url: HOST_API + url,
+                type: type,
+                data: data,
+                success: function (data, textStatus, jqXHR) {
+                    callback(null, data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    callback(textStatus, null);
+                }
+            });
+                
+        },
+            
+            /*Form 전송은 이곳에서 전부 담당한다.*/
         AjaxFormSubmit: function (form, callback) {
             form.ajaxForm({
                 url: form.attr('action'),
@@ -122,9 +141,9 @@ define(
                 }
             });
         },
-        
+            
         refreshDisplay: function (div_id) {
-            $('#'+div_id).load(location.href+' #'+div_id+'>*', '');
+            $('#' + div_id).load(location.href + ' #' + div_id + '>*', '');
         }
     };
         

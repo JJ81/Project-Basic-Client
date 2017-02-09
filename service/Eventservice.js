@@ -53,7 +53,7 @@ Event.uploadResult = (req, callback) => {
         }
     ];
     
-    async.waterfall(o, (err, result) => {
+    async.waterfall(tasks, (err, result) => {
         if (!err) {
             callback(null, {success: true, msg: '방송표 업로드 완료'});
         } else {

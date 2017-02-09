@@ -6,28 +6,18 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">이벤트 결과 등록</h4>
+                <h4 class="modal-title">대표 컨텐츠 등록</h4>
             </div>
             <div class="modal-body">
                 <!-- modal body -->
-                <form id="form_content_register" action="/api/v1/content" method="post" data-parsley-validate=""
+                <form id="form_content_register" action="/api/v1/contents" method="post" data-parsley-validate=""
                       class="form-horizontal form-label-left">
+
+                    <input type="hidden" name="type" value="{{type}}">
 
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="ref_id">Contents <span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12"><input type="text" class="form-control col-md-7 col-xs-12" name="ref_id" required autocomplete="off"/></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Contents Type</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <select class="form-control" name="type" required>
-                                <option value="RT">대표 컨텐츠</option>
-                                <option value="E">교육 컨텐츠</option>
-                                <option value="S">요약 컨텐츠</option>
-                                <option value="R">추천 컨텐츠</option>
-                            </select>
-                        </div>
                     </div>
 
                     <fieldset class="form-group">

@@ -10,7 +10,7 @@ const
     routes = require('./routes/index'),
     api = require('./api/api'),
     event = require('./routes/event'),
-    content = require('./routes/content'),
+    contents = require('./routes/contents'),
     broadcast = require('./routes/broadcast');
 /*routes*/
 
@@ -77,7 +77,7 @@ global.PROJ_TITLE = '홀덤클럽티비';
 app.use('/', routes);
 app.use('/api/v1', api);
 app.use('/event', event);
-app.use('/content', content);
+app.use('/contents', contents);
 app.use('/broadcast', broadcast);
 
 // catch 404 and forward to error handler

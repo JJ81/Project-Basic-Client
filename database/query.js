@@ -60,13 +60,31 @@ QUERY.Event = {
     ResultRegister: 'insert into `event_result` set ?;',
     ResultDelete: 'delete from `event_result` where `event_id` = ?;',
     StatusChange: 'update `event` set `status` =? where `id`=?;',
-    ListGet: 'select *from `event`;'
+    ListGet: 'select e.`id`, e.`title`, e.`thumbnail`,e.`type`, e.`ref_id`, e.`status`, e.`description`, e.`created_dt`, e.`end_dt`,er.`result_img` from `event` as e left join (select *from `event_result`) as er on e.`id` = er.`event_id`;'
+    
+    
+    
+    // ListGet: 'select *from `event`;'
 };
 
-QUERY.Content = {
+QUERY.Contents = {
+    
+    RepresentativeList: 'select * from `contents` ' +
+    'where `type`=\'RT\' ' +
+    'order by `priority` desc, `created_dt` desc; ',
+    EducationList: 'select * from `contents` ' +
+    'where `type`=\'E\' ' +
+    'order by `priority` desc, `created_dt` desc ;',
+    SummaryList: 'select * from `contents` ' +
+    'where `type`=\'S\' ' +
+    'order by `priority` desc, `created_dt` desc ;',
+    RecommendList: 'select * from `contents` ' +
+    'where `type`=\'R\' ' +
+    'order by `priority` desc, `created_dt` desc ;' ,
+    
     Register: 'insert into `contents` set ?;',
-    Delete :'delete from `contents`where `id`= ?',
-    Update : 'update `contents` set `ref_id` = ?, `type` = ? where `id` =?;',
-    ListGet : 'select *from `contents`;'
+    Delete: 'delete from `contents`where `id`= ?',
+    Update: 'update `contents` set `ref_id` = ?, `type` = ? where `id` =?;',
+    ListGet: 'select *from `contents`;'
 };
 module.exports = QUERY;

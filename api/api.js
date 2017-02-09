@@ -135,7 +135,7 @@ router.get('/broadcast/live', (req, res) => {
     // TODO 유효성 검사 추가해야됨
     Broadcast.getLiveList((err, result) => {
         if (!err) {
-            res.json(result);
+            res.json({success: true, result: result});
         } else {
             res.json(err);
         }
@@ -188,6 +188,17 @@ router.delete('/broadcast/calendar', (req, res) => {
 //broadcast API END
 
 //event API Start
+router.get('/event', (req, res) => {
+    Event.getList((err, result) => {
+        if (!err) {
+            res.json({success: true, result: result});
+        } else {
+            res.json({success: false, err: err});
+        }
+    });
+});
+
+
 router.post('/event/result', (req, res) => {
     Event.uploadResult(req, (err, result) => {
         console.log(err);
@@ -207,8 +218,48 @@ router.delete('/event/result', (req, res) => {
 });
 //event API END
 
-//content API END
-router.post('/content', (req, res) => {
+//contents API END
+router.get('/contents/representative', (req, res) => {
+    Content.getRepresentativeList((err, result) => {
+        if (!err) {
+            res.json({success: true, result: result});
+        } else {
+            res.json({success: false, err: err});
+        }
+    });
+});
+
+router.get('/contents/education', (req, res) => {
+    Content.getEducationList((err, result) => {
+        if (!err) {
+            res.json({success: true, result: result});
+        } else {
+            res.json({success: false, err: err});
+        }
+    });
+});
+
+router.get('/contents/summary', (req, res) => {
+    Content.getSummaryList((err, result) => {
+        if (!err) {
+            res.json({success: true, result: result});
+        } else {
+            res.json({success: false, err: err});
+        }
+    });
+});
+
+router.get('/contents/recommend', (req, res) => {
+    Content.getRecommendList((err, result) => {
+        if (!err) {
+            res.json({success: true, result: result});
+        } else {
+            res.json({success: false, err: err});
+        }
+    });
+});
+
+router.post('/contents', (req, res) => {
     const
         ref_id = req.body.ref_id,
         type = req.body.type;
@@ -221,7 +272,7 @@ router.post('/content', (req, res) => {
     });
 });
 
-router.delete('/content', (req, res) => {
+router.delete('/contents', (req, res) => {
     const
         id = req.body.id;
     Content.delete(id, (err, result) => {
@@ -233,14 +284,13 @@ router.delete('/content', (req, res) => {
     });
 });
 
-router.put('/content', (req, res)=>{
-    
+router.put('/contents', (req, res) => {
     const
         id = req.body.id,
         ref_id = req.body.ref_id,
         type = req.body.type;
     
-    Content.update(id, ref_id, type, (err, result)=>{
+    Content.update(id, ref_id, type, (err, result) => {
         if (!err) {
             res.json({success: true, msg: '수정 완료'});
         } else {
@@ -248,9 +298,6 @@ router.put('/content', (req, res)=>{
         }
     });
 });
-
-//content API END
-
 
 /**
  * HC_TV API
