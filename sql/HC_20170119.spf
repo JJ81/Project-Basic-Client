@@ -45,6 +45,8 @@
 		<dict>
 			<key>connectionEncoding</key>
 			<string>utf8mb4</string>
+			<key>contentFilter</key>
+			<dict/>
 			<key>contentPageNumber</key>
 			<integer>1</integer>
 			<key>contentSelection</key>
@@ -68,7 +70,7 @@
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1941, 960}}</string>
+			<string>{{0, 0}, {1530, 864}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -861,12 +863,48 @@ order by cr.priority desc;
 drop table `content_recommend`;
 
 
+## 비디오 뷰 관련
+# 비디오 관련 정보 얻어오기
+# 선택한 비디오에 대한 정보 가져오기
+select * from `video`
+where `video_id`='c8f11df0-9113-11e6-876f-719554daeebf';
+
+# 원하는 채널의 비디오 리스트를 모두 가져오기
+select * from `video`
+where `channel_id`='7c75b340-6d92-11e6-9f3b-212917332ccd'
+order by `created_dt` asc;
+
+
+select * from `event_result`
+where `event_id`=3;
+
+
+
+# news 제공
+# 항상 4개만 활성화될 수 있도록 해야 한다.
+create table `news` (
+	`id` bigint not null auto_increment,
+	`created_dt` datetime default CURRENT_TIMESTAMP,
+	`title` varchar(255) character set utf8 not null comment '뉴스 제목',
+	`sub_title` varchar(255) character set utf8 not null comment '뉴스 소제목',
+	`desc` varchar(255) character set utf8 not null comment '뉴스에 대한 간략한 설명',
+	`contents` text character set utf8 default null comment '뉴스 전체 내용',
+	`active` boolean default false,
+	primary key(`id`)
+) engine=Innodb default charset=utf8mb4 collate=utf8mb4_bin row_format=COMPACT;
+
+
+
+
+
+
+
 
 
 
 </string>
 			<key>table</key>
-			<string>contents</string>
+			<string>news</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -881,6 +919,32 @@ drop table `content_recommend`;
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string># news 제공
+create table `news` (
+	`id` bigint not null auto_increment,
+	`created_dt` datetime default CURRENT_TIMESTAMP,
+	`title` varchar(255) character set utf8 not null comment '뉴스 제목',
+	`sub_title` varchar(255) character set utf8 not null comment '뉴스 소제목',
+	`desc` varchar(255) character set utf8 not null comment '뉴스에 대한 간략한 설명',
+	`contents` text character set utf8 default null comment '뉴스 전체 내용',
+	`active` boolean default false,
+	primary key(`id`)
+) engine=Innodb default charset=utf8mb4 collate=utf8mb4_bin row_format=COMPACT</string>
+		<string>select * from `event_result`
+where `event_id`=3</string>
+		<string>## 비디오 뷰 관련
+# 비디오 관련 정보 얻어오기
+# 선택한 비디오에 대한 정보 가져오기
+select * from `video`
+where `video_id`='c8f11df0-9113-11e6-876f-719554daeebf'</string>
+		<string>select * from `video`
+where `channel_id`='7c75b340-6d92-11e6-9f3b-212917332ccd'
+order by `created_dt` asc</string>
+		<string>## contents 테이블에 통합됨
+drop table `content_recommend`</string>
+		<string>## 비디오 뷰 관련
+# 비디오 관련 정보 얻어오기
+select * from `video`</string>
 		<string>select * from `event_result`
 where event_id=3</string>
 		<string>select * from `event_result`
@@ -972,33 +1036,6 @@ select * from `contents`
 where `type`='E'
 order by `priority` desc
 limit 0,10</string>
-		<string># 요약 콘텐츠
-select * from `contents`
-where `type`='S'
-order by `priority` desc
-limit 0,10</string>
-		<string># 홀클 대표 콘텐츠
-select * from `contents`
-where `type`='R'
-order by `priority` desc
-limit 0,10</string>
-		<string># 홀클 대표 콘텐츠
-select * from `contents`
-where `type`='R'
-order by `priority` desc
-limit 0,1</string>
-		<string># 홀클 대표 콘텐츠
-select * from `contents`
-where `type`='R'
-order by `priority` desc</string>
-		<string># 교육 콘텐츠
-select * from `contents`
-where `type`='E'
-order by `priority` desc</string>
-		<string># 요약 콘텐츠
-select * from `contents`
-where `type`='S'
-order by `priority` desc</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

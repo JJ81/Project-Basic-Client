@@ -1,3 +1,26 @@
+<h4>News Section</h4>
+<!-- News Section -->
+<div class="story-rotator no-js ps-ui" data-ps-ui-type="story-rotator">
+    <div class="story-rotator-wrapper">
+        {{#each news}}
+        <div class="item clear">
+            <a href="#">
+                <img src="/static/images/tmp_news.jpg" width="540" height="300" alt=""/>
+            </a>
+            <div class="caption full">
+                <strong><a href="#">{{title}}</a></strong>
+                <!--<p><a href="/en/tv/channels/2017/02/pokerstars-top-5---most-controversial-poker-hands.shtml">Poker is a game that is typically played in good spirits with a keen sense of fairness and etiquette...but sometimes all hell breaks loose!</a></p>-->
+            </div>
+            <div class="caption small">
+                <strong><a href="#">{{sub_title}}</a></strong>
+                <!--<p><a href="/en/tv/channels/2017/02/pokerstars-top-5---most-controversial-poker-hands.shtml">Controversies </a></p>-->
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>
+<!-- // News Section -->
+
 <h4 class="heading">최신 업데이트 비디오 정보</h4>
 <ul>
     {{#each videos}}

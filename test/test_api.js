@@ -195,6 +195,18 @@ describe('[API 2.0] Should return 200', () => {
 		});
 	});
 
-
+	describe('Get News List', () => {
+		it('/news/list', (done) => {
+			request.get(`${HOST_API}news/list`, (err, res, body) => {
+				let _body = JSON.parse(body);
+				expect(res.statusCode).to.equal(200);
+				expect(_body.success).to.be.true;
+				expect(_body.result.length).to.not.equal(0);
+				expect(_body.result.length).to.equal(4);
+				//console.info(body);
+				done();
+			});
+		});
+	});
 
 });

@@ -181,13 +181,24 @@ router.get('/', (req, res) => {
 						cb(err, null);
 					}
 				});
+			},
+			(cb) => { // 뉴스 가져오기
+				request.get(`${HOST}/news/list`, (err, res, body) => {
+					let _body  = JSON.parse(body);
+					if(!err && res.statusCode == 200){
+						if(_body.success){
+							cb(null, _body);
+						}else{
+							cb('News', null);
+						}
+					}else{
+						console.error('[Recom] ');
+						cb(err, null);
+					}
+				});
 			}
 		], (err, result) => {
 		if (!err) {
-
-			console.log('result');
-			console.log(result);
-
 			res.render('index', {
 				current_path: 'INDEX',
 				static : STATIC_URL,
@@ -196,7 +207,8 @@ router.get('/', (req, res) => {
 				live : result[0].result,
 				channels : result[1].result,
 				videos : result[2].result,
-				recom : result[3].result
+				recom : result[3].result,
+				news : result[4].result
 			});
 		} else {
 			console.error(err);
@@ -206,7 +218,6 @@ router.get('/', (req, res) => {
 });
 
 // TODO 모든 라우터에서 항상 추춴방송, 전체 채널, 방송 여부에 대한 데이터를 항상 데이터를 가져와야 한다
-// TODO 위의 데이터는 Redis에 캐시를 하도록 한다
 
 
 router.get('/event', (req, res) => {
@@ -401,6 +412,8 @@ router.get('/channel/:channel_id/video/:video_id', (req, res) => {
 			}
 		});
 });
+
+
 
 
 // router.get('/test', (req, res) => {

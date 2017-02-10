@@ -603,5 +603,28 @@ router.get('/video/:video_id/information', (req, res) => {
 });
 
 
+/**
+ * 최신 뉴스 {N}개 가져오기
+ */
+router.get('/news/list', (req, res) => {
+	connection.query(QUERY.NEWS.LIST,
+		[4],
+		(err, rows) => {
+			if(!err){
+				res.json({
+					success : true,
+					result : rows
+				});
+			}else{
+				res.json({
+					success : false,
+					msg : err
+				});
+			}
+		});
+});
+
+
+
 
 module.exports = router;
