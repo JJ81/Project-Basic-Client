@@ -20,7 +20,7 @@ requirejs(
             Common.AjaxFormSubmit(form_bc_live_on, (err, result) => {
                 if (!err) {
                     alert(result.msg);
-                    $('#body_bc_live').load(location.href + ' #body_bc_live>*', '');
+                    location.reload();
                 } else {
                     alert(result.msg);
                 }

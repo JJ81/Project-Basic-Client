@@ -19,7 +19,7 @@ requirejs(
             Common.AjaxFormSubmit(form_bc_calendar_upload, function (err, result) {
                 if (!err) {
                     alert(result.msg);
-                    $('#body_bc_calendar').load(location.href+' #body_bc_calendar>*', '');
+                    location.reload();
                 } else {
                     alert(result.msg);
                 }
@@ -30,17 +30,16 @@ requirejs(
          * 편성표 삭제
          */
         btn_calendar_delete.on('click', function () {
-            
             const check_confirm = confirm('삭제를 진해하시겠습니까?');
-            
             if (check_confirm){
-                const id = $(this).attr('data-id');
-                
-                Common.broadcastCalendarDelete(id, function (err, result) {
-                    if (!err) {
+                const data ={
+                    id : $(this).attr('data-id')
+                };
+                Common.AjaxSubmit('broadcast/calendar', data, 'DELETE', (err, result)=>{
+                    if(!err){
                         alert(result.msg);
-                        Common.refreshDisplay('body_bc_calendar');
-                    } else {
+                        location.reload();
+                    }else{
                         alert(result.msg);
                     }
                 });

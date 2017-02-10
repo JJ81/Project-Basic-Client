@@ -8,9 +8,7 @@ const
     async = require('async'),
     Upload = require('../service/UploadService'),
     Broadcast = {};
-    // s3Keys = {
-    //     calendar: 'broadcast/calendar/'
-    // };
+
 
 
 Broadcast.onLive = (link, callback) => {
