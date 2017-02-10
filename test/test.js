@@ -20,7 +20,7 @@ describe('[API 2.0] Should return 200', () => {
                 done();
             });
         });
-    }),
+    });
     
     // describe('Broadcast Register', () => {
     //     it('/broadcast/live', (done) =>{
@@ -88,6 +88,19 @@ describe('[API 2.0] Should return 200', () => {
         });
     });
     
+    
+    describe('Event List', ()=>{
+        it('/event', (done)=>{
+            req.get(`${HOST_API}event`,(err, res, body)=>{
+                const _body = JSON.parse(body);
+                expect(res.statusCode).to.equal(200);
+                expect(_body.success).to.be.true;
+                done();
+            });
+        });
+        
+    });
+    
     describe('Event Result List', ()=>{
         it('/event/result', (done)=>{
             req.get(`${HOST_API}event/result`, (err, res ,body)=>{
@@ -98,7 +111,6 @@ describe('[API 2.0] Should return 200', () => {
             });
         });
     });
-    
     
     describe('Calendar Result List', ()=>{
         it('/broadcast/calendar', (done)=>{
@@ -121,7 +133,4 @@ describe('[API 2.0] Should return 200', () => {
             });
         });
     });
-    
-    
-    
 });

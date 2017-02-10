@@ -34,7 +34,6 @@ requirejs(
             const data = {
                 id: $(this).attr('data-bc-id')
             };
-            
             Common.AjaxSubmit('broadcast/live', data, 'PUT', (err, result) =>{
                 if(!err){
                     alert(result.msg);

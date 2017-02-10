@@ -84,7 +84,7 @@ hbs.registerHelper('showContentType', (type) => {
         show_type = '추천 컨텐츠';
         break;
     default:
-        show_type = false;
+        show_type = '대표 컨텐츠';
         break;
     }
     return show_type;

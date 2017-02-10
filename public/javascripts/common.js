@@ -38,75 +38,6 @@ define(
         
     const utils = {
             
-        // broadcastLiveOn: (link, callback) => {
-        //     $.ajax({
-        //         url: API.baseURL + '/broadcast/live',
-        //         type: 'post',
-        //         data: {link: link},
-        //         success: function (data, textStatus, jqXHR) {
-        //             callback(null, data);
-        //         },
-        //         error: function (jqXHR, textStatus, errorThrown) {
-        //             callback(textStatus, null);
-        //         }
-        //     });
-        // },
-        //
-        // broadcastLiveOff: (id, callback) => {
-        //     $.ajax({
-        //         url: API.baseURL + '/broadcast/live',
-        //         type: 'put',
-        //         data: {id: id},
-        //         success: function (data, textStatus, jqXHR) {
-        //             callback(null, data);
-        //         },
-        //         error: function (jqXHR, textStatus, errorThrown) {
-        //             callback(textStatus, null);
-        //         }
-        //     });
-        // },
-            
-        // broadcastCalendarDelete: (id, callback) => {
-        //     $.ajax({
-        //         url: API.baseURL + '/broadcast/calendar',
-        //         type: 'DELETE',
-        //         data: {id: id},
-        //         success: function (data, textStatus, jqXHR) {
-        //             callback(null, data);
-        //         },
-        //         error: function (jqXHR, textStatus, errorThrown) {
-        //             callback(textStatus, null);
-        //         }
-        //     });
-        // },
-            
-        // eventResultDelete: (event_id, callback) => {
-        //     $.ajax({
-        //         url: API.baseURL + '/event/result',
-        //         type: 'DELETE',
-        //         data: {event_id: event_id},
-        //         success: function (data, textStatus, jqXHR) {
-        //             callback(null, data);
-        //         },
-        //         error: function (jqXHR, textStatus, errorThrown) {
-        //             callback(textStatus, null);
-        //         }
-        //     });
-        // },
-            
-        // contentDelete: (id, callback) => {
-        //     $.ajax({
-        //         url: API.baseURL + '/content',
-        //         type: 'DELETE',
-        //         data: {id: id},
-        //         success: function (data, textStatus, jqXHR) {
-        //             callback(null, data);
-        //         },
-        //         error: function (jqXHR, textStatus, errorThrown) {
-        //             callback(textStatus, null);
-        //         }
-        //     });
-        // },
     
         /*POST, DELETE, PUT 전솜을 담당(Form 전송 외 모두 담당)*/
         AjaxSubmit: function (url, data, type, callback) {
@@ -139,8 +70,7 @@ define(
         },
         
     };
-        
-        
+    /*모달 close시 입력값 초기화*/
     $('.modal').on('hidden.bs.modal', function (e) {
         $(this).find('form')[0].reset();
     });

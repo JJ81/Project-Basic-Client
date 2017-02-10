@@ -198,8 +198,32 @@ router.delete('/broadcast/calendar', (req, res) => {
 //broadcast API END
 
 //event API Start
+
+router.get('/event', (req, res)=>{
+    Event.getList((err, result)=>{
+        if (!err) {
+            res.json({success: true, result: result});
+        } else {
+            res.json({success: false, err: err});
+        }
+    });
+});
+
+router.put('/event', (req, res)=>{
+    const event_id = req.body.event_id;
+    
+    Event.start(event_id, (err, result)=>{
+        if (!err) {
+            res.json({success: true, msg: '작업완료'});
+        } else {
+            res.json({success: false, err: err});
+        }
+    });
+});
+
+
 router.get('/event/result', (req, res) => {
-    Event.getList((err, result) => {
+    Event.getResultList((err, result) => {
         if (!err) {
             res.json({success: true, result: result});
         } else {
@@ -209,16 +233,28 @@ router.get('/event/result', (req, res) => {
 });
 
 
+router.post('/event', (req, res)=>{
+    Event.upload(req, (err, result)=>{
+        if(!err){
+            res.json({success: true, msg:'등록 완료'});
+        }else{
+            res.json({success: false, err:err});
+        }
+    });
+});
+
 router.post('/event/result', (req, res) => {
     Event.uploadResult(req, (err, result) => {
-        console.log(err);
         res.json(result);
     });
 });
 
 router.delete('/event/result', (req, res) => {
     const event_id = req.body.event_id;
-    Event.delete(event_id, (err, result) => {
+    
+    
+    Event.deleteResult(event_id, (err, result) => {
+        console.log(err);
         if (!err) {
             res.json({success: true, msg: '삭제를 완료했습니다.'});
         } else {

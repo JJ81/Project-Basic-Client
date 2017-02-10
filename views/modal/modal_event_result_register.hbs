@@ -1,4 +1,4 @@
-<div class="modal fade" id="registerEvent" tabindex="-1" role="dialog" aria-labelledby="myMomyModalLabeldalLabel"
+<div class="modal fade" id="registerEventResult" tabindex="-1" role="dialog" aria-labelledby="myMomyModalLabeldalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -6,27 +6,13 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">이벤트 등록</h4>
+                <h4 class="modal-title">이벤트 결과 등록</h4>
             </div>
             <div class="modal-body">
                 <!-- modal body -->
-                <form id="form_event_upload" action="/api/v1/event" enctype="multipart/form-data"  method="post">
+                <form id="form_event_upload" action="/api/v1/event/result" enctype="multipart/form-data"  method="post">
 
-                    <input type="hidden" name="id" id="id" value="">
-                    <input type="hidden" name="type" id="type" value="V">
-
-
-                    <fieldset class="form-group">
-                        <label for="title">Title</label>
-                        <input type="text" class="form-control" name="title"  placeholder="Insert Ttile" required autocomplete="off"/>
-                    </fieldset>
-
-                    <div class="form-group">
-                        <label for="type">Type</label>
-                            <select class="form-control" name="type" required>
-                                <option value="V">투표</option>
-                            </select>
-                    </div>
+                    <input type="hidden" name="event_id" class="event_id" value="">
 
                     <fieldset class="form-group">
                         <label for="image">Image</label>

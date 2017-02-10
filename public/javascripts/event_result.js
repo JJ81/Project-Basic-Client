@@ -21,7 +21,8 @@ requirejs(
         btn_event_result_register.on('click', function () {
             const
                 event_id = $(this).attr('data-event-id'),
-                modal_id = $('#registerEvent');
+                modal_id = $('#registerEventResult');
+            console.log(event_id);
             
             modal_id.find('.event_id').val(event_id);
         });
@@ -40,11 +41,11 @@ requirejs(
             });
         });
         
-        
         /**
          * 이벤트 결과 삭제
          */
         btn_event_result_delete.on('click', function () {
+            
             const data = {
                 event_id: $(this).attr('data-event-id')
             };

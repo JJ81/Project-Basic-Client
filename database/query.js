@@ -59,12 +59,13 @@ QUERY.Broadcast = {
 QUERY.Event = {
     ResultRegister: 'insert into `event_result` set ?;',
     ResultDelete: 'delete from `event_result` where `event_id` = ?;',
-    StatusChange: 'update `event` set `status` =? where `id`=?;',
-    ListGet: 'select e.`id`, e.`title`, e.`thumbnail`,e.`type`, e.`ref_id`, e.`status`, e.`description`, e.`created_dt`, e.`end_dt`,er.`result_img` from `event` as e left join (select *from `event_result`) as er on e.`id` = er.`event_id`;'
-    
-    
-    
-    // ListGet: 'select *from `event`;'
+    StatusChange: 'update `event` set `status` =?, `ref_id` =? where `id`=?;',
+    ResultList: 'select e.`id`, e.`title`, e.`thumbnail`,e.`type`, e.`ref_id`, e.`status`, ' +
+    'e.`description`, e.`created_dt`, e.`end_dt`,er.`result_img` ' +
+    'from `event` as e left join (select *from `event_result`) as er on e.`id` = er.`event_id` order by e.`created_dt` desc;',
+    LIST: 'select * from `event` ' +
+    'order by `created_dt` desc ;',
+    Register: 'insert into `event`set ?',
 };
 
 QUERY.Contents = {
@@ -80,7 +81,7 @@ QUERY.Contents = {
     'order by `priority` desc, `created_dt` desc ;',
     RecommendList: 'select * from `contents` ' +
     'where `type`=\'R\' ' +
-    'order by `priority` desc, `created_dt` desc ;' ,
+    'order by `priority` desc, `created_dt` desc ;',
     
     Register: 'insert into `contents` set ?;',
     Delete: 'delete from `contents`where `id`= ?',

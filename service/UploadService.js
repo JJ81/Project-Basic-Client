@@ -23,7 +23,8 @@ let params = {
 
 Upload.s3Keys = {
     calendar: 'broadcast/calendar/',
-    event: 'event/result',
+    event_result: 'event/result/',
+    event: 'event/'
 };
 
 Upload.formidable =(req, callback) =>{
@@ -59,7 +60,7 @@ Upload.s3 = (files, key, callback) => {
 
 /*TODO 파일 이름이 여러개 일 경우는 어떻게 처리할것인가?*/
 function makeS3FilesName(files) {
-    return (md5(files[0].name));
+    return (md5(files[0].name + files[0].lastModifiedDate));
 }
 
 
