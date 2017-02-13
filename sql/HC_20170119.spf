@@ -58,19 +58,19 @@
 			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
 			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
 			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
-			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClJpZNIeHy0uXxAPTlNN
-			dXRhYmxlU3RyaW5noy0vI1hOU1N0cmluZ9IeHzEyXk5TTXV0YWJs
-			ZUFycmF5ozEzI1dOU0FycmF50h4fIjWiIiNfEA9OU0tleWVkQXJj
-			aGl2ZXLRODlUZGF0YYABAAgAEQAaACMALQAyADcARQBLAFIAWgBl
-			AGwAcAByAHQAdgB6AHwAfgCAAIIAhwCMAJEAugDBAMIAwwDFAMoA
-			1QDeAPQA+AEFAQ4BEwEVARcBGQEeASgBKgEtATIBRAFIAVEBVgFl
-			AWkBcQF2AXkBiwGOAZMAAAAAAAACAQAAAAAAAAA6AAAAAAAAAAAA
-			AAAAAAABlQ==
+			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeACld1c2VyX2lk0h4fLS5f
+			EA9OU011dGFibGVTdHJpbmejLS8jWE5TU3RyaW5n0h4fMTJeTlNN
+			dXRhYmxlQXJyYXmjMTMjV05TQXJyYXnSHh8iNaIiI18QD05TS2V5
+			ZWRBcmNoaXZlctE4OVRkYXRhgAEACAARABoAIwAtADIANwBFAEsA
+			UgBaAGUAbABwAHIAdAB2AHoAfAB+AIAAggCHAIwAkQC6AMEAwgDD
+			AMUAygDVAN4A9AD4AQUBDgETARUBFwEZAR4BKAEqATIBNwFJAU0B
+			VgFbAWoBbgF2AXsBfgGQAZMBmAAAAAAAAAIBAAAAAAAAADoAAAAA
+			AAAAAAAAAAAAAAGa
 			</data>
 			<key>contentSortColIsAsc</key>
 			<true/>
 			<key>contentViewport</key>
-			<string>{{0, 0}, {1530, 864}}</string>
+			<string>{{0, 0}, {2319, 1175}}</string>
 			<key>isToolbarVisible</key>
 			<true/>
 			<key>queries</key>
@@ -893,10 +893,82 @@ create table `news` (
 	primary key(`id`)
 ) engine=Innodb default charset=utf8mb4 collate=utf8mb4_bin row_format=COMPACT;
 
+# 각 글의 계층을 설정한다. (다층구조 댓글 시스템)
+alter table `reply_video` add column `layer` int(5) default null after `comment_id`;
+
+
+
+alter table `reply_video` add column `user_id` varchar(255) character set utf8 not null after `created_dt`;
+
+alter table `reply_video`
+add foreign key (`user_id`)
+references `user`(`user_id`);
+
+
+# nickname allow null 처리할 것.!! nickname에 걸려 있는 인덱스를 끊어줄 것.
+
+##### reply_video에서 nickname 참조를 끊고 user_id를 추가한다.
+## 기존에 nickname으로 출력된 것들을 유지된다.
+## 다만 user테이블을 참조하여 각 글에 대한 user의 nickname을 출력할 수 있도록 한다..
+## nickname은 이후에 바뀔 수도 있으며 현재 한글로도 입력이 되고 있으므로 문제가 생겨날 소지가 크다.
+
+show index from `reply_video`;
+alter table `reply_video` drop index `nickname`;
+alter table `reply_video` add index `user_id`;
+
+insert into `reply_video` (`video_id`, `user_id`, `comment`) values(?,?,?);
+
+## 기존 리얼 디비 데이터에 댓글에 대한 nickname에 일치하는 user_id를 모두 입력할 수 있도록 한다. 
+
+
+
+select * from `user`
+where `user_id` like 'player%';
+
+# plr001 ~ plr001 / $2a$10$cqGXmkeUv7dOi7WkAp6rNeGUa6utkKE5PZtiIKNUl6n2oH4ug8jp2
+
+/* DELIMITER $$
+DROP PROCEDURE IF EXISTS FILL_TEST_ACCOUNT$$
+CREATE PROCEDURE FILL_TEST_ACCOUNT()
+BEGIN
+	DECLARE i INT DEFAULT 1;
+	WHILE i &lt;= 999 DO
+		INSERT INTO `user` (`user_id`, `market_code`, `password`, `nickname`) VALUES (concat('plr',  i), 'DEV_TEST', '$2a$10$cqGXmkeUv7dOi7WkAp6rNeGUa6utkKE5PZtiIKNUl6n2oH4ug8jp2', concat('plr',  i));
+		SET i = i + 1;
+	END WHILE;
+END$$ */
+
+#call FILL_TEST_ACCOUNT();
+
+select count(*) from `user`
+where `user_id` like 'plr%';
+
+select * from `user`
+where `user_id` like 'plr%';
+
+select * from `user`
+where `user_id` like 'player%';
+
+
+select `user_id`, `password`, `nickname`, `name`, `email`, `login_fail_count`, `banned`, `market_code` from `user` where `user_id`='plr3';
 
 
 
 
+select * from `user` where `user_id`='plr1';
+
+
+# 댓글 지우기
+delete from `reply_video`
+where `id`='265' and `user_id`='player001';
+
+
+## 여기서부터 덧글
+## 덧글의 계층에 따라서 layer 혹은 level정보를 입력해야 한다.
+### 댓글은 가장 최상위 계층이다. 덧글은 layer가 1부터 시작한다. 
+### 특정 덧글에 대한 덧글을 달기 위해서는 상위 덧글의 레이어 혹은 레벨을 알고 있어야 한다.
+
+select * from `reply_video`;
 
 
 
@@ -904,7 +976,7 @@ create table `news` (
 
 </string>
 			<key>table</key>
-			<string>news</string>
+			<string>user</string>
 			<key>view</key>
 			<string>SP_VIEW_CUSTOMQUERY</string>
 			<key>windowVerticalDividerPosition</key>
@@ -919,123 +991,79 @@ create table `news` (
 	<array/>
 	<key>queryHistory</key>
 	<array>
-		<string># news 제공
-create table `news` (
-	`id` bigint not null auto_increment,
-	`created_dt` datetime default CURRENT_TIMESTAMP,
-	`title` varchar(255) character set utf8 not null comment '뉴스 제목',
-	`sub_title` varchar(255) character set utf8 not null comment '뉴스 소제목',
-	`desc` varchar(255) character set utf8 not null comment '뉴스에 대한 간략한 설명',
-	`contents` text character set utf8 default null comment '뉴스 전체 내용',
-	`active` boolean default false,
-	primary key(`id`)
-) engine=Innodb default charset=utf8mb4 collate=utf8mb4_bin row_format=COMPACT</string>
-		<string>select * from `event_result`
-where `event_id`=3</string>
-		<string>## 비디오 뷰 관련
-# 비디오 관련 정보 얻어오기
-# 선택한 비디오에 대한 정보 가져오기
-select * from `video`
-where `video_id`='c8f11df0-9113-11e6-876f-719554daeebf'</string>
-		<string>select * from `video`
-where `channel_id`='7c75b340-6d92-11e6-9f3b-212917332ccd'
-order by `created_dt` asc</string>
-		<string>## contents 테이블에 통합됨
-drop table `content_recommend`</string>
-		<string>## 비디오 뷰 관련
-# 비디오 관련 정보 얻어오기
-select * from `video`</string>
-		<string>select * from `event_result`
-where event_id=3</string>
-		<string>select * from `event_result`
-where event_id=1</string>
-		<string>alter table `event` add column `end_dt` datetime default null after `created_dt`</string>
-		<string>## 이벤트 종료 날짜가 있어야 한다. 여러 개의 이벤트를 동시에 진행할 수도 있기 때문
-alter table `event` drop column `end_dt`</string>
-		<string>## 이벤트 종료 날짜가 있어야 한다. 여러 개의 이벤트를 동시에 진행할 수도 있기 때문
-alter table `event` drop colum `end_dt`</string>
-		<string>## 이벤트 종료 날짜가 있어야 한다. 여러 개의 이벤트를 동시에 진행할 수도 있기 때문
-alter table `event` add column `end_dt` datetime default CURRENT_TIMESTAMP after `created_dt`</string>
-		<string>drop table `content_recommend`</string>
-		<string>## 추천 콘텐츠 가져오기
-select channels.*, cr.priority as recom_priority 
-from
-(select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title
-from `channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-where ch.type != 'U' 
-group by ch.group_id
-) as channels
-inner join `content_recommend` as cr
-on channels.super_channel = cr.channel_id
-order by cr.priority desc</string>
-		<string>select channels.*, cr.priority as recom_priority 
-from
-(select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title
-from `channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-where ch.type != 'U' 
-group by ch.group_id
-) as channels
-inner join (
-	select * from `contents`
-	where `type`='R'
-	order by `priority` desc, `created_dt` desc
-) as cr
-on channels.super_channel = cr.ref_id
-order by cr.priority desc</string>
-		<string>select channels.*, cr.priority as recom_priority 
-from
-(select ch.channel as super_channel, ch.title as super_title, ch.type, group_concat(ch.channel_id order by ch.priority desc) as sub_channel, group_concat(cn.title order by ch.priority desc) as sub_title
-from `channel_new` as cn
-inner join (
-	select cn.channel_id as channel, cn.title, cn.type, cn.description, cn.created_dt, cn.priority, cn.active, if(cg.group_id is null, cn.title, cg.group_id) as group_id, if(cg.channel_id is null, cn.channel_id, cg.channel_id) as channel_id
-	from `channel_new` as cn
-	left join `channel_group` as cg
-	on cn.group_id = cg.group_id
-) as ch
-on ch.channel_id = cn.channel_id
-where ch.type != 'U' 
-group by ch.group_id
-) as channels
-inner join (
-	select * from `contents`
-	where `type`='R'
-	order by `priority` desc, `created_dt` desc
-) as cr
-on channels.super_channel = cr.channel_id
-order by cr.priority desc</string>
-		<string>## 추천 채널 가져오기 수정본
-# contents에서 추천만 가져온다. ref_id as channel_id로 변경한다.
-select * from `contents`
-where `type`='R'
-order by `priority` desc, `created_dt` desc</string>
-		<string>## 추천 채널 가져오기 수정본
-# contents에서 추천만 가져온다. ref_id as channel_id로 변경한다.
-select * from `contents`
-where `type`='R'
-order by `priority` desc</string>
-		<string>## 추천 채널 가져오기 수정본
-# contents에서 추천만 가져온다. ref_id as channel_id로 변경한다.
-select * from `contents`
-where `type`='R'</string>
-		<string># 교육 콘텐츠
-select * from `contents`
-where `type`='E'
-order by `priority` desc
-limit 0,10</string>
+		<string>## 여기서부터 덧글
+## 덧글의 계층에 따라서 layer 혹은 level정보를 입력해야 한다.
+
+select * from `reply_video`</string>
+		<string>select * from `user` where `user_id`='plr1'</string>
+		<string>select * from `user` where `user_id`='plr001'</string>
+		<string>select * from `user` where `user_id`='player001'</string>
+		<string>select `user_id`, `password`, `nickname`, `name`, `email`, `login_fail_count`, `banned`, `market_code` from `user` where `user_id`='plr3'</string>
+		<string>select `user_id`, `password`, `nickname`, `name`, `email`, `login_fail_count`, `banned`, `market_code` from `user` where `user_id`='plr2'</string>
+		<string>select `user_id`, `password`, `nickname`, `name`, `email`, `login_fail_count`, `banned`, `market_code` from `user` where `user_id`='plr1'</string>
+		<string>select * from `user`
+where `user_id` like 'player%'</string>
+		<string>select * from `user`
+where `user_id` like 'plr%'</string>
+		<string>select count(*) from `user`
+where `user_id` like 'plr%'</string>
+		<string>#call FILL_TEST_ACCOUNT();
+
+select count(*) from `user`
+where `user_id` like 'plr%';
+
+select count(*) from `user`
+where `user_id` like 'plr%';</string>
+		<string>#call FILL_TEST_ACCOUNT();
+
+select count(*) from `user`
+where `user_id` like 'plr%';</string>
+		<string>#call FILL_TEST_ACCOUNT();
+
+
+select * from `user`
+where `user_id` like 'plr%';
+###
+
+
+select count(*) from `user`
+where `user_id` like 'plr%';</string>
+		<string>#call FILL_TEST_ACCOUNT();
+
+
+select * from `user`
+where `user_id` like 'plr%';;
+
+select count(*) from `user`
+where `user_id` like 'plr%';</string>
+		<string>#call FILL_TEST_ACCOUNT();
+
+
+select * from `user`
+where `user_id` like 'plr%';
+
+select count(*) from `user`
+where `user_id` like 'plr%';</string>
+		<string>#call FILL_TEST_ACCOUNT();
+
+
+select * from `user`
+where `user_id` like 'plr%';</string>
+		<string>call FILL_TEST_ACCOUNT();
+;
+
+select * from `user`
+where `user_id` like 'plr%';</string>
+		<string>call FILL_TEST_ACCOUNT();</string>
+		<string>CREATE PROCEDURE FILL_TEST_ACCOUNT()
+BEGIN
+	DECLARE i INT DEFAULT 1;
+	WHILE i &lt;= 999 DO
+		INSERT INTO `user` (`user_id`, `market_code`, `password`, `nickname`) VALUES (concat('plr',  i), 'DEV_TEST', '$2a$10$cqGXmkeUv7dOi7WkAp6rNeGUa6utkKE5PZtiIKNUl6n2oH4ug8jp2', concat('plr',  i));
+		SET i = i + 1;
+	END WHILE;
+END</string>
+		<string>DROP PROCEDURE IF EXISTS FILL_TEST_ACCOUNT</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

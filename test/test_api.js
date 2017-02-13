@@ -209,4 +209,79 @@ describe('[API 2.0] Should return 200', () => {
 		});
 	});
 
+
+	describe('Get Reply List', () => {
+		it('/reply/list/:video_id', (done) => {
+			request.get(`${HOST_API}reply/list?video_id=297043e0-86d8-11e6-b591-0108467f781a&offset=0&size=1000`, (err, res, body) => {
+				let _body = JSON.parse(body);
+				expect(res.statusCode).to.equal(200);
+				expect(_body.success).to.be.true;
+				// console.info(body);
+				done();
+			});
+		});
+	});
+
+
+
+	/// todo 여기서부터 테스트 시작
+	// ref. https://thewayofcode.wordpress.com/2013/04/21/how-to-build-and-test-rest-api-with-nodejs-express-mocha/
+	// todo 완성 후에 블로그에 설명을 적을 것
+
+	let mockup_data = {
+		video_id : '297043e0-86d8-11e6-b591-0108467f781a',
+		user_id : 'player001',
+		comment : 'REPLY TEST COMMENT',
+		reply_id : null // create할 경우 리턴을 받아서 저장한다
+	};
+
+
+	describe('Read By its ID', () => {
+		// Create
+		it('Create Reply Test', (done) => {
+
+		});
+
+		// Read
+		it('Read Reply Test', (done) => {
+
+		});
+
+		// Update
+		it('Update Reply Test', (done) => {
+
+		});
+
+		// Delete
+		it('Delete Reply Test', (done) => {
+
+		});
+
+
+
+		it('/reply/:user_id/:reply_id', (done) => {
+			request.get(`${HOST_API}reply/player001/266`, (err, res, body) => {
+				let _body = JSON.parse(body);
+				expect(res.statusCode).to.equal(200);
+				expect(_body.success).to.be.true;
+				// console.info(body);
+				done();
+			});
+		});
+
+
+	});
+
+
+
+	// todo 덧글 리스트 테스트
+
+
+	// todo 덧글 통합 테스트
+
+
+	// todo application/json 타입으로 리턴된 것을 테스트한다.
+
+
+
 });

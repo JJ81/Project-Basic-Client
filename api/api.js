@@ -184,57 +184,189 @@ router.get('/users/duplication/email', (req, res) => {
 });
 
 
-//////////////////////////  API REPLY  /////////////////////////////////////
 
+////////////////////////////////////////// API v2.0 //////////////////////////////////////////////////
+
+/**
+ * TODO 댓글과 덧글을 어떻게 구분할 것인가
+ * TODO 댓글을 가져올 때 덧글을 어떻게 가져와서 보여줄 것인가? -> 일단 숨겨두고 버튼을 누르면 보일 수 있도록 하자.
+ * TODO 댓글을 쓰는 것과 덧글을 쓰는 것을 구분하자
+ * TODO 덧글이 쓰여진 댓글을 지울 수 없도록 한다. 만약 지워야 한다면 그 내용이 출력만 되지 않도록 한다.
+ *
+ * TODO create & read & update & delete 순으로 데이터를 설정하고 지울 수 있도록 하며 목업 데이터를 세팅을 해줘야 한다.
+ *
+ *
+ * TODO 로그인을 할 후에 댓글에 대한 권한이 생긴다 로그인 처리에 대한 정보는 어떻게 할 것인가????
+ * TODO API서버 세션에 가지고 있는 방법과 API를 라우팅하는 곳에서 처리하는 방법이 있다 이 둘중에 하나를 선택하여 처리할 수 있도록 한다.
+ * TODO 혹은 항상 첫번쩨 리퀘스트 파라미터를 통해서 항상 로그인을 거처갈 수 있는 로직을 만들어서 구현하는 방법도 있겠다
+ */
+
+
+
+/**
+ * 댓글 : 비디오에 대한 유저들의 반응을 적는 글
+ * 덧글 : 댓글에 대한 반응
+ * return
+ * {
+  "success": true,
+  "result": {
+    "fieldCount": 0,
+    "affectedRows": 1,
+    "insertId": 264,
+    "serverStatus": 2,
+    "warningCount": 0,
+    "message": "",
+    "protocol41": true,
+    "changedRows": 0
+  }
+}
+ */
 router.post('/reply/create', (req, res) => {
-    //TODO 댓글이랑 답글을 한곳에서 처리하자
-    
-    const _obj = {
-        video_id: req.body.video_id,
-        comment: req.body.comment_content,
-        nickname: req.user.nickname
-    };
-    
-    Reply.write(_obj, (err, result) => {
-        if (!err) {
-            res.json(result);
-        } else {
-            res.json(result);
-        }
-    });
+	const _obj = {
+		video_id: req.body.video_id,
+		user_id: req.body.user_id,
+		comment: req.body.comment
+	};
+
+	Reply.Write(_obj, (err, rows) => {
+		if (!err) {
+			res.json({
+				success : true,
+				result : rows
+			});
+		} else {
+			console.error(err);
+			res.json({
+				success : false,
+				msg : err
+			});
+		}
+	});
 });
 
+/**
+ * 비디오 아이디로 댓글 가져오기
+ */
+router.get('/reply/list', (req, res) => {
+	'use strict';
+
+	let info = {
+		video_id : req.query.video_id,
+		offset : parseInt(req.query.offset),
+		size : parseInt(req.query.size)
+	};
+
+	Reply.GetList(info, (err, rows) => {
+		if(!err){
+			res.json({
+				success: true,
+				result : rows
+			});
+		}else{
+			console.error(err);
+			res.json({
+				success: false,
+				msg : err
+			});
+		}
+	});
+});
+
+/**
+ * 개별 댓글 읽어오기
+ */
+router.get('/reply/:user_id/:reply_id', (req, res) => {
+	'use strict';
+	let info = {
+		user_id : req.params.user_id,
+		reply_id : req.params.reply_id
+	};
+
+	Reply.ReadById(info, (err, rows) => {
+		if(!err){
+			res.json({
+				success: true,
+				result : rows
+			});
+		}else{
+			console.error(err);
+			res.json({
+				success: false,
+				msg : err
+			});
+		}
+	});
+});
+
+/**
+ * 댓글 업데이트
+ * @result
+ * {
+  "success": true,
+  "result": {
+    "fieldCount": 0,
+    "affectedRows": 1,
+    "insertId": 0,
+    "serverStatus": 2,
+    "warningCount": 0,
+    "message": "(Rows matched: 1  Changed: 1  Warnings: 0",
+    "protocol41": true,
+    "changedRows": 1
+  }
+}
+ */
 router.put('/reply/update', (req, res) => {
-    
-    const _obj = {
-        id: req.body.id,
-        comment: req.body.comment_content,
-    };
-    
-    Reply.modify(_obj, (err, result) => {
-        if (!err) {
-            res.json(result);
-        } else {
-            res.json(result);
-        }
-    });
+	const _obj = {
+		comment: req.body.comment,
+		reply_id: req.body.reply_id,
+		user_id: req.body.user_id
+	};
+
+	Reply.UpdateById(_obj, (err, rows) => {
+		if(!err){
+			res.json({
+				success: true,
+				result : rows
+			});
+		}else{
+			console.error(err);
+			res.json({
+				success: false,
+				msg : err
+			});
+		}
+	});
 });
 
+/**
+ * 댓글 지우기
+ */
 router.delete('/reply/delete', (req, res) => {
+	const info = {
+		reply_id : req.body.reply_id,
+		user_id : req.body.user_id
+	};
 
-    const reply_id = req.body.id;
-
-    Reply.remove(reply_id, (err, result) => {
-        if (!err) {
-            res.json(result);
-        } else {
-            res.json(result);
-        }
-    });
+	Reply.DeleteById(info, (err, rows) => {
+		if(!err){
+			res.json({
+				success: true,
+				result : rows
+			});
+		}else{
+			console.error(err);
+			res.json({
+				success: false,
+				msg : err
+			});
+		}
+	});
 });
 
 
-////////////////////////////////////////// API v2.0 //////////////////////////////////////////////////ㅍ
+
+
+
 
 // TODO API_KEY를 제공할 수 있도록 한다?
 // TODO 허용된 도메인에서만 호출이 될 수 있도록 설정한다.

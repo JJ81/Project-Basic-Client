@@ -33,9 +33,24 @@ QUERY.USER = {
 };
 
 QUERY.Reply = {
-	Write: 'insert into `reply_video` set ?;',
-	Modify: 'update `reply_video` set `comment` =? where `id` = ?;',
-	Remove: 'delete from `reply_video` where `id` =?'
+	GetListByVideoID :
+		'select * from `reply_video` '+
+		'where `video_id`=? ' +
+		'and `comment_id` is null ' +
+		'and `layer` is null ' +
+		'order by `created_dt` desc ' +
+		'limit ?, ?;',
+	Write: 'insert into `reply_video` (`video_id`, `user_id`, `comment`) values(?,?,?);',
+	ReadById :
+		'select * from `reply_video` ' +
+		'where `user_id`=? ' +
+		'and `id`=?;',
+	UpdateById :
+		'update `reply_video` set `comment`=? ' +
+		'where `id`=? and `user_id`=?;',
+	DeleteById :
+		'delete from `reply_video` ' +
+		'where `id`=? and `user_id`=?;'
 };
 
 QUERY.ReReply = {
