@@ -16,6 +16,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Broadcast Signal', () => {
 		it('/broadcast/live', (done) =>{
 			request.get(`${HOST_API}broadcast/live`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -28,6 +32,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('[Navigation] channel list', () => {
 		it('/navigation/channel/list', (done) => {
 			request.get(`${HOST_API}navigation/channel/list`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -41,6 +49,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Navigation Recommend list', () => {
 		it('/navigation/recommend/list', (done) => {
 			request.get(`${HOST_API}navigation/recommend/list`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -54,6 +66,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Event', () => {
 		it('/event/list', (done) => {
 			request.get(`${HOST_API}event/list?offset=0&size=100`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -67,6 +83,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Event Result', () => {
 		it('/event/result/3', (done) => {
 			request.get(`${HOST_API}event/result/3`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				expect(res.statusCode).to.equal(200);
 				let _body = JSON.parse(body);
 				expect(_body.result.length).to.not.equal(0);
@@ -81,6 +101,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Event on Vote Question', () => {
 		it('/event/vote/question/:id', (done) => {
 			request.get(`${HOST_API}event/vote/question/13`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				expect(res.statusCode).to.equal(200);
 				let _body = JSON.parse(body);
 				expect(_body.result.length).to.not.equal(0);
@@ -94,6 +118,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Event on Vote Answer', () => {
 		it('/event/vote/answer/:id', (done) => {
 			request.get(`${HOST_API}event/vote/answer/14`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				expect(res.statusCode).to.equal(200);
 				let _body = JSON.parse(body);
 				expect(_body.result.length).to.not.equal(0);
@@ -108,6 +136,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Recent updated Video', () => {
 		it('/video/recent/list?offset=0&size=4', (done) => {
 			request.get(`${HOST_API}video/recent/list?offset=0&size=4`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -121,6 +153,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Representative Channel List', () => {
 		it('/contents/representative/list?offset=0&size=4', (done) => {
 			request.get(`${HOST_API}contents/representative/list?offset=0&size=4`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -134,6 +170,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Education Video List', () => {
 		it('/contents/education/list?offset=0&size=4', (done) => {
 			request.get(`${HOST_API}contents/education/list?offset=0&size=4`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -147,6 +187,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Summary Video List', () => {
 		it('/contents/summary/list?offset=0&size=4', (done) => {
 			request.get(`${HOST_API}contents/summary/list?offset=0&size=4`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -160,6 +204,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Get Video List by Channel_id', () => {
 		it('/video/list/:channel_id', (done) => {
 			request.get(`${HOST_API}video/list/385bc900-90f7-11e6-876f-719554daeebf`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -173,6 +221,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Get Channel info by its ID', () => {
 		it('/channel/:channel_id/information', (done) => {
 			request.get(`${HOST_API}channel/385bc900-90f7-11e6-876f-719554daeebf/information`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -186,6 +238,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Get Video info by its ID', () => {
 		it('/video/:video_id/information', (done) => {
 			request.get(`${HOST_API}video/7475dfb0-90f8-11e6-8318-35085802b5fe/information`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -198,6 +254,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Get News List', () => {
 		it('/news/list', (done) => {
 			request.get(`${HOST_API}news/list`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -213,6 +273,10 @@ describe('[API 2.0] Should return 200', () => {
 	describe('Get Reply List', () => {
 		it('/reply/list/:video_id', (done) => {
 			request.get(`${HOST_API}reply/list?video_id=297043e0-86d8-11e6-b591-0108467f781a&offset=0&size=1000`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
 				let _body = JSON.parse(body);
 				expect(res.statusCode).to.equal(200);
 				expect(_body.success).to.be.true;
@@ -223,64 +287,98 @@ describe('[API 2.0] Should return 200', () => {
 	});
 
 
+	// 여기서부터 댓글관련 테스트 시작
+	let reply_id = null;
 
-	/// todo 여기서부터 테스트 시작
-	// ref. https://thewayofcode.wordpress.com/2013/04/21/how-to-build-and-test-rest-api-with-nodejs-express-mocha/
-	// todo 완성 후에 블로그에 설명을 적을 것
-
-	let mockup_data = {
-		video_id : '297043e0-86d8-11e6-b591-0108467f781a',
-		user_id : 'player001',
-		comment : 'REPLY TEST COMMENT',
-		reply_id : null // create할 경우 리턴을 받아서 저장한다
-	};
-
-
-	describe('Read By its ID', () => {
+	describe('Reply Test serialized', () => {
+		let mockup_data = {
+			video_id : '297043e0-86d8-11e6-b591-0108467f781a',
+			user_id : 'player001',
+			comment : 'REPLY TEST COMMENT'
+		};
 		// Create
 		it('Create Reply Test', (done) => {
-
+			request.post(`${HOST_API}reply/create`, {json : mockup_data}, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
+				expect(body).to.be.json;
+				expect(res.statusCode).to.equal(200);
+				expect(body.success).to.be.true;
+				reply_id = body.result.insertId;
+				console.log(`Created Reply : ${reply_id}`);
+				done();
+			});
 		});
 
-		// Read
 		it('Read Reply Test', (done) => {
-
+			request.get(`${HOST_API}reply/${mockup_data.user_id}/${reply_id}`, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
+				let _body = JSON.parse(body);
+				expect(_body).to.be.json;
+				expect(res.statusCode).to.equal(200);
+				expect(_body.success).to.be.true;
+				expect(_body.result[0].id).to.equal(reply_id);
+				done();
+			});
 		});
 
 		// Update
 		it('Update Reply Test', (done) => {
-
-		});
-
-		// Delete
-		it('Delete Reply Test', (done) => {
-
-		});
-
-
-
-		it('/reply/:user_id/:reply_id', (done) => {
-			request.get(`${HOST_API}reply/player001/266`, (err, res, body) => {
-				let _body = JSON.parse(body);
+			let update_data = {
+				comment : 'REPLY TEST COMMENT is updated',
+				reply_id : reply_id,
+				user_id : 'player001'
+			};
+			request.put(`${HOST_API}reply/update`, {json : update_data}, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
+				expect(body).to.be.json;
 				expect(res.statusCode).to.equal(200);
-				expect(_body.success).to.be.true;
-				// console.info(body);
+				expect(body.success).to.be.true;
 				done();
 			});
 		});
 
-
+		// Delete
+		it('Delete Reply Test', (done) => {
+			let delete_data = {
+				reply_id,
+				user_id : 'player001'
+			};
+			request.delete(`${HOST_API}reply/delete`, {json : delete_data}, (err, res, body) => {
+				if(err){
+					console.error(err);
+					throw err;
+				}
+				expect(body).to.be.json;
+				expect(res.statusCode).to.equal(200);
+				expect(body.success).to.be.true;
+				expect(body.result.affectedRows).to.equal(1);
+				done();
+			});
+		});
 	});
 
+	// -- 댓글관련 테스트 종료
 
 
 	// todo 덧글 리스트 테스트
 
 
+
 	// todo 덧글 통합 테스트
 
 
-	// todo application/json 타입으로 리턴된 것을 테스트한다.
+
+	// todo get으로 데이터가 리턴되는 형태는 스트링이기 때문에 json으로 파싱을 해줘야 한다 파싱을 하지 않아도 자동으로 처리되는 옵션이 있는지 확인해보자.
+
 
 
 
