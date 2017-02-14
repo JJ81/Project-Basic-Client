@@ -133,4 +133,59 @@ describe('[API 2.0] Should return 200', () => {
             });
         });
     });
+    
+    describe('Channel List All', ()=>{
+        it('/channel', (done)=>{
+            req.get(`${HOST_API}channel`, (err, res ,body)=>{
+                const _body = JSON.parse(body);
+                expect(res.statusCode).to.equal(200);
+                expect(_body.success).to.be.true;
+                done();
+            });
+        });
+    });
+    
+    describe('Channel List Special', ()=>{
+        it('/channel/pecial', (done)=>{
+            req.get(`${HOST_API}channel/special`, (err, res ,body)=>{
+                const _body = JSON.parse(body);
+                expect(res.statusCode).to.equal(200);
+                expect(_body.success).to.be.true;
+                done();
+            });
+        });
+    });
+    
+    describe('Channel General', ()=>{
+        it('/channel/general', (done)=>{
+            req.get(`${HOST_API}channel/general`, (err, res ,body)=>{
+                const _body = JSON.parse(body);
+                expect(res.statusCode).to.equal(200);
+                expect(_body.success).to.be.true;
+                done();
+            });
+        });
+    });
+    
+    describe('Channel List Under', () => {
+        it('/channel/Under', (done) => {
+            req.get(`${HOST_API}channel/under`, (err, res, body) => {
+                const _body = JSON.parse(body);
+                expect(res.statusCode).to.equal(200);
+                expect(_body.success).to.be.true;
+                done();
+            });
+        });
+    });
+    
+    describe('video List', ()=>{
+        it('/video/:channl_id', (done)=>{
+            req.get(`${HOST_API}video/09a7d000-6e5f-11e6-8218-a1708bd8e844`, (err, res ,body)=>{
+                const _body = JSON.parse(body);
+                expect(res.statusCode).to.equal(200);
+                expect(_body.success).to.be.true;
+                done();
+            });
+        });
+    });
 });

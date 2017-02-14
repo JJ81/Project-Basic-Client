@@ -16,6 +16,8 @@ const
     Broadcast = require('../service/BroadcastService'),
     Event = require('../service/Eventservice'),
     Content = require('../service/ContentService'),
+    Channel = require('../service/ChannelService'),
+    Video = require('../service/VideoService'),
     Reply = require('../service/UserService');
 
 
@@ -85,23 +87,23 @@ const isAuthenticated = (req, res, next) => {
  */
 
 passport.use(new LocalStrategy({
-    usernameField: 'user_id',
-    passwordField: 'password',
-    passReqToCallback: true
-}, (req, usernameField, passwordField, done) => {
-    Common.login(usernameField, passwordField, (err, result) => {
-        if (err) {
-            return done(null, false);
-        } else {
-            console.log(result);
-            if (result.success) {
-                return done(null, result.admin_info);
-            } else {
+        usernameField: 'user_id',
+        passwordField: 'password',
+        passReqToCallback: true
+    }, (req, usernameField, passwordField, done) => {
+        Common.login(usernameField, passwordField, (err, result) => {
+            if (err) {
                 return done(null, false);
+            } else {
+                console.log(result);
+                if (result.success) {
+                    return done(null, result.admin_info);
+                } else {
+                    return done(null, false);
+                }
             }
-        }
-    });
-}
+        });
+    }
 ));
 
 router.get('/logout', (req, res) => {
@@ -170,7 +172,7 @@ router.get('/broadcast/calendar', (req, res) => {
         if (!err) {
             res.json({success: true, result: result});
         } else {
-            res.json({success: false, err:err});
+            res.json({success: false, err: err});
         }
     });
 });
@@ -199,8 +201,8 @@ router.delete('/broadcast/calendar', (req, res) => {
 
 //event API Start
 
-router.get('/event', (req, res)=>{
-    Event.getList((err, result)=>{
+router.get('/event', (req, res) => {
+    Event.getList((err, result) => {
         if (!err) {
             res.json({success: true, result: result});
         } else {
@@ -209,10 +211,10 @@ router.get('/event', (req, res)=>{
     });
 });
 
-router.put('/event', (req, res)=>{
+router.put('/event', (req, res) => {
     const event_id = req.body.event_id;
     
-    Event.start(event_id, (err, result)=>{
+    Event.start(event_id, (err, result) => {
         if (!err) {
             res.json({success: true, msg: '작업완료'});
         } else {
@@ -233,12 +235,12 @@ router.get('/event/result', (req, res) => {
 });
 
 
-router.post('/event', (req, res)=>{
-    Event.upload(req, (err, result)=>{
-        if(!err){
-            res.json({success: true, msg:'등록 완료'});
-        }else{
-            res.json({success: false, err:err});
+router.post('/event', (req, res) => {
+    Event.upload(req, (err, result) => {
+        if (!err) {
+            res.json({success: true, msg: '등록 완료'});
+        } else {
+            res.json({success: false, err: err});
         }
     });
 });
@@ -264,7 +266,7 @@ router.delete('/event/result', (req, res) => {
 });
 //event API END
 
-//contents API END
+//contents API start
 router.get('/contents/representative', (req, res) => {
     Content.getRepresentativeList((err, result) => {
         if (!err) {
@@ -317,7 +319,85 @@ router.post('/contents', (req, res) => {
         }
     });
 });
+//contents API end
 
+//channel API start
+router.get('/channel', (req, res) => {
+    Channel.getListAll((err, result) => {
+        if (!err) {
+            res.json({success: true, result: result});
+        } else {
+            res.json({success: false, err: err});
+        }
+    });
+});
+
+router.get('/channel/special', (req, res) => {
+    Channel.getListSpecial((err, result) => {
+        if (!err) {
+            res.json({success: true, result: result});
+        } else {
+            res.json({success: false, err: err});
+        }
+    });
+});
+
+router.get('/channel/general', (req, res) => {
+    Channel.getListGeneral((err, result) => {
+        if (!err) {
+            res.json({success: true, result: result});
+        } else {
+            res.json({success: false, err: err});
+        }
+    });
+});
+
+router.get('/channel/under', (req, res) => {
+    Channel.getListUnder((err, result) => {
+        if (!err) {
+            res.json({success: true, result: result});
+        } else {
+            res.json({success: false, err: err});
+        }
+    });
+});
+
+router.post('/channel', (req, res) => {
+    
+    Channel.set(req, (err, result) => {
+        if (!err) {
+            res.json({success: true, msg: '등록완료'});
+        } else {
+            res.json({success: false, msg: '다시 시도해주세요.'});
+        }
+    });
+});
+
+//channel API end
+
+//video API START
+router.get('/video/:channel_id', (req, res) => {
+    const channel_id = req.params.channel_id;
+    Video.getList(channel_id, (err, result) => {
+        if (!err) {
+            res.json({success: true, result: result});
+        } else {
+            res.json({success: false, err: err});
+        }
+    });
+});
+
+router.post('/video', (req, res) => {
+    Video.upload(req, (err, result) => {
+        if (!err) {
+            res.json({success: true, msg: '등록완료'});
+        } else {
+            res.json({success: false, msg: '다시 시도해주세요.', err:err});
+        }
+    });
+});
+
+//video API END
 router.delete('/contents', (req, res) => {
     const
         id = req.body.id;

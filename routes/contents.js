@@ -2,8 +2,7 @@ const
     express = require('express'),
     router = express.Router(),
     request = require('request'),
-    JSON = require('JSON'),
-    Content = require('../service/ContentService');
+    JSON = require('JSON');
 
 // TODO 모든 라우터에서 사용중 어디로 빼야 될까?
 const HOST_INFO = {

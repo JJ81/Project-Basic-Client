@@ -24,8 +24,6 @@ requirejs(
                 event_id = $(this).attr('data-event-id'),
                 modal_id = $('#registerEvent');
             
-            console.log('test');
-            
             modal_id.find('.event_id').val(event_id);
         });
         

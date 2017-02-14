@@ -11,6 +11,7 @@ const
     api = require('./api/api'),
     event = require('./routes/event'),
     contents = require('./routes/contents'),
+    channel = require('./routes/channel'),
     broadcast = require('./routes/broadcast');
 /*routes*/
 
@@ -79,6 +80,7 @@ app.use('/api/v1', api);
 app.use('/event', event);
 app.use('/contents', contents);
 app.use('/broadcast', broadcast);
+app.use('/channel', channel);
 
 // catch 404 and forward to error handler
 app.use((req, res) => {

@@ -52,7 +52,7 @@ QUERY.Broadcast = {
     LiveEnd: 'update `broadcast` set `end_dt` = ?, `status` = 0 where `id` = ?',
     LiveGetList: 'select *from `broadcast` where `status` = 1;',
     CalendarWrite: 'insert into `broadcast_calendar` set ?;',
-    CalendarList: 'select *from `broadcast_calendar`;',
+    CalendarList: 'select *from `broadcast_calendar` order by `created_dt` desc limit 1;',
     CalendarDelete: 'delete from `broadcast_calendar` where `id` =?;'
 };
 
@@ -69,7 +69,6 @@ QUERY.Event = {
 };
 
 QUERY.Contents = {
-    
     RepresentativeList: 'select * from `contents` ' +
     'where `type`=\'RT\' ' +
     'order by `priority` desc, `created_dt` desc; ',
@@ -87,5 +86,20 @@ QUERY.Contents = {
     Delete: 'delete from `contents`where `id`= ?',
     Update: 'update `contents` set `ref_id` = ?, `type` = ? where `id` =?;',
     ListGet: 'select *from `contents`;'
+};
+
+
+// Special(대표채널), General(단독채널), Under(S채널에 종속
+QUERY.Channel = {
+    ListAll: 'select *from `channel_new`;',
+    ListSpecial : 'select *from `channel_new` where `type` = \'S\';',
+    ListGeneral : 'select *from `channel_new` where `type` = \'G\';',
+    ListUnder : 'select *from `channel_new` where `type` = \'U\';',
+    Register: 'insert into `channel_new` set ? ;'
+};
+
+QUERY.Video = {
+    List: 'select *from `video` where `channel_id`= ? order by `created_dt` desc;',
+    Register : 'insert into `video` set ?;'
 };
 module.exports = QUERY;

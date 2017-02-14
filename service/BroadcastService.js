@@ -74,7 +74,8 @@ Broadcast.uploadCalendar = (req, callback) => {
         (s3_file_name, field, callback) => {
             const _obj = {
                 title: field.link,
-                img_name: s3_file_name
+                img_name: s3_file_name,
+                created_dt :new Date()
             };
             connection.query(QUERY.Broadcast.CalendarWrite, _obj, (err, result) => {
                 callback(err, result);
