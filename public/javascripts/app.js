@@ -13,7 +13,9 @@ require.config({
         npPogress: ['/components/gentelella/vendors/nprogress/nprogress'],
         bootstrapProgressbar: ['/components/gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min'],
         fastclick: ['/components/gentelella/vendors/fastclick/lib/fastclick'],
-        common: ['/javascripts/common']
+        common: ['/javascripts/common'],
+        videoJS: ['/components/video.js/dist/video.min'],
+        videoJSYoutube: ['/components/videojs-youtube/dist/Youtube.min']
     },
     shim: {
         custom: ['jquery','bootstrap'],

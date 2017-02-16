@@ -180,7 +180,18 @@ describe('[API 2.0] Should return 200', () => {
     
     describe('video List', ()=>{
         it('/video/:channl_id', (done)=>{
-            req.get(`${HOST_API}video/09a7d000-6e5f-11e6-8218-a1708bd8e844`, (err, res ,body)=>{
+            req.get(`${HOST_API}video/list/09a7d000-6e5f-11e6-8218-a1708bd8e844`, (err, res ,body)=>{
+                const _body = JSON.parse(body);
+                expect(res.statusCode).to.equal(200);
+                expect(_body.success).to.be.true;
+                done();
+            });
+        });
+    });
+    
+    describe('video View', ()=>{
+        it('/video/:video_id', (done)=>{
+            req.get(`${HOST_API}/video/view/7d42cdc0-9ce6-11e6-b9dd-1f2406af1976`, (err, res, body)=>{
                 const _body = JSON.parse(body);
                 expect(res.statusCode).to.equal(200);
                 expect(_body.success).to.be.true;
