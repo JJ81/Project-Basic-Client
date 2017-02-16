@@ -97,12 +97,19 @@ QUERY.Channel = {
 	ListUnder: 'select *from `channel_new` where `type` = \'U\';',
 	Register: 'insert into `channel_new` set ? ;',
 	RegisterGroup: 'update `channel_new` set `type` = ? , `group_id`= ? where `channel_id` =?;',
-	DeleteGroup: 'update `channel_new` set `group_id`= ? where `channel_id`= ?;'
+	DeleteGroup: 'update `channel_new` set `group_id`= ?, `type`= ? where `channel_id`= ?;'
 };
 
 QUERY.Video = {
 	List: 'select *from `video` where `channel_id`= ? order by `created_dt` desc;',
 	View: 'select * from `video` where `video_id`= ?',
 	Register: 'insert into `video` set ?;'
+};
+
+QUERY.News = {
+	ListAll: 'select *from `news`;',
+	SearchById: 'select *from `news` where `id`= ?;',
+	Register: 'insert into `news` set ?;',
+	DeleteById: 'delete from `news` where `id` = ? ;'
 };
 module.exports = QUERY;

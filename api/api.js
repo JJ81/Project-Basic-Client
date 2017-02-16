@@ -8,9 +8,6 @@ const
 	bcrypt = require('bcrypt'),
 	passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy,
-  // async = require('async'),
-  // CommonDAO = require('../RedisDAO/CommonDAO'),
-  // UTIL = require('../util/util'),
 	User = require('../service/UserService'),
 	Common = require('../service/CommonService'),
 	Broadcast = require('../service/BroadcastService'),
@@ -18,6 +15,7 @@ const
 	Content = require('../service/ContentService'),
 	Channel = require('../service/ChannelService'),
 	Video = require('../service/VideoService'),
+	News = require('../service/NewsService'),
 	Reply = require('../service/UserService');
 
 
@@ -316,6 +314,34 @@ router.post('/contents', (req, res) => {
 		}
 	});
 });
+
+router.delete('/contents', (req, res) => {
+	const
+    id = req.body.id;
+	Content.delete(id, (err, result) => {
+		if (!err) {
+			res.json({success: true, msg: '삭제 완료'});
+		} else {
+			res.json({success: false, msg: '다시 시도해주세요.'});
+		}
+	});
+});
+
+router.put('/contents', (req, res) => {
+	const
+		id = req.body.id,
+		ref_id = req.body.ref_id,
+		type = req.body.type;
+  
+	Content.update(id, ref_id, type, (err, result) => {
+		if (!err) {
+			res.json({success: true, msg: '수정 완료'});
+		} else {
+			res.json({success: false, msg: '다시 시도해주세요.'});
+		}
+	});
+});
+
 //contents API end
 
 //channel API start
@@ -431,32 +457,49 @@ router.post('/video', (req, res) => {
 });
 
 //video API END
-router.delete('/contents', (req, res) => {
-	const
-    id = req.body.id;
-	Content.delete(id, (err, result) => {
+
+//NEWS API START
+
+router.get('/news', (req, res)=>{
+	News.getListAll((err, result)=>{
 		if (!err) {
-			res.json({success: true, msg: '삭제 완료'});
+			res.json({success: true, result: result});
 		} else {
-			res.json({success: false, msg: '다시 시도해주세요.'});
+			res.json({success: false, err: err});
 		}
 	});
 });
 
-router.put('/contents', (req, res) => {
-	const
-		id = req.body.id,
-		ref_id = req.body.ref_id,
-		type = req.body.type;
+router.post('/news', (req, res)=>{
+	const values ={
+		title : req.body.title,
+		sub_title : req.body.sub_title,
+		desc : req.body.desc,
+		contents : req.body.contents
+	};
   
-	Content.update(id, ref_id, type, (err, result) => {
+	News.register(values, (err, result)=>{
 		if (!err) {
-			res.json({success: true, msg: '수정 완료'});
+			res.json({success: true, msg: '등록완료'});
 		} else {
-			res.json({success: false, msg: '다시 시도해주세요.'});
+			res.json({success: false, msg: '다시 시도해주세요.', err: err});
 		}
 	});
 });
+
+router.delete('/news', (req, res) => {
+	const id = req.body.id;
+	News.delete(id, (err, result)=>{
+		if (!err) {
+			res.json({success: true, msg: '삭제완료'});
+		} else {
+			res.json({success: false, msg: '다시 시도해주세요.', err: err});
+		}
+	});
+});
+
+//NEWS API END
+
 
 /**
  * HC_TV API

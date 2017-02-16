@@ -89,11 +89,10 @@ Channel.registerGroup = (group_id, channel_id, callback) => {
 };
 
 Channel.deleteGroup = (channel_id, callback) => {
-	connection.query(QUERY.Channel.DeleteGroup, channel_id, (err, result) =>{
+	connection.query(QUERY.Channel.DeleteGroup, [null, 'G', channel_id], (err, result) =>{
 		callback(err, result);
 	});
 };
-
 
 module.exports = Channel;
 
