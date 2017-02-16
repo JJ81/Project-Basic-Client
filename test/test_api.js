@@ -11,7 +11,7 @@ const should = require('should');
 const HOST = 'http://localhost:3002/';
 const HOST_API = `${HOST}api/v2/`;
 
-describe('[API 2.0] Should return 200', () => {
+describe('[API 2.0] API CHECK LIST', () => {
 
 	describe('Broadcast Signal', () => {
 		it('/broadcast/live', (done) =>{
@@ -369,14 +369,15 @@ describe('[API 2.0] Should return 200', () => {
 	// -- 댓글관련 테스트 종료
 
 
-	// todo 덧글 리스트 테스트
+	// 덧글 혹은 답글 관련 테스트 시작
 
 
 
-	// todo 덧글 통합 테스트
+	// -- 덧글 혹은 답글 관련 테스트 종료
 
 
 
+	
 	// todo get으로 데이터가 리턴되는 형태는 스트링이기 때문에 json으로 파싱을 해줘야 한다 파싱을 하지 않아도 자동으로 처리되는 옵션이 있는지 확인해보자.
 
 

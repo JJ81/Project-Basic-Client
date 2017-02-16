@@ -190,17 +190,11 @@ router.get('/users/duplication/email', (req, res) => {
 /**
  * TODO 댓글과 덧글을 어떻게 구분할 것인가
  * TODO 댓글을 가져올 때 덧글을 어떻게 가져와서 보여줄 것인가? -> 일단 숨겨두고 버튼을 누르면 보일 수 있도록 하자.
- * TODO 댓글을 쓰는 것과 덧글을 쓰는 것을 구분하자
  * TODO 덧글이 쓰여진 댓글을 지울 수 없도록 한다. 만약 지워야 한다면 그 내용이 출력만 되지 않도록 한다.
- *
- * TODO create & read & update & delete 순으로 데이터를 설정하고 지울 수 있도록 하며 목업 데이터를 세팅을 해줘야 한다.
- *
- *
  * TODO 로그인을 할 후에 댓글에 대한 권한이 생긴다 로그인 처리에 대한 정보는 어떻게 할 것인가????
  * TODO API서버 세션에 가지고 있는 방법과 API를 라우팅하는 곳에서 처리하는 방법이 있다 이 둘중에 하나를 선택하여 처리할 수 있도록 한다.
  * TODO 혹은 항상 첫번쩨 리퀘스트 파라미터를 통해서 항상 로그인을 거처갈 수 있는 로직을 만들어서 구현하는 방법도 있겠다
  */
-
 
 
 /**
@@ -363,6 +357,16 @@ router.delete('/reply/delete', (req, res) => {
 	});
 });
 
+
+router.post('/re-reply/create');
+
+router.post('/re-reply/list');
+
+router.post('/re-reply/:user_id/:re-reply_id');
+
+router.post('/re-reply/update');
+
+router.post('/re-reply/delete');
 
 
 
