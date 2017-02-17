@@ -7,7 +7,6 @@ const
 	QUERY = require('../database/query'),
 	News = {};
 
-
 News.register = (values, callback) => {
 	connection.query(QUERY.News.Register, values, (err, result) => {
 		callback(err, result);
