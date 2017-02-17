@@ -17,8 +17,21 @@ const HOST_INFO = {
 const HOST = `${HOST_INFO.LOCAL}${HOST_INFO.VERSION}`;
 
 
-router.get('/', (req, res)=>{
-  
+router.get('/', (req, res) => {
+	request.get(`${HOST}/news`, (err, response, body) => {
+		if (!err && response.statusCode === 200) {
+			const _body = JSON.parse(body);
+      
+			res.render('news', {
+				current_path: 'event',
+				title: PROJ_TITLE + '이벤트',
+				result: _body.result,
+			});
+		} else {
+			console.error(err);
+			throw new Error(err);
+		}
+	});
 });
 
 module.exports = router;

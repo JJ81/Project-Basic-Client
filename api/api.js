@@ -8,7 +8,7 @@ const
 	bcrypt = require('bcrypt'),
 	passport = require('passport'),
 	LocalStrategy = require('passport-local').Strategy,
-	User = require('../service/UserService'),
+	User = require('../service/_back/UserService'),
 	Common = require('../service/CommonService'),
 	Broadcast = require('../service/BroadcastService'),
 	Event = require('../service/Eventservice'),
@@ -16,7 +16,7 @@ const
 	Channel = require('../service/ChannelService'),
 	Video = require('../service/VideoService'),
 	News = require('../service/NewsService'),
-	Reply = require('../service/UserService');
+	Reply = require('../service/_back/UserService');
 
 
 /**

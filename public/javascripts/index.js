@@ -3,12 +3,12 @@
  */
 'use strict';
 requirejs(
-  [
-    'jquery'
+	[
+		'jquery'
     , 'common'
     ,'swiper'
     ,'fastclick'
-  ],
+	],
   function ($, Common) {
 
 	  new Swiper ('.swiper-container', {
@@ -36,13 +36,13 @@ requirejs(
 
 
 	  var
-      swiperBtnPrev = $('.swiper-button-prev'),
+		swiperBtnPrev = $('.swiper-button-prev'),
 	    swiperBtnNext = $('.swiper-button-next');
 
 	  if(Common.utils.isMobile()){
 		  swiperBtnPrev.addClass('blind');
 		  swiperBtnNext.addClass('blind');
-    }
+	}
 
 
      // var
@@ -65,4 +65,4 @@ requirejs(
 
      // todo cookie에 저장하여 사용할 수 있도록 한다.
 
-  }); // end of func
+}); // end of func

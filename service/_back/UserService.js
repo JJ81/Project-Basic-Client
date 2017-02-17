@@ -2,10 +2,10 @@
  * Created by cheese on 2017. 1. 23..
  */
 const
-	mysql_dbc = require('../commons/db_conn')(),
+	mysql_dbc = require('../../commons/db_conn')(),
 	connection = mysql_dbc.init(),
 	bcrypt = require('bcrypt'),
-	QUERY = require('../database/query');
+	QUERY = require('../../database/query');
 
 const User = {};
 

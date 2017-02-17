@@ -8,19 +8,20 @@ const
 	News = {};
 
 News.register = (values, callback) => {
-	connection.query(QUERY.News.Register, values, (err, result) => {
+	let test = connection.query(QUERY.News.Register, values, (err, result) => {
+		console.log(test.sql);
 		callback(err, result);
 	});
 };
 
 News.delete = (id, callback) => {
-	connection.query(QUERY.News.DeleteById, id, (err, result)=>{
+	connection.query(QUERY.News.DeleteById, id, (err, result) => {
 		callback(err, result);
 	});
 };
 
-News.getListAll = (callback) =>{
-	connection.query(QUERY.News.ListAll, (err, result) =>{
+News.getListAll = (callback) => {
+	connection.query(QUERY.News.ListAll, (err, result) => {
 		callback(err, result);
 	});
 };

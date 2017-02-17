@@ -14,35 +14,35 @@ require('../helpers/helpers');
 
 
 const isAuthenticated = (req, res, next) => {
-    if (req.isAuthenticated())
-        return next();
-    res.redirect('/login');
+	if (req.isAuthenticated())
+		return next();
+	res.redirect('/login');
 };
 
 router.get('/', isAuthenticated, (req, res) => {
-    res.render('index', {
-        current_path: 'INDEX',
-        title: PROJ_TITLE,
-        loggedIn: req.user
-    });
+	res.render('index', {
+		current_path: 'INDEX',
+		title: PROJ_TITLE,
+		loggedIn: req.user
+	});
 });
 
 
 router.get('/login', function (req, res) {
-    if (req.user == null) {
-        res.render('login', {
-            current_path: 'login',
-            title: PROJ_TITLE + 'login'
-        });
-    } else {
-        res.redirect('/');
-    }
+	if (req.user == null) {
+		res.render('login', {
+			current_path: 'login',
+			title: PROJ_TITLE + 'login'
+		});
+	} else {
+		res.redirect('/');
+	}
 });
 
 
 /*------------TEST CODE----------*/
 router.get('/test', (req, res) => {
-    res.json({result: 'Hello World'});
+	res.json({result: 'Hello World'});
 });
 
 // TEST CSRF token
@@ -54,15 +54,15 @@ const parseForm = bodyParser.urlencoded({extended: false});
 
 
 router.get('/test/form', csrfProtection, (req, res) => {
-    res.render('form', {
-        title: PROJ_TITLE
+	res.render('form', {
+		title: PROJ_TITLE
         , csrfToken: req.csrfToken()
         // test : mysql_location // this is working!!
-    });
+	});
 });
 
 router.post('/test/form/submit', parseForm, csrfProtection, (req, res) => {
-    res.send('data is being processed');
+	res.send('data is being processed');
 });
 
 module.exports = router;
