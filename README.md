@@ -8,6 +8,6 @@
 5. PM2 & Nodemon
 6. eslint & babel + ES6 (partially)
 
-"`
+`
   let a = 'a';
-`"
+`
