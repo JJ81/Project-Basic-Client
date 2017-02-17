@@ -105,6 +105,27 @@ hbs.registerHelper('for', function(from, to, incr, block) {
 
 
 hbs.registerHelper('divideChannel', function (string) {
-  var _arr = string.split(',');
-  return _arr[0];
+	var _arr = string.split(',');
+	return _arr[0];
+});
+
+
+hbs.registerHelper('ExtractSubChannelInfo', (channels, titles) => {
+	// 컴마로 구분된 채널 아이디와
+	// 컴마로 구분된 채널 타이틀을 하나의 배열로 분리하여 전달한다.
+	'use strict';
+	let array = [];
+	let _info = {
+		channel : channels.split(','),
+		title : titles.split(',')
+	};
+
+	for(var i=0, len = _info.channel.length; i < len; i++){
+		array.push({
+			channel : _info.channel[i],
+			title: _info.title[i]
+		});
+	}
+
+	return array;
 });

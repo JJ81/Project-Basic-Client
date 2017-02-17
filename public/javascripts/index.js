@@ -3,46 +3,47 @@
  */
 'use strict';
 requirejs(
-  [
-    'jquery'
-    , 'common'
-    ,'swiper'
-    ,'fastclick'
-  ],
-  function ($, Common) {
+	[
+		'jquery',
+		'./javascripts/vendor/ps.estate.js'
+		//, 'common'
+		//,'swiper'
+		,'fastclick'
+	],
+  function ($) {
 
-	  new Swiper ('.swiper-container', {
-		  direction: 'horizontal',
-		  loop: true,
-		  speed: 1000,
-		  centeredSlides: true,
-		  autoplayDisableOnInteraction: false,
-		  effect : 'coverflow',
-		  autoplay : 6000,
-		  // parallax : true,
-		  paginationClickable: true,
-		  // spaceBetween: 0,
-
-		  // If we need pagination
-		  pagination: '.swiper-pagination',
-
-		  // Navigation arrows
-		  nextButton: '.swiper-button-next',
-		  prevButton: '.swiper-button-prev'
-
-		  // And if we need scrollbar
-		  //scrollbar: '.swiper-scrollbar',
-	  });
-
-
-	  var
-      swiperBtnPrev = $('.swiper-button-prev'),
-	    swiperBtnNext = $('.swiper-button-next');
-
-	  if(Common.utils.isMobile()){
-		  swiperBtnPrev.addClass('blind');
-		  swiperBtnNext.addClass('blind');
-    }
+    // new Swiper ('.swiper-container', {
+		 //  direction: 'horizontal',
+		 //  loop: true,
+		 //  speed: 1000,
+		 //  centeredSlides: true,
+		 //  autoplayDisableOnInteraction: false,
+		 //  effect : 'coverflow',
+		 //  autoplay : 6000,
+		 //  // parallax : true,
+		 //  paginationClickable: true,
+		 //  // spaceBetween: 0,
+    //
+		 //  // If we need pagination
+		 //  pagination: '.swiper-pagination',
+    //
+		 //  // Navigation arrows
+		 //  nextButton: '.swiper-button-next',
+		 //  prevButton: '.swiper-button-prev'
+    //
+		 //  // And if we need scrollbar
+		 //  //scrollbar: '.swiper-scrollbar',
+    // });
+    //
+    //
+    // var
+    //   swiperBtnPrev = $('.swiper-button-prev'),
+	   //  swiperBtnNext = $('.swiper-button-next');
+    //
+    // if(Common.utils.isMobile()){
+		 //  swiperBtnPrev.addClass('blind');
+		 //  swiperBtnNext.addClass('blind');
+    // }
 
 
      // var

@@ -10,7 +10,7 @@ var QUERY = require('../../database/query');
 
 var TWOACEAPI = require('../../secret/twoace_api')('dev');
 var util = require('../../util/util');
-var CommonDAO = require('../../RedisDAO/CommonDAO');
+var CommonDAO = require('../../RedisDAO/RedisDAO');
 var UTIL = require('../../util/util');
 
 /**
@@ -113,7 +113,7 @@ router.post('/agent/set/password', function (req, res) {
   });
 });
 
-const AgentService = require('../../service/AgentService');
+const AgentService = require('../../service/_bak/AgentService');
 
 /**
  * 에이전트가 자신의 에이전트에게 전달
